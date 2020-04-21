@@ -3,21 +3,23 @@ package com.student.book_advisor.dto;
 
 import com.student.book_advisor.enums.GenereLibro;
 
+import java.util.List;
+
 
 public class LibroCardDTO {
     private Long id;
     private String titolo;
-    private String autori;
-    private GenereLibro genere;
+    private String isbn;
+    private List<String> authors;
+    private List<String> genres;
     private Double overallRating = 0.0;
     private String coverImage;
 
 
-    public LibroCardDTO(Long id, String titolo, String autori, GenereLibro genere) {
+    public LibroCardDTO(Long id, String titolo, String isbn) {
         this.id = id;
         this.titolo = titolo;
-        this.autori = autori;
-        this.genere = genere;
+        this.isbn = isbn;
     }
 
     public Long getId() {
@@ -36,20 +38,28 @@ public class LibroCardDTO {
         this.titolo = titolo;
     }
 
-    public String getAutori() {
-        return autori;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setAutori(String autori) {
-        this.autori = autori;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public GenereLibro getGenere() {
-        return genere;
+    public List<String> getAuthors() {
+        return authors;
     }
 
-    public void setGenere(GenereLibro genere) {
-        this.genere = genere;
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
 
     public Double getOverallRating() {

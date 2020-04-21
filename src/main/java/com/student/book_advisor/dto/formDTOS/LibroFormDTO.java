@@ -3,7 +3,9 @@ package com.student.book_advisor.dto.formDTOS;
 
 import com.student.book_advisor.enums.GenereLibro;
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.util.List;
 
 public class LibroFormDTO {
 
@@ -23,9 +25,8 @@ public class LibroFormDTO {
     @Size(min = 1, max = 2048)
     private String sinossi;
 
-    @NotBlank
-    @Size(min = 2, max = 128)
-    private String autori;
+    @NotEmpty
+    private List<String> authors;
 
     @NotNull
     private Boolean saga;
@@ -36,8 +37,10 @@ public class LibroFormDTO {
     @Max(99)
     private Integer numInSaga;
 
-    @NotNull
-    private GenereLibro genere;
+    @NotEmpty
+    private List<String> generi;
+
+    private List<@Valid PrizeFormDTO> prizes;
 
 
     public Integer getAnnoPubblicazione() {
@@ -72,14 +75,6 @@ public class LibroFormDTO {
         this.sinossi = sinossi;
     }
 
-    public String getAutori() {
-        return autori;
-    }
-
-    public void setAutori(String autori) {
-        this.autori = autori;
-    }
-
     public Boolean getSaga() {
         return saga;
     }
@@ -104,12 +99,27 @@ public class LibroFormDTO {
         this.numInSaga = numInSaga;
     }
 
-    public GenereLibro getGenere() {
-        return genere;
+    public List<String> getAuthors() {
+        return authors;
     }
 
-    public void setGenere(GenereLibro genere) {
-        this.genere = genere;
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 
+    public List<String> getGeneri() {
+        return generi;
+    }
+
+    public void setGeneri(List<String> generi) {
+        this.generi = generi;
+    }
+
+    public List<PrizeFormDTO> getPrizes() {
+        return prizes;
+    }
+
+    public void setPrizes(List<PrizeFormDTO> prizes) {
+        this.prizes = prizes;
+    }
 }

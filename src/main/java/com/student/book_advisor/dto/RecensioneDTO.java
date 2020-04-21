@@ -2,12 +2,18 @@ package com.student.book_advisor.dto;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public class RecensioneDTO {
     private Long id;
     private String testo;
     private Integer rating;
+    private Integer originalityRating;
+    private Integer writingQualityRating;
+    private Integer pageTurnerRating;
+    private Boolean containsSpoilers;
     private Timestamp timestamp;
+    private List<CommentDTO> comments;
     //Info utente
     private Long userId;
     private String username;
@@ -16,12 +22,12 @@ public class RecensioneDTO {
     //Info Libro
     private Long bookId;
     private String titolo;
-    private String autori;
+    private List<String> authors;
     private String coverImage;
 
 
 
-    public RecensioneDTO(Long id, String testo, Integer rating, Date timestamp, Long userId, String username, Long bookId, String titolo, String autori) {
+    public RecensioneDTO(Long id, String testo, Integer rating, Date timestamp, Long userId, String username, Long bookId, String titolo, Integer originalityRating, Integer writingQualityRating, Integer pageTurnerRating, Boolean containsSpoilers) {
         this.id = id;
         this.testo = testo;
         this.rating = rating;
@@ -30,7 +36,10 @@ public class RecensioneDTO {
         this.username = username;
         this.bookId = bookId;
         this.titolo = titolo;
-        this.autori = autori;
+        this.originalityRating = originalityRating;
+        this.writingQualityRating = writingQualityRating;
+        this.pageTurnerRating = pageTurnerRating;
+        this.containsSpoilers = containsSpoilers;
     }
 
     public Long getId() {
@@ -97,14 +106,6 @@ public class RecensioneDTO {
         this.titolo = titolo;
     }
 
-    public String getAutori() {
-        return autori;
-    }
-
-    public void setAutori(String autori) {
-        this.autori = autori;
-    }
-
     public String getProfileImage() {
         return profileImage;
     }
@@ -119,5 +120,53 @@ public class RecensioneDTO {
 
     public void setCoverImage(String coverImage) {
         this.coverImage = coverImage;
+    }
+
+    public Integer getOriginalityRating() {
+        return originalityRating;
+    }
+
+    public void setOriginalityRating(Integer originalityRating) {
+        this.originalityRating = originalityRating;
+    }
+
+    public Integer getWritingQualityRating() {
+        return writingQualityRating;
+    }
+
+    public void setWritingQualityRating(Integer writingQualityRating) {
+        this.writingQualityRating = writingQualityRating;
+    }
+
+    public Integer getPageTurnerRating() {
+        return pageTurnerRating;
+    }
+
+    public void setPageTurnerRating(Integer pageTurnerRating) {
+        this.pageTurnerRating = pageTurnerRating;
+    }
+
+    public Boolean getContainsSpoilers() {
+        return containsSpoilers;
+    }
+
+    public void setContainsSpoilers(Boolean containsSpoilers) {
+        this.containsSpoilers = containsSpoilers;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
+    }
+
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
     }
 }

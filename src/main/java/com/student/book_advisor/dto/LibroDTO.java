@@ -2,13 +2,14 @@ package com.student.book_advisor.dto;
 
 import com.student.book_advisor.enums.GenereLibro;
 
+import java.util.List;
+
 public class LibroDTO {
 
     private Long id;
     private String titolo;
-    private String autori;
+    private String isbn;
     private Integer annoPubblicazione;
-    private GenereLibro genere;
     private Integer pagine;
     private String sinossi;
     private Boolean saga;
@@ -16,14 +17,18 @@ public class LibroDTO {
     private Integer numInSaga;
     private String copertina;
     private Double overallRating;
+    private Double overallWritingQualityRating;
+    private Double overallPageTurnerRating;
+    private Double overallOriginalityRating;
+    private List<String> authors;
+    private List<String> genres;
 
-    public LibroDTO(Long id, String titolo, String autori, Integer annoPubblicazione, Integer pagine, GenereLibro genere, String sinossi, Boolean saga, String titoloSaga, Integer numInSaga) {
+    public LibroDTO(Long id, String titolo, String isbn, Integer annoPubblicazione, Integer pagine, String sinossi, Boolean saga, String titoloSaga, Integer numInSaga) {
         this.id = id;
         this.titolo = titolo;
-        this.autori = autori;
+        this.isbn = isbn;
         this.annoPubblicazione = annoPubblicazione;
         this.pagine = pagine;
-        this.genere = genere;
         this.sinossi = sinossi;
         this.saga = saga;
         this.titoloSaga = titoloSaga;
@@ -46,28 +51,12 @@ public class LibroDTO {
         this.titolo = titolo;
     }
 
-    public String getAutori() {
-        return autori;
-    }
-
-    public void setAutori(String autori) {
-        this.autori = autori;
-    }
-
     public Integer getAnnoPubblicazione() {
         return annoPubblicazione;
     }
 
     public void setAnnoPubblicazione(Integer annoPubblicazione) {
         this.annoPubblicazione = annoPubblicazione;
-    }
-
-    public GenereLibro getGenere() {
-        return genere;
-    }
-
-    public void setGenere(GenereLibro genere) {
-        this.genere = genere;
     }
 
     public Integer getPagine() {
@@ -124,5 +113,53 @@ public class LibroDTO {
 
     public void setOverallRating(Double overallRating) {
         this.overallRating = overallRating;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public Double getOverallWritingQualityRating() {
+        return overallWritingQualityRating;
+    }
+
+    public void setOverallWritingQualityRating(Double overallWritingQualityRating) {
+        this.overallWritingQualityRating = overallWritingQualityRating;
+    }
+
+    public Double getOverallPageTurnerRating() {
+        return overallPageTurnerRating;
+    }
+
+    public void setOverallPageTurnerRating(Double overallPageTurnerRating) {
+        this.overallPageTurnerRating = overallPageTurnerRating;
+    }
+
+    public Double getOverallOriginalityRating() {
+        return overallOriginalityRating;
+    }
+
+    public void setOverallOriginalityRating(Double overallOriginalityRating) {
+        this.overallOriginalityRating = overallOriginalityRating;
+    }
+
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
     }
 }

@@ -9,26 +9,27 @@ import javax.validation.constraints.Size;
 public class UtenteFormDTO {
 
     @NotBlank
-    @Size(min = 2, max = 24)
+    @Size(min = 2, max = 20)
     private String nome;
 
     @NotBlank
-    @Size(min = 2, max = 24)
+    @Size(min = 2, max = 20)
     private String cognome;
 
     @NotBlank
-    @Size(min = 5, max = 24)
+    @Size(min = 5, max = 50)
     private String username;
 
     @NotBlank
-    @Size(min = 8, max = 64)
+    @Size(min = 8, max = 50)
     private String password;
 
     @NotBlank
     @Email
+    @Size(max = 64)
     private String email;
 
-    @Size(max = 2048)
+    @Size(max = 1024)
     private String descrizione;
 
     private Credenziali credenziali = Credenziali.Normale;
