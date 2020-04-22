@@ -14,6 +14,7 @@ import java.util.List;
 
 @Repository
 @CrossOrigin(origins = "http://localhost:4200")
+//DA AGGIORNARE
 public interface LibroRepository extends JpaRepository<Libro, Long> {
     //Aggiungi clausola OrderBy AVG on rating recensioni libro!
     @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, l.autori, l.genere) FROM Libro l  WHERE l.genere = :genere")
