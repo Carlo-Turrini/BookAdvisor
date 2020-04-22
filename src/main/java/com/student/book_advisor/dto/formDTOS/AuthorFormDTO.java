@@ -4,12 +4,8 @@ import javax.validation.constraints.*;
 
 public class AuthorFormDTO {
     @NotBlank
-    @Size(min = 1, max = 20)
-    private String authorsName;
-
-    @NotBlank
-    @Size(min = 1, max = 20)
-    private String authorsSurname;
+    @Size(min = 3, max = 50)
+    private String authorsFullname;
 
     @NotNull
     @Min(-2000)
@@ -24,20 +20,12 @@ public class AuthorFormDTO {
     @Size(min = 1, max = 4000)
     private String bibliography;
 
-    public String getAuthorsName() {
-        return authorsName;
+    public String getAuthorsFullname() {
+        return authorsFullname;
     }
 
-    public void setAuthorsName(String authorsName) {
-        this.authorsName = authorsName;
-    }
-
-    public String getAuthorsSurname() {
-        return authorsSurname;
-    }
-
-    public void setAuthorsSurname(String authorsSurname) {
-        this.authorsSurname = authorsSurname;
+    public void setAuthorsFullname(String authorsFullname) {
+        this.authorsFullname = authorsFullname;
     }
 
     public Integer getBirthYear() {

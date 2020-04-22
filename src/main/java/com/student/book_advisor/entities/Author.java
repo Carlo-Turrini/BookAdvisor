@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Author")
+@Table(name = "Author", uniqueConstraints = {@UniqueConstraint(columnNames = {"AuthorsFullname"})})
 public class Author {
 
     @Id
@@ -16,11 +16,8 @@ public class Author {
     @Column(name = "Id")
     private Long id;
 
-    @Column(name = "AuthorsName", length = 20, nullable = false)
-    private String name;
-
-    @Column(name = "AuthorsSurname", length = 20, nullable = false)
-    private String surname;
+    @Column(name = "AuthorsFullname", length = 50, nullable = false)
+    private String authorsFullname;
 
     @Column(name = "BirthYear", precision = 4, nullable =  false)
     private Integer birthYear;
@@ -40,22 +37,6 @@ public class Author {
 
     public Long getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public Integer getBirthYear() {
@@ -96,5 +77,13 @@ public class Author {
 
     public void setAuthorJoinBookList(List<AuthorJoinBook> authorJoinBookList) {
         this.authorJoinBookList = authorJoinBookList;
+    }
+
+    public String getAuthorsFullname() {
+        return authorsFullname;
+    }
+
+    public void setAuthorsFullname(String authorsFullname) {
+        this.authorsFullname = authorsFullname;
     }
 }
