@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Book", uniqueConstraints = {@UniqueConstraint(columnNames = {"titolo", "del_token"}), @UniqueConstraint(columnNames = {"ISBN"})})
+@Table(name = "Book", uniqueConstraints = {@UniqueConstraint(columnNames = {"ISBN"})})
 @Where(clause = "del_token = 00000000-0000-0000-0000-000000000000")
 public class Libro implements Serializable {
 

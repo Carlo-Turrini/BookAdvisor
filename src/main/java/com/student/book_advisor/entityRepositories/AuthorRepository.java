@@ -27,5 +27,8 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query("SELECT new com.student.book_advisor.dto.AuthorDTO(a.id, a.authorsFullname, a.bibliography, a.birthYear, a.deathYear) FROM Author a WHERE a.id = :id")
     public AuthorDTO getAuthorsDTOById(@Param("id")Long id);
 
+    @Query("SELECT a.authorsFullname FROM Author a JOIN a.authorJoinBookList authBook WHERE authBook.book.id = :bookID")
+    public List<String> findAuthorsOfBook(@Param("bookID")Long bookID);
+
 
 }
