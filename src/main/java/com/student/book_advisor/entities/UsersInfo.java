@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "UsersInfo", uniqueConstraints = {@UniqueConstraint(columnNames = {"Username"}), @UniqueConstraint(columnNames = {"Email"})})
@@ -14,6 +15,12 @@ public class UsersInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "Username", length = 50, nullable = false)
+    private String username;
+
+    @Column(name = "Password", length = 50, nullable = false)
+    private String password;
 
     @Column(name = "Name", length = 20, nullable = false)
     private String name;
@@ -32,9 +39,8 @@ public class UsersInfo {
     @ColumnDefault(Constants.DEF_PROFILE_PIC)
     private String profilePhotoPath = Constants.DEF_PROFILE_PIC;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Username")
-    private Users user;
+    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Authorities> authorities;
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BookRanking> bookRankingList = new ArrayList<BookRanking>();
@@ -108,14 +114,6 @@ public class UsersInfo {
         this.profilePhotoPath = profilePhotoPath;
     }
 
-    public Users getUser() {
-        return user;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
-    }
-
     public List<BookRanking> getBookRankingList() {
         return bookRankingList;
     }
@@ -178,5 +176,29 @@ public class UsersInfo {
 
     public void setUsefulReviewList(List<UsefulReview> usefulReviewList) {
         this.usefulReviewList = usefulReviewList;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Authorities> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authorities> authorities) {
+        this.authorities = authorities;
     }
 }
