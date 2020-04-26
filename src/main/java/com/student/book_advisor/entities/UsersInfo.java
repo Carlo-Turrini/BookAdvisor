@@ -22,6 +22,11 @@ public class UsersInfo {
     @Column(name = "Password", length = 50, nullable = false)
     private String password;
 
+    @Column(name = "Enabled", nullable = false)
+    @ColumnDefault("true")
+    private Boolean enabled = true;
+
+
     @Column(name = "Name", length = 20, nullable = false)
     private String name;
 
@@ -39,7 +44,7 @@ public class UsersInfo {
     @ColumnDefault(Constants.DEF_PROFILE_PIC)
     private String profilePhotoPath = Constants.DEF_PROFILE_PIC;
 
-    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Authorities> authorities;
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -200,5 +205,13 @@ public class UsersInfo {
 
     public void setAuthorities(Set<Authorities> authorities) {
         this.authorities = authorities;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }
