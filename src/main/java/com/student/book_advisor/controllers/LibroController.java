@@ -14,6 +14,7 @@ import com.student.book_advisor.services.UtenteService;
 import com.student.book_advisor.session.LoggedUserDAO;
 import com.student.book_advisor.session.SessionDAOFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -34,13 +35,11 @@ public class LibroController {
 
     @Autowired
     private LibroService libroService;
-    @Autowired
-    private UtenteService utenteService;
+
 
     @GetMapping("/libri") //Il parametro è nella query string!
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<LibroCardDTO> getAllBooksByGenre(@RequestParam(name = "genere", required = false) GenereLibro genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Long bookId) {
+    public List<LibroCardDTO> getAllBooksByParam(@RequestParam(name = "genere", required = false) GenereLibro genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Long bookId) {
         if(titolo != null) {
             return libroService.findBooksContainingTitolo(titolo);
         }
@@ -53,19 +52,17 @@ public class LibroController {
         else return libroService.findAllBooks();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/libri/isTitleUnique")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public boolean verifyTitleUniqueness(@RequestBody()String titolo) {
         return libroService.isTitleUnique(titolo);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/libri")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Map<String, Set<String>> newBook(@Valid @RequestBody LibroFormDTO bookForm, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
-        SessionDAOFactory session;
-        String authToken;
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             if(!this.libroService.isTitleUnique(bookForm.getTitolo())) {
@@ -112,27 +109,19 @@ public class LibroController {
                 }
             }
             if(errors.isEmpty()) {
-                session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
-                session.initSession(request, response);
-                LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
-                authToken = loggedUserDAO.find();
-                if (authToken != null) {
-                    if (utenteService.findUsersCredentials(authToken).equals(Credenziali.Admin)) {
-                        Libro newBook = new Libro();
-                        newBook.setAnnoPubblicazione(bookForm.getAnnoPubblicazione());
-                        newBook.setPagine(bookForm.getPagine());
-                        newBook.setAutori(bookForm.getAutori());
-                        newBook.setSinossi(bookForm.getSinossi());
-                        newBook.setTitolo(bookForm.getTitolo());
-                        newBook.setGenere(bookForm.getGenere());
-                        newBook.setSaga(bookForm.getSaga());
-                        if(bookForm.getSaga()) {
-                            newBook.setTitoloSaga(bookForm.getTitoloSaga());
-                            newBook.setNumInSaga(bookForm.getNumInSaga());
-                        }
-                        libroService.newBook(newBook);
-                    } else throw new ApplicationException("Accesso negato!");
-                } else throw new ApplicationException("Utente non loggato!");
+                Libro newBook = new Libro();
+                newBook.setAnnoPubblicazione(bookForm.getAnnoPubblicazione());
+                newBook.setPagine(bookForm.getPagine());
+                newBook.setAutori(bookForm.getAutori());
+                newBook.setSinossi(bookForm.getSinossi());
+                newBook.setTitolo(bookForm.getTitolo());
+                newBook.setGenere(bookForm.getGenere());
+                newBook.setSaga(bookForm.getSaga());
+                if(bookForm.getSaga()) {
+                    newBook.setTitoloSaga(bookForm.getTitoloSaga());
+                    newBook.setNumInSaga(bookForm.getNumInSaga());
+                }
+                libroService.newBook(newBook);
             }
             return errors;
         }
@@ -142,47 +131,31 @@ public class LibroController {
     }
 
     @GetMapping("/libri/{id}")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public LibroDTO getBook(@PathVariable("id") @Min(1) @Max(1) Long id) {
         return libroService.findBookDTOById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/libri/{id}/foto_copertina")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String updateBooksCoverPhoto(@RequestParam("copertina") MultipartFile coverPhoto, @PathVariable("id")Long bookId, HttpServletRequest request, HttpServletResponse response) {
-        SessionDAOFactory session;
-        String authToken;
         try {
-            session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
-            session.initSession(request, response);
-            LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
-            authToken = loggedUserDAO.find();
-            if(authToken != null) {
-                Credenziali credenziali = utenteService.findUsersCredentials(authToken);
-                if(credenziali.equals(Credenziali.Admin)) {
-                    Libro book = libroService.findBookById(bookId);
-                    if(book != null) {
-                        return libroService.updateBooksCoverPhoto(coverPhoto, book);
-                    }
-                    else throw new ApplicationException("Libro inesistente!");
-                }
-                else throw new ApplicationException("Accesso negato!");
+            Libro book = libroService.findBookById(bookId);
+            if(book != null) {
+                return libroService.updateBooksCoverPhoto(coverPhoto, book);
             }
-            else throw new ApplicationException("Utente non loggato!");
+            else throw new ApplicationException("Libro inesistente!");
         }
         catch(Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/libri/{id}")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Map<String, Set<String>> updateBook(@Valid @RequestBody LibroFormDTO bookForm, BindingResult result, @PathVariable("id")Long bookId, HttpServletRequest request, HttpServletResponse response) {
-        SessionDAOFactory session;
-        String authToken;
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             Libro book = libroService.findBookById(bookId);
@@ -220,26 +193,18 @@ public class LibroController {
                     }
                 }
                 if (errors.isEmpty()) {
-                    session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
-                    session.initSession(request, response);
-                    LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
-                    authToken = loggedUserDAO.find();
-                    if (authToken != null) {
-                        if (utenteService.findUsersCredentials(authToken).equals(Credenziali.Admin)) {
-                            book.setAnnoPubblicazione(bookForm.getAnnoPubblicazione());
-                            book.setPagine(bookForm.getPagine());
-                            book.setAutori(bookForm.getAutori());
-                            book.setSinossi(bookForm.getSinossi());
-                            book.setTitolo(bookForm.getTitolo());
-                            book.setGenere(bookForm.getGenere());
-                            book.setSaga(bookForm.getSaga());
-                            if (bookForm.getSaga()) {
-                                book.setTitoloSaga(bookForm.getTitoloSaga());
-                                book.setNumInSaga(bookForm.getNumInSaga());
-                            }
-                            libroService.updateBook(book);
-                        } else throw new ApplicationException("Accesso negato!");
-                    } else throw new ApplicationException("Utente non loggato!");
+                    book.setAnnoPubblicazione(bookForm.getAnnoPubblicazione());
+                    book.setPagine(bookForm.getPagine());
+                    book.setAutori(bookForm.getAutori());
+                    book.setSinossi(bookForm.getSinossi());
+                    book.setTitolo(bookForm.getTitolo());
+                    book.setGenere(bookForm.getGenere());
+                    book.setSaga(bookForm.getSaga());
+                    if (bookForm.getSaga()) {
+                        book.setTitoloSaga(bookForm.getTitoloSaga());
+                        book.setNumInSaga(bookForm.getNumInSaga());
+                    }
+                    libroService.updateBook(book);
                 }
                 return errors;
             }
@@ -250,24 +215,12 @@ public class LibroController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/libri/{id}")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteBook(@PathVariable("id") @Min(1) @Max(1) Long id, HttpServletRequest request, HttpServletResponse response) {
-        SessionDAOFactory session;
-        String authToken;
         try {
-            session = SessionDAOFactory.getSesssionDAOFactory(Constants.SESSION_IMPL);
-            session.initSession(request, response);
-            LoggedUserDAO loggedUserDAO = session.getLoggedUserDAO();
-            authToken = loggedUserDAO.find();
-            if(authToken != null) {
-                Credenziali credenziali = utenteService.findUsersCredentials(authToken);
-                if(credenziali.equals(Credenziali.Admin)) {
-                    libroService.deleteBook(id);                }
-                else throw new ApplicationException("Accesso negato!");
-            }
-            else throw new ApplicationException("Utente non loggato!");
+            libroService.deleteBook(id);
         }
         catch(Exception e) {
             throw new RuntimeException(e);

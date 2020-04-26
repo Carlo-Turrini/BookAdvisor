@@ -25,15 +25,9 @@ public interface UtenteService {
 
     public Utente findUserToLogin(String username, String password);
 
-    public Credenziali findUsersCredentials(String authToken);
-
-    public Long findIdByAuthToken(String authToken);
-
     public boolean isUsernameUnique(String username);
 
     public boolean isEmailUnique(String email);
-
-    public Utente findUserByAuthToken(String authToken);
 
     public String updateUsersProfilePhoto(MultipartFile profilePhoto, Utente user);
 }

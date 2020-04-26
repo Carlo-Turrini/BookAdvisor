@@ -173,4 +173,5 @@ public class Recensione implements Serializable {
     public void setUsefulReviewList(List<UsefulReview> usefulReviewList) {
         this.usefulReviewList = usefulReviewList;
     }
+
 }

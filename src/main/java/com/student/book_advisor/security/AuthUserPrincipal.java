@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class AuthUserPrincipal implements UserDetails {
@@ -57,4 +58,12 @@ public class AuthUserPrincipal implements UserDetails {
     }
 
     public Long getId() {return this.usersInfo.getId();}
+
+    public Set<String> getAuthoritiesToString() {
+        Set<String> authoritiesToString = new HashSet<String>();
+        for(SimpleGrantedAuthority authority : this.authorities) {
+            authoritiesToString.add(authority.getAuthority());
+        }
+        return authoritiesToString;
+    }
 }

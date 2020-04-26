@@ -89,18 +89,6 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Credenziali findUsersCredentials(String authToken) {
-        return utenteRepo.getUsersCredentials(authToken);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Long findIdByAuthToken(String authToken) {
-        return utenteRepo.findIdByAuthToken(authToken);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
     public boolean isUsernameUnique(String username) {
         Integer count = utenteRepo.countAllByUsername(username);
         System.out.println(count.toString());
@@ -119,12 +107,6 @@ public class UtenteServiceImpl implements UtenteService {
             return true;
         }
         else return false;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Utente findUserByAuthToken(String authToken) {
-        return utenteRepo.findByAuthToken(authToken);
     }
 
     @Override

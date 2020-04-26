@@ -3,6 +3,7 @@ package com.student.book_advisor.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,10 +19,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource(name = "userDetailsService")
     private UserDetailsService userDetailsService;
@@ -47,7 +48,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login").permitAll()
                 .successHandler(loginSuccessHandler))
                 .authorizeRequests()
-                .antMatchers().permitAll()
+                .mvcMatchers(HttpMethod.POST, "/utenti").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/utenti/{id}").permitAll()
+                .mvcMatchers(HttpMethod.POST, "/utenti/isUsernameUnique").permitAll()
+                .mvcMatchers(HttpMethod.POST, "/utenti/isEmailUnique").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/libri").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/libri/{id}").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/libri/{id}/recensioni").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/utenti/{id}/recensioni").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
                 .and().logout(logout -> logout
@@ -64,8 +72,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("http://localhost:4200/*", new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

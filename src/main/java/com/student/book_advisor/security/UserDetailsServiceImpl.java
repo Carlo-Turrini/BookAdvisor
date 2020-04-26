@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UsersInfo user = usersInfoRepository.findByUsername(username);
         if(user == null){
@@ -33,7 +36,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new AuthUserPrincipal(user, getAuthority(user));
     }
 
-    private Set<SimpleGrantedAuthority> getAuthority(UsersInfo user) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    protected Set<SimpleGrantedAuthority> getAuthority(UsersInfo user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         authoritiesRepository.findAllByUserID(user.getId()).forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getAuthority()));
