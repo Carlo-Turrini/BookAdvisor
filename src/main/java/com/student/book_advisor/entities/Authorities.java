@@ -1,7 +1,5 @@
 package com.student.book_advisor.entities;
 
-import com.student.book_advisor.entities.idClass.AuthoritiesId;
-
 import javax.persistence.*;
 
 @Entity

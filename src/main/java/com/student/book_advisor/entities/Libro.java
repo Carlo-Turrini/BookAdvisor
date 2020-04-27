@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Book", uniqueConstraints = {@UniqueConstraint(columnNames = {"ISBN"})})
+@Table(name = "Book", uniqueConstraints = {@UniqueConstraint(columnNames = {"Title"})})
 @Where(clause = "del_token = 00000000-0000-0000-0000-000000000000")
 public class Libro implements Serializable {
 
@@ -25,9 +25,6 @@ public class Libro implements Serializable {
     @Column(name = "del_token", nullable = false)
     @ColumnDefault("0")
     private String delToken = Constants.nilUUID;
-
-    @Column(name = "ISBN", length = 17, nullable = false)
-    private String ISBN;
 
     @Column(name = "PubblicationYear", precision = 4, nullable = false)
     private Integer annoPubblicazione;
@@ -45,18 +42,8 @@ public class Libro implements Serializable {
     @ColumnDefault(Constants.DEF_BOOK_COVER)
     private String bookCoverPath = Constants.DEF_BOOK_COVER;
 
-    @Column(name = "Saga", nullable = false)
-    @ColumnDefault("false")
-    private Boolean saga = false;
-
-    @Column(name = "SagaTitle", length = 64)
-    private String titoloSaga;
-
-    @Column(name = "NumberInSaga", precision = 2)
-    private Integer numInSaga;
-
-    @Column(name = "autori", length = 128, nullable = false)
-    private String autori;
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Saga saga;
 
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Recensione> recensioneList = new ArrayList<Recensione>();
@@ -71,16 +58,7 @@ public class Libro implements Serializable {
     private List<AuthorJoinBook> authorJoinBookList = new ArrayList<AuthorJoinBook>();
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BookRead> bookReadList = new ArrayList<BookRead>();
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BookToRead> bookToReadList = new ArrayList<BookToRead>();
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FavouriteBook> favouriteBookList = new ArrayList<FavouriteBook>();
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ReadingBook> readingBookList = new ArrayList<ReadingBook>();
+    private List<MyBooks> myBooksList = new ArrayList<MyBooks>();
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BookRanking> bookRankingList = new ArrayList<BookRanking>();
@@ -141,36 +119,12 @@ public class Libro implements Serializable {
         this.bookCoverPath = bookCoverPath;
     }
 
-    public String getAutori() {
-        return autori;
-    }
-
-    public void setAutori(String autori) {
-        this.autori = autori;
-    }
-
-    public Boolean getSaga() {
+    public Saga getSaga() {
         return saga;
     }
 
-    public void setSaga(Boolean saga) {
+    public void setSaga(Saga saga) {
         this.saga = saga;
-    }
-
-    public String getTitoloSaga() {
-        return titoloSaga;
-    }
-
-    public void setTitoloSaga(String titoloSaga) {
-        this.titoloSaga = titoloSaga;
-    }
-
-    public Integer getNumInSaga() {
-        return numInSaga;
-    }
-
-    public void setNumInSaga(Integer numInSaga) {
-        this.numInSaga = numInSaga;
     }
 
     public List<Recensione> getRecensioneList() {
@@ -179,14 +133,6 @@ public class Libro implements Serializable {
 
     public void setRecensioneList(List<Recensione> recensioneList) {
         this.recensioneList = recensioneList;
-    }
-
-    public String getISBN() {
-        return ISBN;
-    }
-
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
     }
 
     public List<Prize> getPrizeList() {
@@ -213,36 +159,12 @@ public class Libro implements Serializable {
         this.authorJoinBookList = authorJoinBookList;
     }
 
-    public List<BookRead> getBookReadList() {
-        return bookReadList;
+    public List<MyBooks> getMyBooksList() {
+        return myBooksList;
     }
 
-    public void setBookReadList(List<BookRead> bookReadList) {
-        this.bookReadList = bookReadList;
-    }
-
-    public List<BookToRead> getBookToReadList() {
-        return bookToReadList;
-    }
-
-    public void setBookToReadList(List<BookToRead> bookToReadList) {
-        this.bookToReadList = bookToReadList;
-    }
-
-    public List<FavouriteBook> getFavouriteBookList() {
-        return favouriteBookList;
-    }
-
-    public void setFavouriteBookList(List<FavouriteBook> favouriteBookList) {
-        this.favouriteBookList = favouriteBookList;
-    }
-
-    public List<ReadingBook> getReadingBookList() {
-        return readingBookList;
-    }
-
-    public void setReadingBookList(List<ReadingBook> readingBookList) {
-        this.readingBookList = readingBookList;
+    public void setMyBooksList(List<MyBooks> myBooksList) {
+        this.myBooksList = myBooksList;
     }
 
     public List<BookRanking> getBookRankingList() {

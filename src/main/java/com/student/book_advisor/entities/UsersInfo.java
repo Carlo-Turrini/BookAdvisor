@@ -51,25 +51,16 @@ public class UsersInfo {
     private List<BookRanking> bookRankingList = new ArrayList<BookRanking>();
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BookRead> bookReadList = new ArrayList<BookRead>();
-
-    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BookToRead> bookToReadList = new ArrayList<BookToRead>();
-
-    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<Comment>();
-
-    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FavouriteBook> favouriteBookList = new ArrayList<FavouriteBook>();
-
-    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ReadingBook> readingBookList = new ArrayList<ReadingBook>();
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Recensione> recensioneList = new ArrayList<Recensione>();
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UsefulReview> usefulReviewList = new ArrayList<UsefulReview>();
+
+    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MyBooks> myBooksList = new ArrayList<MyBooks>();
 
     public Long getId() {
         return id;
@@ -127,44 +118,12 @@ public class UsersInfo {
         this.bookRankingList = bookRankingList;
     }
 
-    public List<BookRead> getBookReadList() {
-        return bookReadList;
-    }
-
-    public void setBookReadList(List<BookRead> bookReadList) {
-        this.bookReadList = bookReadList;
-    }
-
-    public List<BookToRead> getBookToReadList() {
-        return bookToReadList;
-    }
-
-    public void setBookToReadList(List<BookToRead> bookToReadList) {
-        this.bookToReadList = bookToReadList;
-    }
-
     public List<Comment> getCommentList() {
         return commentList;
     }
 
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
-    }
-
-    public List<FavouriteBook> getFavouriteBookList() {
-        return favouriteBookList;
-    }
-
-    public void setFavouriteBookList(List<FavouriteBook> favouriteBookList) {
-        this.favouriteBookList = favouriteBookList;
-    }
-
-    public List<ReadingBook> getReadingBookList() {
-        return readingBookList;
-    }
-
-    public void setReadingBookList(List<ReadingBook> readingBookList) {
-        this.readingBookList = readingBookList;
     }
 
     public List<Recensione> getRecensioneList() {
@@ -181,6 +140,14 @@ public class UsersInfo {
 
     public void setUsefulReviewList(List<UsefulReview> usefulReviewList) {
         this.usefulReviewList = usefulReviewList;
+    }
+
+    public List<MyBooks> getMyBooksList() {
+        return myBooksList;
+    }
+
+    public void setMyBooksList(List<MyBooks> myBooksList) {
+        this.myBooksList = myBooksList;
     }
 
     public String getUsername() {

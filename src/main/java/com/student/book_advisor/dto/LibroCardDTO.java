@@ -9,17 +9,15 @@ import java.util.List;
 public class LibroCardDTO {
     private Long id;
     private String titolo;
-    private String isbn;
     private List<String> authors;
     private List<String> genres;
     private Double overallRating = 0.0;
     private String coverImage;
 
 
-    public LibroCardDTO(Long id, String titolo, String isbn) {
+    public LibroCardDTO(Long id, String titolo) {
         this.id = id;
         this.titolo = titolo;
-        this.isbn = isbn;
     }
 
     public Long getId() {
@@ -36,14 +34,6 @@ public class LibroCardDTO {
 
     public void setTitolo(String titolo) {
         this.titolo = titolo;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
     }
 
     public List<String> getAuthors() {

@@ -8,11 +8,9 @@ public class LibroDTO {
 
     private Long id;
     private String titolo;
-    private String isbn;
     private Integer annoPubblicazione;
     private Integer pagine;
     private String sinossi;
-    private Boolean saga;
     private String titoloSaga;
     private Integer numInSaga;
     private String copertina;
@@ -23,14 +21,12 @@ public class LibroDTO {
     private List<String> authors;
     private List<String> genres;
 
-    public LibroDTO(Long id, String titolo, String isbn, Integer annoPubblicazione, Integer pagine, String sinossi, Boolean saga, String titoloSaga, Integer numInSaga) {
+    public LibroDTO(Long id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga) {
         this.id = id;
         this.titolo = titolo;
-        this.isbn = isbn;
         this.annoPubblicazione = annoPubblicazione;
         this.pagine = pagine;
         this.sinossi = sinossi;
-        this.saga = saga;
         this.titoloSaga = titoloSaga;
         this.numInSaga = numInSaga;
     }
@@ -75,14 +71,6 @@ public class LibroDTO {
         this.sinossi = sinossi;
     }
 
-    public Boolean getSaga() {
-        return saga;
-    }
-
-    public void setSaga(Boolean saga) {
-        this.saga = saga;
-    }
-
     public String getTitoloSaga() {
         return titoloSaga;
     }
@@ -113,14 +101,6 @@ public class LibroDTO {
 
     public void setOverallRating(Double overallRating) {
         this.overallRating = overallRating;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
     }
 
     public Double getOverallWritingQualityRating() {
