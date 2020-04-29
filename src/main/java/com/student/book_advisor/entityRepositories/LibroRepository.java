@@ -26,20 +26,19 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("SELECT l.bookCoverPath FROM Libro l WHERE l.id = :bookId")
     public String findBookCoverPath(@Param("bookId")Long id);
 
-    //Togli
     @Query("SELECT count(l) FROM Libro l WHERE l.titolo = :titolo")
     public Integer countAllByTitolo(@Param("titolo")String titolo);
     //Togli
-    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, l.titoloSaga, l.numInSaga) FROM Libro l WHERE l.titolo = :titolo")
+    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id) WHERE l.titolo = :titolo")
     public LibroDTO findByTitolo(@Param("titolo") String titolo);
 
     @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo) FROM Libro l WHERE l.titolo LIKE CONCAT('%',:titolo,'%')")
     public List<LibroCardDTO> findAllBooksContainingTitolo(@Param("titolo")String titolo);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, l.titoloSaga, l.numInSaga) FROM Libro l WHERE l.id = :id")
+    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id)  WHERE l.id = :id")
     public LibroDTO getBookById(@Param("id")Long bookId);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo) FROM Libro l WHERE l.titoloSaga = :titoloSaga AND l.id <> :bookId ORDER BY l.numInSaga")
+    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo) FROM Libro l JOIN l.saga s WHERE s.sagaTitle = :titoloSaga AND l.id <> :bookId ORDER BY s.numberInSaga")
     public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(@Param("titoloSaga")String titoloSaga, @Param("bookId")Long id);
 
     @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(b.id, b.titolo) FROM MyBooks mb JOIN mb.book b WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'read'")

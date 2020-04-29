@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private AuthoritiesRepository authoritiesRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

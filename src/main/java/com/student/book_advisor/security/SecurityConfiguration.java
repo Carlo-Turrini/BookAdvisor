@@ -6,14 +6,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -23,12 +24,18 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource(name = "userDetailsService")
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private LoginSuccessHandler loginSuccessHandler;
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    LoginSuccessHandler loginSuccessHandler;
+
+    @Autowired
+    LoginFailureHandler loginFailureHandler;
 
     @Override
     @Bean
@@ -42,11 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+        http.cors().and().csrf().disable().addFilterBefore(new StatelessCsrfFilter(), CsrfFilter.class)
                 .formLogin(form -> form
-                .loginPage("/login").permitAll()
-                .successHandler(loginSuccessHandler))
+                        .loginPage("/login").permitAll()
+                        .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailureHandler))
                 .authorizeRequests()
                 .mvcMatchers(HttpMethod.POST, "/utenti").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/utenti/{id}").permitAll()
@@ -57,12 +64,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/libri/{id}/recensioni").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/utenti/{id}/recensioni").permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("http://localhost:4200/login"))
+                .and().exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+                .and().addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider))
+                .addFilter(new JwtTokenFilter(authenticationManager()))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/").permitAll()
-                .invalidateHttpSession(true)
-                .deleteCookies("authToken"));
+                .addLogoutHandler(new CustomLogoutHandler(jwtTokenProvider)));
     }
 
     @Bean
