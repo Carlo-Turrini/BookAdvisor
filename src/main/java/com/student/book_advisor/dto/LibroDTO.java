@@ -1,5 +1,6 @@
 package com.student.book_advisor.dto;
 
+import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.enums.GenereLibro;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class LibroDTO {
     private Double overallOriginalityRating;
     private List<String> authors;
     private List<String> genres;
+    private BookShelf shelf;
 
     public LibroDTO(Long id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga) {
         this.id = id;
@@ -141,5 +143,13 @@ public class LibroDTO {
 
     public void setGenres(List<String> genres) {
         this.genres = genres;
+    }
+
+    public BookShelf getShelf() {
+        return shelf;
+    }
+
+    public void setShelf(BookShelf shelf) {
+        this.shelf = shelf;
     }
 }

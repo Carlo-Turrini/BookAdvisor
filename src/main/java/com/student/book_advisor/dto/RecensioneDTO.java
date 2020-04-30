@@ -13,7 +13,7 @@ public class RecensioneDTO {
     private Integer pageTurnerRating;
     private Boolean containsSpoilers;
     private Timestamp timestamp;
-    private List<CommentDTO> comments;
+    private Integer numOfUsersConsideredReviewUseful;
     //Info utente
     private Long userId;
     private String username;
@@ -154,19 +154,19 @@ public class RecensioneDTO {
         this.containsSpoilers = containsSpoilers;
     }
 
-    public List<CommentDTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentDTO> comments) {
-        this.comments = comments;
-    }
-
     public List<String> getAuthors() {
         return authors;
     }
 
     public void setAuthors(List<String> authors) {
         this.authors = authors;
+    }
+
+    public Integer getNumOfUsersConsideredReviewUseful() {
+        return numOfUsersConsideredReviewUseful;
+    }
+
+    public void setNumOfUsersConsideredReviewUseful(Integer numOfUsersConsideredReviewUseful) {
+        this.numOfUsersConsideredReviewUseful = numOfUsersConsideredReviewUseful;
     }
 }

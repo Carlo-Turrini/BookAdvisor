@@ -16,4 +16,8 @@ public interface RecensioneService {
     public void deleteReview(Long reviewId);
 
     public Recensione getReview(Long reviewId);
+
+    public Integer addUsefulReview(Long reviewID, Long userID);
+
+    public Integer removeUsefulReview(Long reviewID, Long userID);
 }

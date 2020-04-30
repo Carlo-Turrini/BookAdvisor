@@ -1,10 +1,10 @@
 package com.student.book_advisor.services;
 
 import com.student.book_advisor.constants.Constants;
-import com.student.book_advisor.dto.UtenteCardDTO;
-import com.student.book_advisor.dto.UtenteDTO;
-import com.student.book_advisor.entities.Utente;
-import com.student.book_advisor.entityRepositories.UtenteRepository;
+import com.student.book_advisor.dto.*;
+import com.student.book_advisor.entities.*;
+import com.student.book_advisor.entityRepositories.*;
+import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.enums.Credenziali;
 import com.student.book_advisor.enums.FileUploadDir;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +19,22 @@ import java.util.UUID;
 @Service
 public class UtenteServiceImpl implements UtenteService {
     @Autowired
-    private UtenteRepository utenteRepo;
-    @Autowired
     private StorageService storageService;
+    @Autowired
+    private MyBooksRepository myBooksRepository;
+    @Autowired
+    private BookRankingRepository bookRankingRepository;
+    @Autowired
+    private LibroRepository libroRepository;
+    @Autowired
+    private UsersInfoRepository usersInfoRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<UtenteCardDTO> findAllUsers() {
-        List<UtenteCardDTO> utenti = utenteRepo.findAllUsers();
+        List<UtenteCardDTO> utenti = usersInfoRepository.findAllUsers();
         for (UtenteCardDTO utente : utenti) {
-            String fotoProfiloPath = utenteRepo.getUserProfilePhotoPath(utente.getId());
+            String fotoProfiloPath = usersInfoRepository.getUserProfilePhotoPath(utente.getId());
             if(fotoProfiloPath.equals(Constants.DEF_PROFILE_PIC)) {
                 utente.setProfileImage(fotoProfiloPath);
             }
@@ -40,57 +46,56 @@ public class UtenteServiceImpl implements UtenteService {
     }
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public UtenteDTO findById(Long id) {
-        UtenteDTO user = utenteRepo.findUserById(id);
-        String fotoProfiloPath = utenteRepo.getUserProfilePhotoPath(id);
+    public UsersInfoDTO findById(Long id) {
+        UsersInfoDTO user = usersInfoRepository.findUserById(id);
+        String fotoProfiloPath = usersInfoRepository.getUserProfilePhotoPath(id);
         if(fotoProfiloPath.equals(Constants.DEF_PROFILE_PIC)) {
-            user.setFotoProfilo(fotoProfiloPath);
+            user.setProfilePhoto(fotoProfiloPath);
         }
         else {
-            user.setFotoProfilo(storageService.serve(fotoProfiloPath, FileUploadDir.profileImage));
+            user.setProfilePhoto(storageService.serve(fotoProfiloPath, FileUploadDir.profileImage));
         }
         return user;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Utente getUser(Long userId) {
-        return utenteRepo.getOne(userId);
+    public UsersInfo getUser(Long userId) {
+        return usersInfoRepository.getOne(userId);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Utente newUser(Utente newUser) {
-        newUser.setAuthToken(UUID.randomUUID().toString());
-        return utenteRepo.save(newUser);
+    public UsersInfo newUser(UsersInfo newUser) {
+        return usersInfoRepository.save(newUser);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Utente updateUser(Utente updatedUser) {
-        return utenteRepo.save(updatedUser);
+    public UsersInfo updateUser(UsersInfo updatedUser) {
+        return usersInfoRepository.save(updatedUser);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteUser(Long id) {
-        Utente user = utenteRepo.getOne(id);
+        UsersInfo user = usersInfoRepository.getOne(id);
         if(user != null) {
-            user.setDelToken(UUID.randomUUID().toString());
-            utenteRepo.save(user);
+            //user.setDelToken(UUID.randomUUID().toString());
+            usersInfoRepository.save(user);
         }
     }
 
-    @Override
+    /*@Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Utente findUserToLogin(String username, String password) {
-        return utenteRepo.findByUsernameAndPassword(username, password);
-    }
+    public UsersInfo findUserToLogin(String username, String password) {
+        return usersInfoRepository.findByUsernameAndPassword(username, password);
+    }*/
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean isUsernameUnique(String username) {
-        Integer count = utenteRepo.countAllByUsername(username);
+        Integer count = usersInfoRepository.countAllByUsername(username);
         System.out.println(count.toString());
         if(count == null || count == 0) {
             return true;
@@ -102,7 +107,7 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean isEmailUnique(String email) {
-        Integer count = utenteRepo.countAllByEmail(email);
+        Integer count = usersInfoRepository.countAllByEmail(email);
         if(count == null || count == 0) {
             return true;
         }
@@ -111,15 +116,132 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public String updateUsersProfilePhoto(MultipartFile profilePhoto, Utente user) {
+    public String updateUsersProfilePhoto(MultipartFile profilePhoto, UsersInfo user) {
         String profilePath = null;
         if(!user.getProfilePhotoPath().equals(Constants.DEF_PROFILE_PIC)) {
             profilePath = user.getProfilePhotoPath();
         }
         String filePath = storageService.store(profilePhoto, FileUploadDir.profileImage, profilePath);
         user.setProfilePhotoPath(filePath);
-        utenteRepo.save(user);
+        usersInfoRepository.save(user);
         String src = "{ \"img\":\""+storageService.serve(filePath, FileUploadDir.profileImage) + "\"}";
         return src;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteFromShelf(Long userID, Long myBookID) {
+        myBooksRepository.deleteMyBookByUserIDAndId(myBookID, userID);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void addToShelf(Long userID, Long bookID, BookShelf shelf) {
+        MyBooks myBook = myBooksRepository.getByBookIDAndUserID(bookID, userID);
+        if(myBook == null) {
+            MyBooks newMyBook = new MyBooks();
+            newMyBook.setShelfType(shelf);
+            newMyBook.setUsersInfo(usersInfoRepository.getOne(userID));
+            newMyBook.setBook(libroRepository.getOne(bookID));
+            myBooksRepository.save(newMyBook);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateShelf(Long userID, Long myBookID, BookShelf shelf) {
+        MyBooks myBook = myBooksRepository.getByIdAndUserId(myBookID, userID);
+        if(myBook != null) {
+            myBook.setShelfType(shelf);
+            myBooksRepository.save(myBook);
+        }
+
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<MyBooksDTO> findAllMyBooks(Long userID) {
+        return myBooksRepository.getMyBooksByUserID(userID);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<BookRankingDTO> findUsersBookRank(Long userID) {
+        return bookRankingRepository.findBookRankingByUser(userID);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<BookRankingDTO> addBookToBookRank(Long userID, Long bookID, Integer bookRank) {
+        UsersInfo user = usersInfoRepository.getOne(userID);
+        if(user != null) {
+            List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
+            List<Long> bookIDsInRanking = bookRankingRepository.findAllBookIDsInRank(userID);
+            Integer numOfBooksInRank = bookRankingList.size();
+            Libro bookToAdd = libroRepository.getOne(bookID);
+            if (bookToAdd != null && !bookIDsInRanking.contains(bookID)) {
+                MyBooks myBook = myBooksRepository.getByBookIDAndUserID(bookID, userID);
+                if(myBook != null) {
+                    if(myBook.getShelfType().compareTo(BookShelf.read)!=0) {
+                        myBook.setShelfType(BookShelf.read);
+                        myBooksRepository.save(myBook);
+                    }
+                }
+                else {
+                    MyBooks addToMyBooks = new MyBooks();
+                    addToMyBooks.setShelfType(BookShelf.read);
+                    addToMyBooks.setBook(bookToAdd);
+                    addToMyBooks.setUsersInfo(user);
+                    myBooksRepository.save(addToMyBooks);
+                }
+                if (numOfBooksInRank == 10) {
+                    bookRankingRepository.delete(bookRankingList.get(9));
+                }
+                if (bookRank > numOfBooksInRank && numOfBooksInRank == 10) {
+                    bookRank = 10;
+                } else if (bookRank > numOfBooksInRank + 1 && numOfBooksInRank < 10) {
+                    bookRank = numOfBooksInRank + 1;
+                }
+                Integer maxIndex = numOfBooksInRank == 10 ? 8 : numOfBooksInRank - 1;
+                for (int i = maxIndex; i >= bookRank - 1; i--) {
+                    BookRanking br = bookRankingList.get(i);
+                    br.setBookRank(i + 1);
+                    bookRankingRepository.save(br);
+                }
+                BookRanking newBookInRank = new BookRanking();
+                newBookInRank.setBookRank(bookRank);
+                newBookInRank.setBook(bookToAdd);
+                newBookInRank.setUsersInfo(user);
+                bookRankingRepository.save(newBookInRank);
+
+            }
+            return bookRankingRepository.findBookRankingByUser(userID);
+        }
+        else return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<BookRankingDTO> removeBookFromBookRank(Long userID, Long bookRankID) {
+        UsersInfo user = usersInfoRepository.getOne(userID);
+        if(user != null) {
+            List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
+            BookRanking bookRankingToDelete = bookRankingRepository.getOne(bookRankID);
+            if(bookRankingToDelete.getUsersInfo().getId() == userID) {
+                Integer bookRank = bookRankingToDelete.getBookRank();
+                Integer bookRankListSize = bookRankingList.size();
+                bookRankingRepository.delete(bookRankingToDelete);
+                if(bookRank < bookRankListSize) {
+                    for(int i=bookRank; i<bookRankListSize; i++) {
+                        BookRanking br = bookRankingList.get(i);
+                        br.setBookRank(i-1);
+                        bookRankingRepository.save(br);
+                    }
+                }
+                return bookRankingRepository.findBookRankingByUser(userID);
+            }
+            else return null;
+        }
+        else return null;
     }
 }

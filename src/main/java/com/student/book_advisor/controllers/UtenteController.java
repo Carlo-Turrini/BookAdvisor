@@ -1,10 +1,13 @@
 package com.student.book_advisor.controllers;
 
+import com.student.book_advisor.dto.MyBooksDTO;
 import com.student.book_advisor.dto.UtenteCardDTO;
 import com.student.book_advisor.dto.UtenteDTO;
 import com.student.book_advisor.dto.auxiliaryDTOs.LoggedUserDTO;
 import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.entities.MyBooks;
 import com.student.book_advisor.entities.Utente;
+import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.security.AuthUserPrincipal;
 import com.student.book_advisor.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +43,7 @@ public class UtenteController {
     //Rimuovibile
     @GetMapping("/utenti/id")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Long getUserIdByAuthToken(HttpServletRequest request, HttpServletResponse response) {
+    public Long getUserID(HttpServletRequest request, HttpServletResponse response) {
         try {
             Long id = ((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
             return id;
@@ -242,5 +245,31 @@ public class UtenteController {
         }
 
     }
+
+    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @DeleteMapping("/utenti/{id}/myBooks/{myBookID}")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("myBookID") @Min(1) @Max(1) Long myBookID, HttpServletRequest request, HttpServletResponse response) {
+        try {
+            utenteService.deleteFromShelf(userID, myBookID);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PutMapping("/utenti/{id}/myBooks/{myBookID}")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<MyBooksDTO> updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("myBookID") @Min(1) @Max(1) Long myBookID, @RequestParam("shelf") BookShelf shelf) {
+        try {
+            utenteService.updateShelf(userID, myBookID, shelf);
+            return utenteService.findAllMyBooks(userID);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

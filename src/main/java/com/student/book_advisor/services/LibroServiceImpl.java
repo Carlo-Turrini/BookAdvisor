@@ -4,8 +4,11 @@ package com.student.book_advisor.services;
 import com.student.book_advisor.constants.Constants;
 import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
+import com.student.book_advisor.dto.PrizeDTO;
 import com.student.book_advisor.entities.Libro;
+import com.student.book_advisor.entities.Prize;
 import com.student.book_advisor.entityRepositories.LibroRepository;
+import com.student.book_advisor.entityRepositories.PrizeRepository;
 import com.student.book_advisor.entityRepositories.RecensioneRepository;
 import com.student.book_advisor.enums.FileUploadDir;
 import com.student.book_advisor.enums.GenereLibro;
@@ -31,6 +34,8 @@ public class LibroServiceImpl implements LibroService {
     private RecensioneRepository recensioneRepo;
     @Autowired
     private StorageService storageService;
+    @Autowired
+    private PrizeRepository prizeRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -204,4 +209,37 @@ public class LibroServiceImpl implements LibroService {
     public Double getBookOverallRating(Long id) {
         return this.recensioneRepo.getAverageRatingOfBook(id);
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<PrizeDTO> addPrize(PrizeDTO prize, Long bookID) {
+        Libro book = libroRepo.getOne(bookID);
+        if(book != null) {
+            Prize p = prizeRepository.findByBookIDAndPrizeName(bookID, prize.getPrizeName());
+            if(p == null) {
+                Prize addPrize = new Prize();
+                addPrize.setBook(book);
+                addPrize.setYearAwarded(prize.getYearAwarded());
+                addPrize.setPrizeName(prize.getPrizeName());
+                prizeRepository.save(addPrize);
+                return prizeRepository.findAllPrizesForBook(bookID);
+            }
+            else return null;
+        }
+        else return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<PrizeDTO> removePrize(Long prizeID, Long bookID) {
+        Libro book = libroRepo.getOne(bookID);
+        if(book != null) {
+            Prize p = prizeRepository.findByIdAndBookID(prizeID, bookID);
+            if(p != null) {
+                prizeRepository.delete(p);
+                return prizeRepository.findAllPrizesForBook(bookID);
+            }
+            else return null;
+        }
+        else return null;    }
 }

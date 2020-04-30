@@ -23,9 +23,6 @@ public class MyBooks {
     @JoinColumn(name = "BookID")
     private Libro book;
 
-    @OneToOne(mappedBy = "myBook", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private ReadingProgress readingProgress;
-
     public Long getId() {
         return id;
     }
@@ -58,11 +55,4 @@ public class MyBooks {
         this.book = book;
     }
 
-    public ReadingProgress getReadingProgress() {
-        return readingProgress;
-    }
-
-    public void setReadingProgress(ReadingProgress readingProgress) {
-        this.readingProgress = readingProgress;
-    }
 }

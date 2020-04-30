@@ -9,9 +9,6 @@ public class UsefulReview {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Useful", nullable = false)
-    private Boolean useful;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ReviewID")
     private Recensione review;
@@ -26,14 +23,6 @@ public class UsefulReview {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getUseful() {
-        return useful;
-    }
-
-    public void setUseful(Boolean useful) {
-        this.useful = useful;
     }
 
     public Recensione getReview() {

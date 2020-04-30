@@ -51,9 +51,6 @@ public class UsersInfo {
     private List<BookRanking> bookRankingList = new ArrayList<BookRanking>();
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> commentList = new ArrayList<Comment>();
-
-    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Recensione> recensioneList = new ArrayList<Recensione>();
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -116,14 +113,6 @@ public class UsersInfo {
 
     public void setBookRankingList(List<BookRanking> bookRankingList) {
         this.bookRankingList = bookRankingList;
-    }
-
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
     }
 
     public List<Recensione> getRecensioneList() {

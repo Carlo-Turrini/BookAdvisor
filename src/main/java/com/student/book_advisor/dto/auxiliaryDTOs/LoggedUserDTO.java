@@ -1,16 +1,14 @@
 package com.student.book_advisor.dto.auxiliaryDTOs;
 
-import com.student.book_advisor.session.LoggedUserDAO;
-
-import java.util.Set;
+import java.util.List;
 
 public class LoggedUserDTO {
     private Long id;
-    private Set<String> roles;
+    private Boolean isAdmin;
 
-    public LoggedUserDTO(Long id, Set<String> roles) {
+    public LoggedUserDTO(Long id, Boolean isAdmin) {
         this.id = id;
-        this.roles = roles;
+        this.isAdmin = isAdmin;
     }
 
     public Long getId() {
@@ -21,11 +19,11 @@ public class LoggedUserDTO {
         this.id = id;
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public Boolean getAdmin() {
+        return isAdmin;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
     }
 }

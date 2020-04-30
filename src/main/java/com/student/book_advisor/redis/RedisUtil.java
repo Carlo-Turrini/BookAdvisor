@@ -11,29 +11,13 @@ public class RedisUtil {
 
     private final JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
 
-    public void add(String key, String value, Date expirationDate) {
+    public void set(String key, String value, Date expirationDate) {
         Jedis jedis = null;
         try {
             Long timeout = (expirationDate.getTime() - new Date().getTime())/1000;
             jedis = pool.getResource();
-            jedis.sadd(key, value);
+            jedis.set(key, value);
             jedis.expireAt(key, timeout);
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-        finally {
-            if(jedis != null) {
-                jedis.close();
-            }
-        }
-    }
-
-    public void remove(String key, String value) {
-        Jedis jedis = null;
-        try {
-            jedis = pool.getResource();
-            jedis.srem(key, value);
         }
         catch(Exception e) {
             throw new RuntimeException(e);
@@ -49,7 +33,8 @@ public class RedisUtil {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
-            return jedis.sismember(key, value);
+            String cachedToken = jedis.get(key);
+            return cachedToken.equals(value);
         }
         catch(Exception e) {
             throw new RuntimeException(e);

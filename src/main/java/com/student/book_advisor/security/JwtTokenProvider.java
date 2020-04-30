@@ -102,7 +102,7 @@ public class JwtTokenProvider {
                 Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
                 String jwtTokenID = claims.getBody().getId();
                 Date expirationDate = claims.getBody().getExpiration();
-                redisUtil.add(jwtTokenID, token, expirationDate);
+                redisUtil.set(jwtTokenID, token, expirationDate);
             }
         }
     }

@@ -2,6 +2,7 @@ package com.student.book_advisor.services;
 
 import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
+import com.student.book_advisor.dto.PrizeDTO;
 import com.student.book_advisor.entities.Libro;
 import com.student.book_advisor.enums.GenereLibro;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,4 +36,8 @@ public interface LibroService {
     public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(String titoloSaga, Long bookId);
 
     public Double getBookOverallRating(Long id);
+
+    public List<PrizeDTO> addPrize(PrizeDTO prize, Long bookID);
+
+    public List<PrizeDTO> removePrize(Long prizeID, Long bookID);
 }

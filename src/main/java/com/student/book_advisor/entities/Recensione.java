@@ -65,9 +65,6 @@ public class Recensione implements Serializable {
     private UsersInfo usersInfo;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> commentList = new ArrayList<Comment>();
-
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UsefulReview> usefulReviewList = new ArrayList<UsefulReview>();
 
     public Long getId() {
@@ -156,14 +153,6 @@ public class Recensione implements Serializable {
 
     public void setLibro(Libro libro) {
         this.libro = libro;
-    }
-
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
     }
 
     public List<UsefulReview> getUsefulReviewList() {
