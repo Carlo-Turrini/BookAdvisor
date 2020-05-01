@@ -1,6 +1,7 @@
 package com.student.book_advisor.dto;
 
 
+import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 import com.student.book_advisor.enums.GenereLibro;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public class LibroCardDTO {
     private Long id;
     private String titolo;
-    private List<String> authors;
+    private List<AuthorOfBook> authors;
     private List<String> genres;
     private Double overallRating = 0.0;
     private String coverImage;
@@ -36,11 +37,11 @@ public class LibroCardDTO {
         this.titolo = titolo;
     }
 
-    public List<String> getAuthors() {
+    public List<AuthorOfBook> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<String> authors) {
+    public void setAuthors(List<AuthorOfBook> authors) {
         this.authors = authors;
     }
 

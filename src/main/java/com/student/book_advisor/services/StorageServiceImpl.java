@@ -57,6 +57,9 @@ public class StorageServiceImpl implements StorageService {
                     else if(tipologia.equals(FileUploadDir.profileImage)) {
                         dir = FolderService.profile_dir;
                     }
+                    else if(tipologia.equals(FileUploadDir.authorImage)) {
+                        dir = FolderService.author_dir;
+                    }
                 }
                 else throw new StorageException("Estensione del file non valida" + uploadedFilename);
                 System.out.println("Creo dir se non esiste");
@@ -100,8 +103,11 @@ public class StorageServiceImpl implements StorageService {
             if(tipologia.equals(FileUploadDir.profileImage)) {
                 fullPath = FolderService.profile_dir + imagePath;
             }
-            else {
+            else if(tipologia.equals(FileUploadDir.coverImage)) {
                 fullPath = FolderService.cover_dir + imagePath;
+            }
+            else {
+                fullPath = FolderService.author_dir + imagePath;
             }
             String encodeBase64 = null;
             String extension = StringUtils.getFilenameExtension(imagePath);

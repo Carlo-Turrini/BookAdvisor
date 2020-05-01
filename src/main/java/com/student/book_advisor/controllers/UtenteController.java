@@ -38,7 +38,7 @@ public class UtenteController {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public LoggedUserDTO getLoggedUserInfo() {
         AuthUserPrincipal authUserPrincipal = (AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return new LoggedUserDTO(authUserPrincipal.getId(), authUserPrincipal.getAuthoritiesToString());
+        return new LoggedUserDTO(authUserPrincipal.getId(), authUserPrincipal.getAuthoritiesToString().contains("ROLE_ADMIN"));
     }
     //Rimuovibile
     @GetMapping("/utenti/id")
