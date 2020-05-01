@@ -15,4 +15,9 @@ public interface GenreRepository extends JpaRepository<Genre,Long> {
 
     @Query("SELECT g.genre FROM Genre g JOIN g.genreJoinBookList genBook WHERE genBook.book.id = :bookID")
     public List<String> findGenresOfBook(@Param("bookID")Long bookID);
+
+    public Genre findByGenre(String genre);
+
+    @Query("SELECT g.genre FROM Genre g")
+    public List<String> findAllToString();
 }

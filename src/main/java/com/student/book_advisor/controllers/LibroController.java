@@ -1,18 +1,13 @@
 package com.student.book_advisor.controllers;
 
 
-import com.student.book_advisor.constants.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
 import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.entities.Libro;
-import com.student.book_advisor.enums.Credenziali;
 import com.student.book_advisor.enums.GenereLibro;
 import com.student.book_advisor.services.LibroService;
-import com.student.book_advisor.services.UtenteService;
-import com.student.book_advisor.session.LoggedUserDAO;
-import com.student.book_advisor.session.SessionDAOFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
@@ -62,7 +57,7 @@ public class LibroController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/libri")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> newBook(@Valid @RequestBody LibroFormDTO bookForm, BindingResult result, HttpServletRequest request, HttpServletResponse response) {
+    public Map<String, Set<String>> newBook(@Valid @RequestBody LibroFormDTO bookForm, BindingResult result) {
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             if(!this.libroService.isTitleUnique(bookForm.getTitolo())) {
@@ -71,7 +66,7 @@ public class LibroController {
             for(FieldError fieldError: result.getFieldErrors()) {
                 String code = fieldError.getCode();
                 String field = fieldError.getField();
-                if(code.equals("NotNull") || code.equals("NotBlank")) {
+                if(code.equals("NotNull") || code.equals("NotBlank") || code.equals("NotEmpty")) {
                     errors.computeIfAbsent(field, key -> new HashSet<>()).add("required");
                 }
                 else if(field.equals("annoPubblicazione") && code.equals("Pattern")) {
@@ -92,12 +87,6 @@ public class LibroController {
                     }
                     else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
                 }
-                else if(field.equals("autori") && code.equals("Size")) {
-                    if(bookForm.getAutori().length() < 2) {
-                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
-                    }
-                    else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                }
                 else if(field.equals("sinossi") && code.equals("Size")) {
                     if(bookForm.getSinossi().length() < 1) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
@@ -109,19 +98,7 @@ public class LibroController {
                 }
             }
             if(errors.isEmpty()) {
-                Libro newBook = new Libro();
-                newBook.setAnnoPubblicazione(bookForm.getAnnoPubblicazione());
-                newBook.setPagine(bookForm.getPagine());
-                newBook.setAutori(bookForm.getAutori());
-                newBook.setSinossi(bookForm.getSinossi());
-                newBook.setTitolo(bookForm.getTitolo());
-                newBook.setGenere(bookForm.getGenere());
-                newBook.setSaga(bookForm.getSaga());
-                if(bookForm.getSaga()) {
-                    newBook.setTitoloSaga(bookForm.getTitoloSaga());
-                    newBook.setNumInSaga(bookForm.getNumInSaga());
-                }
-                libroService.newBook(newBook);
+                libroService.newBook(bookForm);
             }
             return errors;
         }
@@ -166,7 +143,7 @@ public class LibroController {
                 for (FieldError fieldError : result.getFieldErrors()) {
                     String code = fieldError.getCode();
                     String field = fieldError.getField();
-                    if (code.equals("NotNull") || code.equals("NotBlank")) {
+                    if (code.equals("NotNull") || code.equals("NotBlank") || code.equals("NotEmpty")) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("required");
                     } else if (field.equals("annoPubblicazione") && code.equals("Pattern")) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("pattern");
@@ -180,10 +157,6 @@ public class LibroController {
                         if (bookForm.getTitolo().length() < 1) {
                             errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
                         } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                    } else if (field.equals("autori") && code.equals("Size")) {
-                        if (bookForm.getAutori().length() < 2) {
-                            errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
-                        } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
                     } else if (field.equals("sinossi") && code.equals("Size")) {
                         if (bookForm.getSinossi().length() < 1) {
                             errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
@@ -193,18 +166,7 @@ public class LibroController {
                     }
                 }
                 if (errors.isEmpty()) {
-                    book.setAnnoPubblicazione(bookForm.getAnnoPubblicazione());
-                    book.setPagine(bookForm.getPagine());
-                    book.setAutori(bookForm.getAutori());
-                    book.setSinossi(bookForm.getSinossi());
-                    book.setTitolo(bookForm.getTitolo());
-                    book.setGenere(bookForm.getGenere());
-                    book.setSaga(bookForm.getSaga());
-                    if (bookForm.getSaga()) {
-                        book.setTitoloSaga(bookForm.getTitoloSaga());
-                        book.setNumInSaga(bookForm.getNumInSaga());
-                    }
-                    libroService.updateBook(book);
+                    libroService.updateBook(bookForm, bookId);
                 }
                 return errors;
             }

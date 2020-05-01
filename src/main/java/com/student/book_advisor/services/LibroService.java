@@ -3,6 +3,7 @@ package com.student.book_advisor.services;
 import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
 import com.student.book_advisor.dto.PrizeDTO;
+import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.entities.Libro;
 import com.student.book_advisor.enums.GenereLibro;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,9 +22,9 @@ public interface LibroService {
 
     public LibroDTO findBookDTOById(Long id);
 
-    public Libro newBook(Libro newBook);
+    public Libro newBook(LibroFormDTO libroForm);
 
-    public Libro updateBook(Libro updatedBook);
+    public Libro updateBook(LibroFormDTO libroForm, Long bookID);
 
     public void deleteBook(Long id);
 

@@ -1,6 +1,7 @@
 package com.student.book_advisor.dto.formDTOS;
 
 
+import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 import com.student.book_advisor.enums.GenereLibro;
 
 import javax.validation.Valid;
@@ -26,7 +27,7 @@ public class LibroFormDTO {
     private String sinossi;
 
     @NotEmpty
-    private List<String> authors;
+    private List<AuthorOfBook> authors;
 
     @NotNull
     private Boolean saga;
@@ -39,8 +40,6 @@ public class LibroFormDTO {
 
     @NotEmpty
     private List<String> generi;
-
-    private List<@Valid PrizeFormDTO> prizes;
 
 
     public Integer getAnnoPubblicazione() {
@@ -99,11 +98,11 @@ public class LibroFormDTO {
         this.numInSaga = numInSaga;
     }
 
-    public List<String> getAuthors() {
+    public List<AuthorOfBook> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<String> authors) {
+    public void setAuthors(List<AuthorOfBook> authors) {
         this.authors = authors;
     }
 
@@ -115,11 +114,4 @@ public class LibroFormDTO {
         this.generi = generi;
     }
 
-    public List<PrizeFormDTO> getPrizes() {
-        return prizes;
-    }
-
-    public void setPrizes(List<PrizeFormDTO> prizes) {
-        this.prizes = prizes;
-    }
 }

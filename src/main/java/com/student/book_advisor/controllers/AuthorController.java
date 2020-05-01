@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.*;
 
+@RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class AuthorController {
     @Autowired

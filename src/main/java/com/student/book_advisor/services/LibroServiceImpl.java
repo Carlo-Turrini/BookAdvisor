@@ -2,14 +2,14 @@ package com.student.book_advisor.services;
 
 
 import com.student.book_advisor.constants.Constants;
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
 import com.student.book_advisor.dto.PrizeDTO;
-import com.student.book_advisor.entities.Libro;
-import com.student.book_advisor.entities.Prize;
-import com.student.book_advisor.entityRepositories.LibroRepository;
-import com.student.book_advisor.entityRepositories.PrizeRepository;
-import com.student.book_advisor.entityRepositories.RecensioneRepository;
+import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
+import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
+import com.student.book_advisor.entities.*;
+import com.student.book_advisor.entityRepositories.*;
 import com.student.book_advisor.enums.FileUploadDir;
 import com.student.book_advisor.enums.GenereLibro;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +36,16 @@ public class LibroServiceImpl implements LibroService {
     private StorageService storageService;
     @Autowired
     private PrizeRepository prizeRepository;
+    @Autowired
+    private GenreJoinBookRepository genreJoinBookRepository;
+    @Autowired
+    private GenreRepository genreRepository;
+    @Autowired
+    private SagaRepository sagaRepository;
+    @Autowired
+    private AuthorRepository authorRepository;
+    @Autowired
+    private AuthorJoinBookRepository authorJoinBookRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -119,14 +129,92 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Libro newBook(Libro newBook) {
-        return libroRepo.save(newBook);
+    public Libro newBook(LibroFormDTO libroForm) {
+        Libro book = new Libro();
+        book.setTitolo(libroForm.getTitolo());
+        book.setSinossi(libroForm.getSinossi());
+        book.setPagine(libroForm.getPagine());
+        book.setAnnoPubblicazione(libroForm.getAnnoPubblicazione());
+        book = libroRepo.save(book);
+        for(String gen : libroForm.getGeneri()) {
+            Genre genre = genreRepository.findByGenre(gen);
+            GenreJoinBook gjb = new GenreJoinBook();
+            gjb.setBook(book);
+            gjb.setGenre(genre);
+            genreJoinBookRepository.save(gjb);
+        }
+        if(libroForm.getSaga()) {
+            Saga saga = new Saga();
+            saga.setBook(book);
+            saga.setNumberInSaga(libroForm.getNumInSaga());
+            saga.setSagaTitle(libroForm.getTitoloSaga());
+            sagaRepository.save(saga);
+        }
+        for(AuthorOfBook author : libroForm.getAuthors()) {
+            Author auth = authorRepository.getOne(author.getId());
+            if(auth != null) {
+                AuthorJoinBook ajb = new AuthorJoinBook();
+                ajb.setAuthor(auth);
+                ajb.setBook(book);
+                authorJoinBookRepository.save(ajb);
+            }
+            else throw new ApplicationException("This author doesn't exist!");
+        }
+        return book;
+
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Libro updateBook(Libro updatedBook) {
-        return libroRepo.save(updatedBook);
+    public Libro updateBook(LibroFormDTO libroForm, Long bookID) {
+        Libro book = libroRepo.getOne(bookID);
+        if(book != null) {
+            book.setTitolo(libroForm.getTitolo());
+            book.setSinossi(libroForm.getSinossi());
+            book.setPagine(libroForm.getPagine());
+            book.setAnnoPubblicazione(libroForm.getAnnoPubblicazione());
+            book = libroRepo.save(book);
+            for (String gen : libroForm.getGeneri()) {
+                Genre genre = genreRepository.findByGenre(gen);
+                GenreJoinBook gjb = genreJoinBookRepository.findByGenre(genre);
+                if (gjb == null) {
+                    gjb = new GenreJoinBook();
+                    gjb.setBook(book);
+                    gjb.setGenre(genre);
+                    genreJoinBookRepository.save(gjb);
+                }
+            }
+            if (libroForm.getSaga()) {
+                Saga saga = sagaRepository.findByBook(book);
+                if (saga == null) {
+                    saga = new Saga();
+                    saga.setBook(book);
+                }
+                saga.setNumberInSaga(libroForm.getNumInSaga());
+                saga.setSagaTitle(libroForm.getTitoloSaga());
+                sagaRepository.save(saga);
+            } else {
+                Saga saga = sagaRepository.findByBook(book);
+                if (saga != null) {
+                    sagaRepository.delete(saga);
+                }
+            }
+            for (AuthorOfBook author : libroForm.getAuthors()) {
+                Author auth = authorRepository.getOne(author.getId());
+                if(auth != null) {
+                    AuthorJoinBook ajb = authorJoinBookRepository.findByAuthorAndBook(auth, book);
+                    if(ajb == null) {
+                        ajb = new AuthorJoinBook();
+                        ajb.setAuthor(auth);
+                        ajb.setBook(book);
+                        authorJoinBookRepository.save(ajb);
+                    }
+                }
+                else throw new ApplicationException("This author doesn't exist!");
+            }
+            return book;
+        }
+        else return null;
     }
 
     @Override
