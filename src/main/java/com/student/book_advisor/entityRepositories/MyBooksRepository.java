@@ -15,7 +15,7 @@ public interface MyBooksRepository extends JpaRepository<MyBooks, Long> {
     @Query("DELETE FROM MyBooks mb WHERE mb.id = :id AND mb.usersInfo.id = :userID")
     public void deleteMyBookByUserIDAndId(@Param("id")Long id, @Param("userID") Long userID);
 
-    @Query("SELECT new com.student.book_advisor.dto.MyBooksDTO(mb.id, b.id, b.titolo, mb.ShelfType, mb.usersInfo.id) FROM MyBooks mb JOIN mb.book b WHERE mb.usersInfo.id = :userID")
+    @Query("SELECT new com.student.book_advisor.dto.MyBooksDTO(mb.id, l.id, l.titolo, mb.ShelfType, mb.usersInfo.id, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (mb.book.id = l.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE mb.usersInfo.id = :userID GROUP BY mb.id, l.id, l.titolo, mb.ShelfType, mb.usersInfo.id")
     public List<MyBooksDTO> getMyBooksByUserID(@Param("userID")Long userID);
 
     @Query("SELECT mb FROM MyBooks mb WHERE mb.id = :id AND mb.usersInfo.id = :userID")

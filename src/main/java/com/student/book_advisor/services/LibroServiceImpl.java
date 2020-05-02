@@ -7,6 +7,7 @@ import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
 import com.student.book_advisor.dto.PrizeDTO;
 import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
+import com.student.book_advisor.dto.auxiliaryDTOs.OverallRatingsForBook;
 import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.entities.*;
 import com.student.book_advisor.entityRepositories.*;
@@ -296,6 +297,11 @@ public class LibroServiceImpl implements LibroService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Double getBookOverallRating(Long id) {
         return this.recensioneRepo.getAverageRatingOfBook(id);
+    }
+
+    @Override
+    public OverallRatingsForBook getBookOverallRatings(Long bookID) {
+        return recensioneRepo.getAverageRatingsOfBook(bookID);
     }
 
     @Override

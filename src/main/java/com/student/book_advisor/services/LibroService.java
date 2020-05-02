@@ -3,6 +3,7 @@ package com.student.book_advisor.services;
 import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
 import com.student.book_advisor.dto.PrizeDTO;
+import com.student.book_advisor.dto.auxiliaryDTOs.OverallRatingsForBook;
 import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.entities.Libro;
 import com.student.book_advisor.enums.GenereLibro;
@@ -41,4 +42,6 @@ public interface LibroService {
     public List<PrizeDTO> addPrize(PrizeDTO prize, Long bookID);
 
     public List<PrizeDTO> removePrize(Long prizeID, Long bookID);
+
+    public OverallRatingsForBook getBookOverallRatings(Long bookID);
 }

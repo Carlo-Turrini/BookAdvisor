@@ -17,10 +17,10 @@ import java.util.List;
 //DA AGGIORNARE
 public interface LibroRepository extends JpaRepository<Libro, Long> {
     //Aggiungi clausola OrderBy AVG on rating recensioni libro!
-    @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo) FROM Libro l JOIN l.genreJoinBookList genres  WHERE genres.genre.genre = :genere")
+    @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating) ) FROM Libro l JOIN l.genreJoinBookList genres LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE genres.genre.genre = :genere GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC ")
     public List<LibroCardDTO> findLibriByGenere(@Param("genere")GenereLibro genere);
 
-    @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo) FROM Libro l")
+    @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l LEFT JOIN Recensione r ON (r.libro.id = l.id) GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC ")
     public List<LibroCardDTO> findAllBooks();
 
     @Query("SELECT l.bookCoverPath FROM Libro l WHERE l.id = :bookId")
@@ -32,22 +32,22 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id) WHERE l.titolo = :titolo")
     public LibroDTO findByTitolo(@Param("titolo") String titolo);
 
-    @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo) FROM Libro l WHERE l.titolo LIKE CONCAT('%',:titolo,'%')")
+    @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE l.titolo LIKE CONCAT('%',:titolo,'%') GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC")
     public List<LibroCardDTO> findAllBooksContainingTitolo(@Param("titolo")String titolo);
 
     @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id)  WHERE l.id = :id")
     public LibroDTO getBookById(@Param("id")Long bookId);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo) FROM Libro l JOIN l.saga s WHERE s.sagaTitle = :titoloSaga AND l.id <> :bookId ORDER BY s.numberInSaga")
+    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l JOIN l.saga s LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE s.sagaTitle = :titoloSaga AND l.id <> :bookId GROUP BY l.id, l.titolo ORDER BY s.numberInSaga")
     public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(@Param("titoloSaga")String titoloSaga, @Param("bookId")Long id);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(b.id, b.titolo) FROM MyBooks mb JOIN mb.book b WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'read'")
+    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'read' GROUP BY l.id, l.titolo")
     public List<LibroCardDTO> findAllBooksReadByUser(@Param("userID")Long userID);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(b.id, b.titolo) FROM MyBooks mb JOIN mb.book b WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'toRead'")
+    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'toRead' GROUP BY l.id, l.titolo")
     public List<LibroCardDTO> findUsersBooksToRead(@Param("userID")Long userID);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(b.id, b.titolo) FROM MyBooks mb JOIN mb.book b WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'reading'")
+    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'reading' GROUP BY l.id, l.titolo")
     public List<LibroCardDTO> findAllBooksBeingReadByUser(@Param("userID")Long userID);
 
 }

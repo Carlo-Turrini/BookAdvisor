@@ -20,12 +20,15 @@ public class MyBooksDTO {
     private Long userID;
 
 
-    public MyBooksDTO(Long id, Long bookID, String titolo, BookShelf shelf, Long userID) {
+    public MyBooksDTO(Long id, Long bookID, String titolo, BookShelf shelf, Long userID, Double overallRating) {
         this.id = id;
         this.titolo = titolo;
         this.shelf = shelf;
         this.bookID = bookID;
         this.userID = userID;
+        if(overallRating != null) {
+            this.overallRating = overallRating;
+        }
     }
 
     public Long getId() {

@@ -16,9 +16,12 @@ public class LibroCardDTO {
     private String coverImage;
 
 
-    public LibroCardDTO(Long id, String titolo) {
+    public LibroCardDTO(Long id, String titolo, Double overallRating) {
         this.id = id;
         this.titolo = titolo;
+        if(overallRating != null) {
+            this.overallRating = overallRating;
+        }
     }
 
     public Long getId() {
