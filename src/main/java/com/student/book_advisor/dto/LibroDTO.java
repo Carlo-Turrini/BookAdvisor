@@ -24,7 +24,7 @@ public class LibroDTO {
     private List<String> genres;
     private BookShelf shelf;
 
-    public LibroDTO(Long id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga) {
+    public LibroDTO(Long id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga, Double overallRating, Double overallWritingQualityRating, Double overallPageTurnerRating, Double overallOriginalityRating) {
         this.id = id;
         this.titolo = titolo;
         this.annoPubblicazione = annoPubblicazione;
@@ -32,6 +32,10 @@ public class LibroDTO {
         this.sinossi = sinossi;
         this.titoloSaga = titoloSaga;
         this.numInSaga = numInSaga;
+        this.overallRating = overallRating;
+        this.overallWritingQualityRating = overallWritingQualityRating;
+        this.overallPageTurnerRating = overallPageTurnerRating;
+        this.overallOriginalityRating = overallOriginalityRating;
     }
 
     public Long getId() {

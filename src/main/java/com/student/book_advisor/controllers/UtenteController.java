@@ -1,14 +1,17 @@
 package com.student.book_advisor.controllers;
 
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.MyBooksDTO;
+import com.student.book_advisor.dto.UsersInfoDTO;
 import com.student.book_advisor.dto.UtenteCardDTO;
 import com.student.book_advisor.dto.UtenteDTO;
 import com.student.book_advisor.dto.auxiliaryDTOs.LoggedUserDTO;
 import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
-import com.student.book_advisor.entities.MyBooks;
+import com.student.book_advisor.entities.UsersInfo;
 import com.student.book_advisor.entities.Utente;
 import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.security.AuthUserPrincipal;
+import com.student.book_advisor.services.MyBooksService;
 import com.student.book_advisor.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +36,8 @@ public class UtenteController {
 
     @Autowired
     private UtenteService utenteService;
+    @Autowired
+    private MyBooksService myBooksService;
 
     @GetMapping("/utenti/loggedUserInfo")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
@@ -80,8 +85,8 @@ public class UtenteController {
 
     @GetMapping("/utenti/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public UtenteDTO getUser(@PathVariable("id") @Min(1) @Max(1) Long id) {
-        return (UtenteDTO) utenteService.findById(id);
+    public UsersInfoDTO getUser(@PathVariable("id") @Min(1) @Max(1) Long id) {
+        return (UsersInfoDTO) utenteService.findById(id);
     }
 
     @PostMapping("/utenti")
@@ -134,14 +139,7 @@ public class UtenteController {
 
             }
             if(errors.isEmpty()) {
-                Utente newUser = new Utente();
-                newUser.setNome(userForm.getNome());
-                newUser.setCognome(userForm.getCognome());
-                newUser.setUsername(userForm.getUsername());
-                newUser.setPassword(userForm.getPassword());
-                newUser.setEmail(userForm.getEmail());
-                newUser.setDescrizione(userForm.getDescrizione());
-                utenteService.newUser(newUser);
+                utenteService.newUser(userForm);
             }
             return errors;
         }
@@ -169,62 +167,48 @@ public class UtenteController {
     public Map<String, Set<String>> updateUser(@Valid @RequestBody UtenteFormDTO userForm, BindingResult result, @PathVariable("id") Long userId, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Set<String>> errors = new HashMap<>();
         try {
-            Utente updatedUser = utenteService.getUser(userId);
-            if(!userForm.getUsername().equals(updatedUser.getUsername()) && !this.utenteService.isUsernameUnique(userForm.getUsername())) {
-                errors.computeIfAbsent("username", key -> new HashSet<>()).add("usernameTaken");
-            }
-            if(!userForm.getEmail().equals(updatedUser.getEmail()) && !this.utenteService.isEmailUnique(userForm.getEmail())) {
-                errors.computeIfAbsent("username", key -> new HashSet<>()).add("emailTaken");
-            }
-            for(FieldError fieldError: result.getFieldErrors()) {
-                String code = fieldError.getCode();
-                String field = fieldError.getField();
-                if(code.equals("NotBlank")) {
-                    errors.computeIfAbsent(field, key -> new HashSet<>()).add("required");
+            UsersInfo updatedUser = utenteService.getUser(userId);
+            if(updatedUser != null) {
+                if (!userForm.getUsername().equals(updatedUser.getUsername())) {
+                    throw new ApplicationException("Username not updatable!");
                 }
-                else if(code.equals("Size") && field.equals("nome")) {
-                    if(userForm.getNome().length() < 2) {
-                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
+                if (!userForm.getEmail().equals(updatedUser.getEmail()) && !this.utenteService.isEmailUnique(userForm.getEmail())) {
+                    errors.computeIfAbsent("username", key -> new HashSet<>()).add("emailTaken");
+                }
+                for (FieldError fieldError : result.getFieldErrors()) {
+                    String code = fieldError.getCode();
+                    String field = fieldError.getField();
+                    if (code.equals("NotBlank")) {
+                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("required");
+                    } else if (code.equals("Size") && field.equals("nome")) {
+                        if (userForm.getNome().length() < 2) {
+                            errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
+                        } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
+                    } else if (code.equals("Size") && field.equals("cognome")) {
+                        if (userForm.getCognome().length() < 2) {
+                            errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
+                        } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
+                    } else if (code.equals("Size") && field.equals("username")) {
+                        if (userForm.getUsername().length() < 5) {
+                            errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
+                        } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
+                    } else if (code.equals("Size") && field.equals("password")) {
+                        if (userForm.getPassword().length() < 8) {
+                            errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
+                        } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
+                    } else if (code.equals("Size") && field.equals("descrizione")) {
+                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
+                    } else if (code.equals("Email") && field.equals("email")) {
+                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("email");
                     }
-                    else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                }
-                else if(code.equals("Size") && field.equals("cognome")) {
-                    if(userForm.getCognome().length() < 2) {
-                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
-                    }
-                    else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                }
-                else if(code.equals("Size") && field.equals("username")) {
-                    if(userForm.getUsername().length() < 5) {
-                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
-                    }
-                    else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                }
-                else if(code.equals("Size") && field.equals("password")) {
-                    if(userForm.getPassword().length() < 8) {
-                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
-                    }
-                    else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                }
-                else if(code.equals("Size") && field.equals("descrizione")) {
-                    errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                }
-                else if(code.equals("Email") && field.equals("email")) {
-                    errors.computeIfAbsent(field, key -> new HashSet<>()).add("email");
-                }
 
+                }
+                if (errors.isEmpty()) {
+                    utenteService.updateUser(updatedUser, userForm);
+                }
+                return errors;
             }
-            if(errors.isEmpty()) {
-                updatedUser.setNome(userForm.getNome());
-                updatedUser.setCognome(userForm.getCognome());
-                updatedUser.setUsername(userForm.getUsername());
-                updatedUser.setPassword(userForm.getPassword());
-                updatedUser.setEmail(userForm.getEmail());
-                updatedUser.setDescrizione(userForm.getDescrizione());
-                updatedUser.setCredenziali(userForm.getCredenziali());
-                utenteService.updateUser(updatedUser);
-            }
-            return errors;
+            else throw new ApplicationException("User doesn't exist!");
 
         }
         catch(Exception e) {
@@ -251,7 +235,7 @@ public class UtenteController {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("myBookID") @Min(1) @Max(1) Long myBookID, HttpServletRequest request, HttpServletResponse response) {
         try {
-            utenteService.deleteFromShelf(userID, myBookID);
+            myBooksService.deleteFromShelf(userID, myBookID);
         }
         catch(Exception e) {
             throw new RuntimeException(e);
@@ -259,17 +243,41 @@ public class UtenteController {
     }
 
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
-    @PutMapping("/utenti/{id}/myBooks/{myBookID}")
+    @PutMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<MyBooksDTO> updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("myBookID") @Min(1) @Max(1) Long myBookID, @RequestParam("shelf") BookShelf shelf) {
+    public List<MyBooksDTO> updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("bookID") @Min(1) @Max(1) Long bookID, @RequestParam("shelf") BookShelf shelf) {
         try {
-            utenteService.updateShelf(userID, myBookID, shelf);
-            return utenteService.findAllMyBooks(userID);
+            myBooksService.updateShelf(userID, bookID, shelf);
+            return myBooksService.findAllMyBooks(userID);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/utenti/{id}/myBooks")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public List<MyBooksDTO> getAllMyBooks(@PathVariable("id")Long userID) {
+        try {
+            return myBooksService.findAllMyBooks(userID);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PostMapping("/utenti/{id}/myBooks/{bookID}")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public String addBookToShelf(@PathVariable("id")Long userID, @PathVariable("bookID")Long bookID, @RequestBody BookShelf shelf) {
+        try {
+            return myBooksService.addToShelf(userID, bookID, shelf);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
 
 
 }

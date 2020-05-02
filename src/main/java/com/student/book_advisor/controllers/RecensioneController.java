@@ -1,20 +1,14 @@
 package com.student.book_advisor.controllers;
 
 
-import com.student.book_advisor.constants.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.RecensioneDTO;
 import com.student.book_advisor.dto.formDTOS.RecensioneFormDTO;
 import com.student.book_advisor.entities.Libro;
 import com.student.book_advisor.entities.Recensione;
-import com.student.book_advisor.entities.Utente;
-import com.student.book_advisor.enums.Credenziali;
 import com.student.book_advisor.security.AuthUserPrincipal;
 import com.student.book_advisor.services.LibroService;
 import com.student.book_advisor.services.RecensioneService;
-import com.student.book_advisor.services.UtenteService;
-import com.student.book_advisor.session.LoggedUserDAO;
-import com.student.book_advisor.session.SessionDAOFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,9 +31,6 @@ public class RecensioneController {
 
     @Autowired
     private RecensioneService recensioneService;
-
-    @Autowired
-    private LibroService libroService;
 
 
     @GetMapping("/libri/{id}/recensioni")
@@ -65,10 +56,10 @@ public class RecensioneController {
                 if(code.equals("NotBlank") || code.equals("NotNull")) {
                     errors.computeIfAbsent(field, key -> new HashSet<>()).add("required");
                 }
-                else if(code.equals("Min") && field.equals("rating")) {
+                else if(code.equals("Min")) {
                     errors.computeIfAbsent(field, key -> new HashSet<>()).add("min");
                 }
-                else if(code.equals("Max") && field.equals("rating")) {
+                else if(code.equals("Max")) {
                     errors.computeIfAbsent(field, key -> new HashSet<>()).add("max");
                 }
                 else if(code.equals("Size") && field.equals("testo")) {
@@ -79,15 +70,7 @@ public class RecensioneController {
                 }
             }
             if(errors.isEmpty()) {
-                Recensione newReview = new Recensione();
-                Libro bookToReview = libroService.findBookById(bookId);
-                if (bookToReview != null) {
-                    newReview.setLibro(bookToReview);
-                    newReview.setUsersInfo(((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsersInfo());
-                    newReview.setRating(reviewForm.getRating());
-                    newReview.setTesto(reviewForm.getTesto());
-                    recensioneService.addNewReview(newReview);
-                } else throw new ApplicationException("Libro inesistente!");
+                recensioneService.addNewReview(reviewForm, bookId);
             }
             return errors;
         }

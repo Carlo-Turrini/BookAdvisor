@@ -2,6 +2,7 @@ package com.student.book_advisor.services;
 
 import com.student.book_advisor.constants.Constants;
 import com.student.book_advisor.dto.*;
+import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
 import com.student.book_advisor.entities.*;
 import com.student.book_advisor.entityRepositories.*;
 import com.student.book_advisor.enums.BookShelf;
@@ -28,6 +29,8 @@ public class UtenteServiceImpl implements UtenteService {
     private LibroRepository libroRepository;
     @Autowired
     private UsersInfoRepository usersInfoRepository;
+    @Autowired
+    private AuthoritiesRepository authoritiesRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -66,13 +69,31 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public UsersInfo newUser(UsersInfo newUser) {
-        return usersInfoRepository.save(newUser);
+    public UsersInfo newUser(UtenteFormDTO userForm) {
+        UsersInfo newUser = new UsersInfo();
+        newUser.setName(userForm.getNome());
+        newUser.setSurname(userForm.getCognome());
+        newUser.setUsername(userForm.getUsername());
+        newUser.setPassword(userForm.getPassword());
+        newUser.setEmail(userForm.getEmail());
+        newUser.setDescription(userForm.getDescrizione());
+        newUser = usersInfoRepository.save(newUser);
+        //Set newUsers authority in application domain.
+        Authorities authority = new Authorities();
+        authority.setAuthority("USER");
+        authority.setUsersInfo(newUser);
+        authoritiesRepository.save(authority);
+        return newUser;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public UsersInfo updateUser(UsersInfo updatedUser) {
+    public UsersInfo updateUser(UsersInfo updatedUser, UtenteFormDTO userForm) {
+        updatedUser.setName(userForm.getNome());
+        updatedUser.setSurname(userForm.getCognome());
+        updatedUser.setPassword(userForm.getPassword());
+        updatedUser.setEmail(userForm.getEmail());
+        updatedUser.setDescription(userForm.getDescrizione());
         return usersInfoRepository.save(updatedUser);
     }
 
@@ -96,7 +117,6 @@ public class UtenteServiceImpl implements UtenteService {
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean isUsernameUnique(String username) {
         Integer count = usersInfoRepository.countAllByUsername(username);
-        System.out.println(count.toString());
         if(count == null || count == 0) {
             return true;
         }
@@ -128,41 +148,6 @@ public class UtenteServiceImpl implements UtenteService {
         return src;
     }
 
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteFromShelf(Long userID, Long myBookID) {
-        myBooksRepository.deleteMyBookByUserIDAndId(myBookID, userID);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void addToShelf(Long userID, Long bookID, BookShelf shelf) {
-        MyBooks myBook = myBooksRepository.getByBookIDAndUserID(bookID, userID);
-        if(myBook == null) {
-            MyBooks newMyBook = new MyBooks();
-            newMyBook.setShelfType(shelf);
-            newMyBook.setUsersInfo(usersInfoRepository.getOne(userID));
-            newMyBook.setBook(libroRepository.getOne(bookID));
-            myBooksRepository.save(newMyBook);
-        }
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void updateShelf(Long userID, Long myBookID, BookShelf shelf) {
-        MyBooks myBook = myBooksRepository.getByIdAndUserId(myBookID, userID);
-        if(myBook != null) {
-            myBook.setShelfType(shelf);
-            myBooksRepository.save(myBook);
-        }
-
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<MyBooksDTO> findAllMyBooks(Long userID) {
-        return myBooksRepository.getMyBooksByUserID(userID);
-    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)

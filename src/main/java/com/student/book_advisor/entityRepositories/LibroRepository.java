@@ -29,13 +29,13 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("SELECT count(l) FROM Libro l WHERE l.titolo = :titolo")
     public Integer countAllByTitolo(@Param("titolo")String titolo);
     //Togli
-    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id) WHERE l.titolo = :titolo")
+    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga, AVG(r.rating), AVG(r.writingQualityRating), AVG(r.pageTurnerRating), AVG(r.pageTurnerRating)) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE l.titolo = :titolo GROUP BY l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga")
     public LibroDTO findByTitolo(@Param("titolo") String titolo);
 
     @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE l.titolo LIKE CONCAT('%',:titolo,'%') GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC")
     public List<LibroCardDTO> findAllBooksContainingTitolo(@Param("titolo")String titolo);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id)  WHERE l.id = :id")
+    @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga, AVG(r.rating), AVG(r.writingQualityRating), AVG(r.pageTurnerRating), AVG(r.pageTurnerRating)) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE l.id = :id GROUP BY l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga")
     public LibroDTO getBookById(@Param("id")Long bookId);
 
     @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l JOIN l.saga s LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE s.sagaTitle = :titoloSaga AND l.id <> :bookId GROUP BY l.id, l.titolo ORDER BY s.numberInSaga")

@@ -32,8 +32,6 @@ public class UtenteFormDTO {
     @Size(max = 1024)
     private String descrizione;
 
-    private Credenziali credenziali = Credenziali.Normale;
-
     public String getNome() {
         return nome;
     }
@@ -82,11 +80,4 @@ public class UtenteFormDTO {
         this.descrizione = descrizione;
     }
 
-    public Credenziali getCredenziali() {
-        return credenziali;
-    }
-
-    public void setCredenziali(Credenziali credenziali) {
-        this.credenziali = credenziali;
-    }
 }

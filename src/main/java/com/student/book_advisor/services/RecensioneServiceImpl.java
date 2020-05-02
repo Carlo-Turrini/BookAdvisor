@@ -1,13 +1,18 @@
 package com.student.book_advisor.services;
 
 import com.student.book_advisor.constants.Constants;
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.RecensioneDTO;
+import com.student.book_advisor.dto.formDTOS.RecensioneFormDTO;
+import com.student.book_advisor.entities.Libro;
 import com.student.book_advisor.entities.Recensione;
 import com.student.book_advisor.entities.UsefulReview;
 import com.student.book_advisor.entities.UsersInfo;
 import com.student.book_advisor.entityRepositories.*;
 import com.student.book_advisor.enums.FileUploadDir;
+import com.student.book_advisor.security.AuthUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,7 +86,20 @@ public class RecensioneServiceImpl implements RecensioneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Recensione addNewReview(Recensione newReview) {
+    public Recensione addNewReview(RecensioneFormDTO reviewForm, Long bookID) {
+        Recensione newReview = new Recensione();
+        Libro bookToReview = libroRepo.getOne(bookID);
+        if (bookToReview != null) {
+            newReview.setLibro(bookToReview);
+            newReview.setUsersInfo(((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsersInfo());
+            newReview.setRating(reviewForm.getRating());
+            newReview.setPageTurnerRating(reviewForm.getPageTurnerRating());
+            newReview.setWritingQualityRating(reviewForm.getWritingQualityRating());
+            newReview.setOriginalityRating(reviewForm.getOriginalityRating());
+            newReview.setContainsSpoiler(reviewForm.getContainsSpoilers());
+            newReview.setTesto(reviewForm.getTesto());
+            recensioneRepo.save(newReview);
+        } else throw new ApplicationException("Libro inesistente!");
         return recensioneRepo.save(newReview);
     }
 

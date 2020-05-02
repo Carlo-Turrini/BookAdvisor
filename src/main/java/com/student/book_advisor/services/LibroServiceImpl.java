@@ -13,7 +13,9 @@ import com.student.book_advisor.entities.*;
 import com.student.book_advisor.entityRepositories.*;
 import com.student.book_advisor.enums.FileUploadDir;
 import com.student.book_advisor.enums.GenereLibro;
+import com.student.book_advisor.security.AuthUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,8 @@ public class LibroServiceImpl implements LibroService {
     private AuthorRepository authorRepository;
     @Autowired
     private AuthorJoinBookRepository authorJoinBookRepository;
+    @Autowired
+    private MyBooksRepository myBooksRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -54,11 +58,13 @@ public class LibroServiceImpl implements LibroService {
         List<LibroCardDTO> allBooks = new ArrayList<LibroCardDTO>();
         allBooks = libroRepo.findAllBooks();
         for(LibroCardDTO book: allBooks) {
-            Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
+            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
             if(rating == null) {
                 book.setOverallRating(new Double(0));
             }
-            else book.setOverallRating(rating);
+            else book.setOverallRating(rating);*/
+            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
+            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
@@ -67,7 +73,7 @@ public class LibroServiceImpl implements LibroService {
                 book.setCoverImage(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
             }
         }
-        allBooks.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
+        //allBooks.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
         return allBooks;
     }
 
@@ -77,11 +83,13 @@ public class LibroServiceImpl implements LibroService {
         List<LibroCardDTO> allBooksByGenre = new ArrayList<LibroCardDTO>();
         allBooksByGenre = libroRepo.findLibriByGenere(genere);
         for(LibroCardDTO book: allBooksByGenre) {
-            Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
+            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
             if(rating == null) {
                 book.setOverallRating(new Double(0));
             }
-            else book.setOverallRating(rating);
+            else book.setOverallRating(rating);*/
+            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
+            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
@@ -90,7 +98,7 @@ public class LibroServiceImpl implements LibroService {
                 book.setCoverImage(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
             }
         }
-        allBooksByGenre.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
+        //allBooksByGenre.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
         return allBooksByGenre;
     }
 
@@ -100,6 +108,7 @@ public class LibroServiceImpl implements LibroService {
         return libroRepo.getOne(id);
     }
 
+    //Toglibile
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public LibroDTO findBookByTitolo(String titolo) {
@@ -115,6 +124,7 @@ public class LibroServiceImpl implements LibroService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public LibroDTO findBookDTOById(Long id) {
         LibroDTO book = libroRepo.getBookById(id);
         String bookCoverPath = libroRepo.findBookCoverPath(id);
@@ -124,7 +134,13 @@ public class LibroServiceImpl implements LibroService {
         else {
             book.setCopertina(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
         }
-        book.setOverallRating(recensioneRepo.getAverageRatingOfBook(id));
+        book.setGenres(genreRepository.findGenresOfBook(book.getId()));
+        book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+        AuthUserPrincipal authUserPrincipal = (AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(authUserPrincipal != null) {
+            book.setShelf(myBooksRepository.getBookShelfByBookIDAndUserID(book.getId(), authUserPrincipal.getId()));
+        }
+        //book.setOverallRating(recensioneRepo.getAverageRatingOfBook(id));
         return book;
     }
 
@@ -254,11 +270,13 @@ public class LibroServiceImpl implements LibroService {
         List<LibroCardDTO> allBooksContainingTitolo = new ArrayList<LibroCardDTO>();
         allBooksContainingTitolo = libroRepo.findAllBooksContainingTitolo(titolo);
         for(LibroCardDTO book: allBooksContainingTitolo) {
-            Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
+            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
             if(rating == null) {
                 book.setOverallRating(new Double(0));
             }
-            else book.setOverallRating(rating);
+            else book.setOverallRating(rating);*/
+            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
+            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
@@ -267,7 +285,7 @@ public class LibroServiceImpl implements LibroService {
                 book.setCoverImage(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
             }
         }
-        allBooksContainingTitolo.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
+        //allBooksContainingTitolo.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
         return allBooksContainingTitolo;
     }
 
@@ -277,11 +295,13 @@ public class LibroServiceImpl implements LibroService {
         List<LibroCardDTO> sagaBooks = new ArrayList<LibroCardDTO>();
         sagaBooks = this.libroRepo.findAllBooksByTitoloSagaExcludingCurrent(titoloSaga, bookId);
         for(LibroCardDTO book: sagaBooks) {
-            Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
+            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
             if(rating == null) {
                 book.setOverallRating(new Double(0));
             }
-            else book.setOverallRating(rating);
+            else book.setOverallRating(rating);*/
+            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
+            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
