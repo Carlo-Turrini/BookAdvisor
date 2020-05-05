@@ -34,6 +34,8 @@ public class RecensioneServiceImpl implements RecensioneService {
     private LibroRepository libroRepo;
     @Autowired
     private UsefulReviewRepository usefulReviewRepository;
+    @Autowired
+    private AuthorRepository authorRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -57,6 +59,11 @@ public class RecensioneServiceImpl implements RecensioneService {
                 recensione.setProfileImage(storageService.serve(profilePhotoPath,FileUploadDir.profileImage));
 
             }
+            recensione.setAuthors(authorRepository.findAuthorsOfBook(recensione.getBookId()));
+            Long loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            if(loggedUserID != null) {
+                recensione.setReviewUsefulForLoggedUser(usefulReviewRepository.findByUserIDAndReviewID(loggedUserID, recensione.getId())!=null);
+            }
         }
         return recensioni;
     }
@@ -79,6 +86,11 @@ public class RecensioneServiceImpl implements RecensioneService {
             } else {
                 recensione.setProfileImage(storageService.serve(profilePhotoPath, FileUploadDir.profileImage));
 
+            }
+            recensione.setAuthors(authorRepository.findAuthorsOfBook(recensione.getBookId()));
+            Long loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            if(loggedUserID != null) {
+                recensione.setReviewUsefulForLoggedUser(usefulReviewRepository.findByUserIDAndReviewID(loggedUserID, recensione.getId())!=null);
             }
         }
         return recensioni;

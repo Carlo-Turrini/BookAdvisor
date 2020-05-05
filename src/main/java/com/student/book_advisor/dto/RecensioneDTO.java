@@ -1,5 +1,8 @@
 package com.student.book_advisor.dto;
 
+import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
+import com.student.book_advisor.entities.Author;
+
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +16,8 @@ public class RecensioneDTO {
     private Integer pageTurnerRating;
     private Boolean containsSpoilers;
     private Timestamp timestamp;
-    private Integer numOfUsersConsideredReviewUseful;
+    private Long numOfUsersConsideredReviewUseful;
+    private Boolean isReviewUsefulForLoggedUser;
     //Info utente
     private Long userId;
     private String username;
@@ -22,12 +26,12 @@ public class RecensioneDTO {
     //Info Libro
     private Long bookId;
     private String titolo;
-    private List<String> authors;
+    private List<AuthorOfBook> authors;
     private String coverImage;
 
 
 
-    public RecensioneDTO(Long id, String testo, Integer rating, Date timestamp, Long userId, String username, Long bookId, String titolo, Integer originalityRating, Integer writingQualityRating, Integer pageTurnerRating, Boolean containsSpoilers) {
+    public RecensioneDTO(Long id, String testo, Integer rating, Date timestamp, Long userId, String username, Long bookId, String titolo, Integer originalityRating, Integer writingQualityRating, Integer pageTurnerRating, Boolean containsSpoilers, Long numOfUsersConsideredReviewUseful) {
         this.id = id;
         this.testo = testo;
         this.rating = rating;
@@ -40,6 +44,7 @@ public class RecensioneDTO {
         this.writingQualityRating = writingQualityRating;
         this.pageTurnerRating = pageTurnerRating;
         this.containsSpoilers = containsSpoilers;
+        this.numOfUsersConsideredReviewUseful = numOfUsersConsideredReviewUseful;
     }
 
     public Long getId() {
@@ -154,19 +159,27 @@ public class RecensioneDTO {
         this.containsSpoilers = containsSpoilers;
     }
 
-    public List<String> getAuthors() {
+    public List<AuthorOfBook> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(List<String> authors) {
+    public void setAuthors(List<AuthorOfBook> authors) {
         this.authors = authors;
     }
 
-    public Integer getNumOfUsersConsideredReviewUseful() {
+    public Long getNumOfUsersConsideredReviewUseful() {
         return numOfUsersConsideredReviewUseful;
     }
 
-    public void setNumOfUsersConsideredReviewUseful(Integer numOfUsersConsideredReviewUseful) {
+    public void setNumOfUsersConsideredReviewUseful(Long numOfUsersConsideredReviewUseful) {
         this.numOfUsersConsideredReviewUseful = numOfUsersConsideredReviewUseful;
+    }
+
+    public Boolean getReviewUsefulForLoggedUser() {
+        return isReviewUsefulForLoggedUser;
+    }
+
+    public void setReviewUsefulForLoggedUser(Boolean reviewUsefulForLoggedUser) {
+        isReviewUsefulForLoggedUser = reviewUsefulForLoggedUser;
     }
 }

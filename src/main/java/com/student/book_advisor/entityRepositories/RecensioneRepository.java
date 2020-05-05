@@ -14,10 +14,10 @@ import java.util.List;
 @Repository
 public interface RecensioneRepository extends JpaRepository<Recensione, Long> {
 
-    @Query("SELECT new com.student.book_advisor.dto.RecensioneDTO(r.id, r.testo, r.rating, r.timestamp, r.usersInfo.id, r.usersInfo.username, r.libro.id, r.libro.titolo, r.originalityRating, r.writingQualityRating, r.pageTurnerRating, r.containsSpoiler) FROM Recensione r WHERE r.libro.id = :bookId ORDER BY r.timestamp DESC ")
+    @Query("SELECT new com.student.book_advisor.dto.RecensioneDTO(r.id, r.testo, r.rating, r.timestamp, r.usersInfo.id, r.usersInfo.username, r.libro.id, r.libro.titolo, r.originalityRating, r.writingQualityRating, r.pageTurnerRating, r.containsSpoiler, COUNT(ur)) FROM Recensione r LEFT JOIN UsefulReview ur ON (ur.review.id = r.id) WHERE r.libro.id = :bookId GROUP BY r.id, r.testo, r.rating, r.timestamp, r.usersInfo.id, r.usersInfo.username, r.libro.id, r.libro.titolo, r.originalityRating, r.writingQualityRating, r.pageTurnerRating, r.containsSpoiler ORDER BY r.timestamp DESC ")
     public List<RecensioneDTO> findAllByBook(@Param("bookId")Long id);
 
-    @Query("SELECT new com.student.book_advisor.dto.RecensioneDTO(r.id, r.testo, r.rating, r.timestamp, r.usersInfo.id, r.usersInfo.username, r.libro.id, r.libro.titolo, r.originalityRating, r.writingQualityRating, r.pageTurnerRating, r.containsSpoiler) FROM Recensione r WHERE r.usersInfo.id = :userId ORDER BY r.timestamp DESC ")
+    @Query("SELECT new com.student.book_advisor.dto.RecensioneDTO(r.id, r.testo, r.rating, r.timestamp, r.usersInfo.id, r.usersInfo.username, r.libro.id, r.libro.titolo, r.originalityRating, r.writingQualityRating, r.pageTurnerRating, r.containsSpoiler, COUNT(ur)) FROM Recensione r LEFT JOIN UsefulReview ur ON (ur.review.id = r.id) WHERE r.usersInfo.id = :userId GROUP BY r.id, r.testo, r.rating, r.timestamp, r.usersInfo.id, r.usersInfo.username, r.libro.id, r.libro.titolo, r.originalityRating, r.writingQualityRating, r.pageTurnerRating, r.containsSpoiler ORDER BY r.timestamp DESC ")
     public List<RecensioneDTO> findAllByUser(@Param("userId")Long id);
 
     @Query("SELECT AVG(r.rating) FROM Recensione r WHERE r.libro.id = :bookId")

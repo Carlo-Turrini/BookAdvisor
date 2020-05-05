@@ -24,4 +24,10 @@ public class GenreServiceImpl implements GenreService{
         }
         return genreRepository.findAllToString();
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<String> getAllGenres() {
+        return genreRepository.findAllToString();
+    }
 }

@@ -48,12 +48,30 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDTO getAuthorsDTO(Long id) {
-        return authorRepository.getAuthorsDTOById(id);
+        AuthorDTO author = authorRepository.getAuthorsDTOById(id);
+        String authorsPhotoPath = authorRepository.getAuthorsPhotoPath(id);
+        if(authorsPhotoPath.equals(Constants.DEF_PROFILE_PIC)) {
+            author.setAuthorsPhoto(authorsPhotoPath);
+        }
+        else {
+            author.setAuthorsPhoto(storageService.serve(authorsPhotoPath, FileUploadDir.authorImage));
+        }
+        return author;
     }
 
     @Override
     public List<AuthorCardDTO> getAllAuthors() {
-        return authorRepository.findAllToDTO();
+        List<AuthorCardDTO> authorCardDTOList = authorRepository.findAllToDTO();
+        for(AuthorCardDTO author : authorCardDTOList) {
+            String authorsPhotoPath = authorRepository.getAuthorsPhotoPath(author.getId());
+            if(authorsPhotoPath.equals(Constants.DEF_PROFILE_PIC)) {
+                author.setAuthorsPhoto(authorsPhotoPath);
+            }
+            else {
+                author.setAuthorsPhoto(storageService.serve(authorsPhotoPath, FileUploadDir.authorImage));
+            }
+        }
+        return authorCardDTOList;
     }
 
     @Override

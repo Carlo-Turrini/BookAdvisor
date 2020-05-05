@@ -1,5 +1,7 @@
 package com.student.book_advisor.dto;
 
+import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
+
 import java.util.List;
 
 public class BookRankingDTO {
@@ -7,16 +9,14 @@ public class BookRankingDTO {
     private Long bookID;
     private Integer bookRank;
     private String bookTitle;
-    private String bookCoverPhotoPath;
-    private List<String> bookAuthors;
-    private Double bookOverallRating;
+    private String bookCoverPhoto;
+    private List<AuthorOfBook> bookAuthors;
 
-    public BookRankingDTO(Long id, Integer bookRank, Long bookID, String bookTitle, String bookCoverPhotoPath) {
+    public BookRankingDTO(Long id, Integer bookRank, Long bookID, String bookTitle) {
         this.id = id;
         this.bookRank = bookRank;
         this.bookID = bookID;
         this.bookTitle = bookTitle;
-        this.bookCoverPhotoPath = bookCoverPhotoPath;
     }
 
     public Long getId() {
@@ -51,27 +51,20 @@ public class BookRankingDTO {
         this.bookTitle = bookTitle;
     }
 
-    public String getBookCoverPhotoPath() {
-        return bookCoverPhotoPath;
+    public String getBookCoverPhoto() {
+        return bookCoverPhoto;
     }
 
-    public void setBookCoverPhotoPath(String bookCoverPhotoPath) {
-        this.bookCoverPhotoPath = bookCoverPhotoPath;
+    public void setBookCoverPhoto(String bookCoverPhoto) {
+        this.bookCoverPhoto = bookCoverPhoto;
     }
 
-    public List<String> getBookAuthors() {
+    public List<AuthorOfBook> getBookAuthors() {
         return bookAuthors;
     }
 
-    public void setBookAuthors(List<String> bookAuthors) {
+    public void setBookAuthors(List<AuthorOfBook> bookAuthors) {
         this.bookAuthors = bookAuthors;
     }
 
-    public Double getBookOverallRating() {
-        return bookOverallRating;
-    }
-
-    public void setBookOverallRating(Double bookOverallRating) {
-        this.bookOverallRating = bookOverallRating;
-    }
 }

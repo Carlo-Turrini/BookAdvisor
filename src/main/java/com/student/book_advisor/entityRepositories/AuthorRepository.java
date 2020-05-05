@@ -34,5 +34,8 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query("SELECT COUNT(a) FROM Author a WHERE a.authorsFullname = :authorsFullname")
     public Integer countAllAuthorsWithName(@Param("fullname")String authorsFullname);
 
+    @Query("SELECT a.authorsPhotoPath FROM Author a WHERE a.id = :id")
+    public String getAuthorsPhotoPath(@Param("id")Long id);
+
 
 }

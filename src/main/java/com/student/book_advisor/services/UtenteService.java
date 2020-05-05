@@ -2,6 +2,7 @@ package com.student.book_advisor.services;
 
 import com.student.book_advisor.dto.*;
 import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.dto.formDTOS.UtenteUpdateFormDTO;
 import com.student.book_advisor.entities.UsersInfo;
 import com.student.book_advisor.entities.Utente;
 import com.student.book_advisor.enums.BookShelf;
@@ -21,7 +22,7 @@ public interface UtenteService {
 
     public UsersInfo newUser(UtenteFormDTO userForm);
 
-    public UsersInfo updateUser(UsersInfo updatedUser, UtenteFormDTO userForm);
+    public UsersInfo updateUser(UsersInfo updatedUser, UtenteUpdateFormDTO userForm);
 
     public void deleteUser(Long id);
 
@@ -35,9 +36,5 @@ public interface UtenteService {
 
 
 
-    public List<BookRankingDTO> findUsersBookRank(Long userID);
 
-    public List<BookRankingDTO> addBookToBookRank(Long userID, Long bookID, Integer bookRank);
-
-    public List<BookRankingDTO> removeBookFromBookRank(Long userID, Long bookRankID);
 }

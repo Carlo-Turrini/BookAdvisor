@@ -1,16 +1,14 @@
 package com.student.book_advisor.controllers;
 
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.dto.MyBooksDTO;
-import com.student.book_advisor.dto.UsersInfoDTO;
-import com.student.book_advisor.dto.UtenteCardDTO;
-import com.student.book_advisor.dto.UtenteDTO;
+import com.student.book_advisor.dto.*;
 import com.student.book_advisor.dto.auxiliaryDTOs.LoggedUserDTO;
 import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.dto.formDTOS.UtenteUpdateFormDTO;
 import com.student.book_advisor.entities.UsersInfo;
-import com.student.book_advisor.entities.Utente;
 import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.security.AuthUserPrincipal;
+import com.student.book_advisor.services.BookRankingService;
 import com.student.book_advisor.services.MyBooksService;
 import com.student.book_advisor.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +36,9 @@ public class UtenteController {
     private UtenteService utenteService;
     @Autowired
     private MyBooksService myBooksService;
+    @Autowired
+    private BookRankingService bookRankingService;
+
 
     @GetMapping("/utenti/loggedUserInfo")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
@@ -164,14 +165,11 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> updateUser(@Valid @RequestBody UtenteFormDTO userForm, BindingResult result, @PathVariable("id") Long userId, HttpServletRequest request, HttpServletResponse response) {
+    public Map<String, Set<String>> updateUser(@Valid @RequestBody UtenteUpdateFormDTO userForm, BindingResult result, @PathVariable("id") Long userId, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             UsersInfo updatedUser = utenteService.getUser(userId);
             if(updatedUser != null) {
-                if (!userForm.getUsername().equals(updatedUser.getUsername())) {
-                    throw new ApplicationException("Username not updatable!");
-                }
                 if (!userForm.getEmail().equals(updatedUser.getEmail()) && !this.utenteService.isEmailUnique(userForm.getEmail())) {
                     errors.computeIfAbsent("username", key -> new HashSet<>()).add("emailTaken");
                 }
@@ -186,10 +184,6 @@ public class UtenteController {
                         } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
                     } else if (code.equals("Size") && field.equals("cognome")) {
                         if (userForm.getCognome().length() < 2) {
-                            errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
-                        } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                    } else if (code.equals("Size") && field.equals("username")) {
-                        if (userForm.getUsername().length() < 5) {
                             errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
                         } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
                     } else if (code.equals("Size") && field.equals("password")) {
@@ -277,7 +271,41 @@ public class UtenteController {
             throw new RuntimeException(e);
         }
     }
-    
+
+    @GetMapping("/utenti/{id}/bookRank")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public List<BookRankingDTO> getUsersBookRanking(@PathVariable("id")Long userID) {
+        try {
+            return bookRankingService.findUsersBookRank(userID);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.prinicpal.usersInfo.id)")
+    @PostMapping("/utenti/{id}/bookRank")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<BookRankingDTO> addBookRank(@PathVariable("id")Long userID, @RequestParam(name = "bookID") Long bookID, @RequestParam(name = "rank")Integer rank) {
+        try {
+            return bookRankingService.addBookToBookRank(userID, bookID, rank);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @DeleteMapping("/utenti/{id}/bookRank/{rankID}")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public List<BookRankingDTO> removeBookRank(@PathVariable("id")Long userID, @PathVariable("rankID")Long rankID) {
+        try {
+            return bookRankingService.removeBookFromBookRank(userID, rankID);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }
