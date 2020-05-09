@@ -25,9 +25,9 @@ public class AuthorController {
     private AuthorService authorService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/authors/isFullnameUnique")
+    @PostMapping("/authors/isFullnameUnique")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Boolean isAuthorsFullnameUnique(@RequestParam("fullname")String authorsFullname) {
+    public Boolean isAuthorsFullnameUnique(@RequestBody()String authorsFullname) {
         return authorService.isAuthorsFullnameUnique(authorsFullname);
     }
 

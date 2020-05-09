@@ -239,10 +239,9 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<MyBooksDTO> updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("bookID") @Min(1) @Max(1) Long bookID, @RequestParam("shelf") BookShelf shelf) {
+    public String updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("bookID") @Min(1) @Max(1) Long bookID, @RequestParam("shelf") BookShelf shelf) {
         try {
-            myBooksService.updateShelf(userID, bookID, shelf);
-            return myBooksService.findAllMyBooks(userID);
+            return myBooksService.updateShelf(userID, bookID, shelf);
         }
         catch (Exception e) {
             throw new RuntimeException(e);

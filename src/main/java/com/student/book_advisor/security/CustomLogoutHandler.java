@@ -18,5 +18,6 @@ public class CustomLogoutHandler implements LogoutHandler {
     public void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) {
         SecurityContextHolder.getContext().setAuthentication(null);
         jwtTokenProvider.invalidateJwtToken(httpServletRequest, httpServletResponse);
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 }

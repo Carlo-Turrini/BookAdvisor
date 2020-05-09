@@ -13,6 +13,7 @@ public class LibroDTO {
     private Integer annoPubblicazione;
     private Integer pagine;
     private String sinossi;
+    private Boolean saga;
     private String titoloSaga;
     private Integer numInSaga;
     private String copertina;
@@ -156,5 +157,13 @@ public class LibroDTO {
 
     public void setShelf(BookShelf shelf) {
         this.shelf = shelf;
+    }
+
+    public Boolean getSaga() {
+        return saga;
+    }
+
+    public void setSaga(Boolean saga) {
+        this.saga = saga;
     }
 }

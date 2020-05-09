@@ -10,7 +10,7 @@ public interface MyBooksService {
 
     public void deleteFromShelf(Long userID, Long myBookID);
 
-    public void updateShelf(Long userID, Long myBookID, BookShelf shelf);
+    public String updateShelf(Long userID, Long myBookID, BookShelf shelf);
 
     public List<MyBooksDTO> findAllMyBooks(Long userID);
 }

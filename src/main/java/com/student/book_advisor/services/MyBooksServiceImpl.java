@@ -46,12 +46,14 @@ public class MyBooksServiceImpl implements MyBooksService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateShelf(Long userID, Long myBookID, BookShelf shelf) {
+    public String updateShelf(Long userID, Long myBookID, BookShelf shelf) {
         MyBooks myBook = myBooksRepository.getByBookIDAndUserID(myBookID, userID);
         if(myBook != null) {
             myBook.setShelfType(shelf);
             myBooksRepository.save(myBook);
+            return myBook.getShelfType().toString();
         }
+        else throw new ApplicationException("Book isn't part of user's mybooks");
 
     }
 

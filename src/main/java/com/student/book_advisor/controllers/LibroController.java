@@ -271,9 +271,9 @@ public class LibroController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/libri/{id}/prizes/isPrizeAssigned")
+    @PostMapping("/libri/{id}/prizes/isPrizeAssigned")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Boolean isPrizeAlreadyAssignedToBook(@PathVariable("id")Long bookID, @RequestParam(name = "prizeName")String prizeName) {
+    public Boolean isPrizeAlreadyAssignedToBook(@PathVariable("id")Long bookID, @RequestBody()String prizeName) {
         return prizeService.isPrizeAlreadyAssignedToBook(prizeName, bookID);
     }
 }

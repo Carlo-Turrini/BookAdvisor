@@ -140,6 +140,9 @@ public class LibroServiceImpl implements LibroService {
         if(authUserPrincipal != null) {
             book.setShelf(myBooksRepository.getBookShelfByBookIDAndUserID(book.getId(), authUserPrincipal.getId()));
         }
+        if(book.getTitoloSaga() != null && book.getTitoloSaga() != "") {
+            book.setSaga(true);
+        }
         //book.setOverallRating(recensioneRepo.getAverageRatingOfBook(id));
         return book;
     }

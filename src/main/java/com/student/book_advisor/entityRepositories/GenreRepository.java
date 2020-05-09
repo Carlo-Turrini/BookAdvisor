@@ -20,4 +20,7 @@ public interface GenreRepository extends JpaRepository<Genre,Long> {
 
     @Query("SELECT g.genre FROM Genre g")
     public List<String> findAllToString();
+
+    @Query("SELECT COUNT(g) FROM Genre g WHERE g.genre = :genre")
+    public Integer countAllGenresByGenre(@Param("genre")String genre);
 }

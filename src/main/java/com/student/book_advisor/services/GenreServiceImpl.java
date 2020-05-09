@@ -16,18 +16,23 @@ public class GenreServiceImpl implements GenreService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<String> addGenre(String genre) {
+    public void addGenre(String genre) {
         if(genreRepository.findByGenre(genre) == null) {
             Genre gen = new Genre();
             gen.setGenre(genre);
             genreRepository.save(gen);
         }
-        return genreRepository.findAllToString();
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<String> getAllGenres() {
         return genreRepository.findAllToString();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Boolean isGenreUnique(String genre) {
+        return !(genreRepository.countAllGenresByGenre(genre) > 0);
     }
 }
