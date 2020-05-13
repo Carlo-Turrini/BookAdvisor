@@ -20,4 +20,6 @@ public interface AuthorService {
     public AuthorDTO getAuthorsDTO(Long id);
     public List<AuthorOfBook> getAuthorsOfBook(Long bookID);
     public String updateAuthorsPhoto(MultipartFile authorsPhoto, Long authorsID);
+    public List<AuthorOfBook> getAllAuthorsOfBook();
+    public AuthorOfBook getAuthorOfBookByFullname(String authorsFullname);
 }

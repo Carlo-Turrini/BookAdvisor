@@ -44,4 +44,6 @@ public interface LibroService {
     public List<PrizeDTO> removePrize(Long prizeID, Long bookID);
 
     public OverallRatingsForBook getBookOverallRatings(Long bookID);
+
+    public List<LibroCardDTO> findAllBooksByAuthor(String authorsFullname);
 }

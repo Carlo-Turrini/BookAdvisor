@@ -48,9 +48,6 @@ public class UsersInfo {
     private Set<Authorities> authorities;
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BookRanking> bookRankingList = new ArrayList<BookRanking>();
-
-    @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Recensione> recensioneList = new ArrayList<Recensione>();
 
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -105,14 +102,6 @@ public class UsersInfo {
 
     public void setProfilePhotoPath(String profilePhotoPath) {
         this.profilePhotoPath = profilePhotoPath;
-    }
-
-    public List<BookRanking> getBookRankingList() {
-        return bookRankingList;
-    }
-
-    public void setBookRankingList(List<BookRanking> bookRankingList) {
-        this.bookRankingList = bookRankingList;
     }
 
     public List<Recensione> getRecensioneList() {

@@ -2,7 +2,10 @@ package com.student.book_advisor.services;
 
 import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.MyBooksDTO;
+import com.student.book_advisor.dto.auxiliaryDTOs.MyBooksReadDTO;
+import com.student.book_advisor.entities.BookRanking;
 import com.student.book_advisor.entities.MyBooks;
+import com.student.book_advisor.entityRepositories.BookRankingRepository;
 import com.student.book_advisor.entityRepositories.LibroRepository;
 import com.student.book_advisor.entityRepositories.MyBooksRepository;
 import com.student.book_advisor.entityRepositories.UsersInfoRepository;
@@ -22,6 +25,8 @@ public class MyBooksServiceImpl implements MyBooksService {
     private UsersInfoRepository usersInfoRepository;
     @Autowired
     private LibroRepository libroRepository;
+    @Autowired
+    private BookRankingRepository bookRankingRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -49,6 +54,12 @@ public class MyBooksServiceImpl implements MyBooksService {
     public String updateShelf(Long userID, Long myBookID, BookShelf shelf) {
         MyBooks myBook = myBooksRepository.getByBookIDAndUserID(myBookID, userID);
         if(myBook != null) {
+            if(myBook.getShelfType().compareTo(BookShelf.read)==0) {
+                BookRanking bookRank = bookRankingRepository.getBookRankingByMyBooks(myBook);
+                if(bookRank != null && myBook.getShelfType().compareTo(shelf)!=0) {
+                    bookRankingRepository.delete(bookRank);
+                }
+            }
             myBook.setShelfType(shelf);
             myBooksRepository.save(myBook);
             return myBook.getShelfType().toString();
@@ -61,5 +72,11 @@ public class MyBooksServiceImpl implements MyBooksService {
     @Transactional(propagation = Propagation.REQUIRED)
     public List<MyBooksDTO> findAllMyBooks(Long userID) {
         return myBooksRepository.getMyBooksByUserID(userID);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<MyBooksReadDTO> findAllMyBooksRead(Long userID) {
+        return myBooksRepository.getAllMyBooksReadButNotInRank(userID);
     }
 }

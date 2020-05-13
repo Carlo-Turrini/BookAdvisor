@@ -20,4 +20,7 @@ public interface PrizeRepository extends JpaRepository<Prize, Long> {
 
     @Query("SELECT p FROM Prize p WHERE p.book.id = :bookID AND p.prizeName = :prizeName")
     public Prize findByBookIDAndPrizeName(@Param("bookID")Long bookID, @Param("prizeName")String prizeName);
+
+    @Query("SELECT new com.student.book_advisor.dto.PrizeDTO(p.id, p.yearAwarded, p.prizeName) FROM Prize p WHERE p.book.id = :bookID AND p.prizeName = :prizeName")
+    public PrizeDTO findDTOByBookIDAndPrizeName(@Param("bookID")Long bookID, @Param("prizeName")String prizeName);
 }

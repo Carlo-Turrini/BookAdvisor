@@ -60,9 +60,6 @@ public class Libro implements Serializable {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MyBooks> myBooksList = new ArrayList<MyBooks>();
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BookRanking> bookRankingList = new ArrayList<BookRanking>();
-
     public Long getId() {
         return id;
     }
@@ -167,11 +164,4 @@ public class Libro implements Serializable {
         this.myBooksList = myBooksList;
     }
 
-    public List<BookRanking> getBookRankingList() {
-        return bookRankingList;
-    }
-
-    public void setBookRankingList(List<BookRanking> bookRankingList) {
-        this.bookRankingList = bookRankingList;
-    }
 }

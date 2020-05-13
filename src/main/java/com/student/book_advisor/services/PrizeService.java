@@ -14,4 +14,6 @@ public interface PrizeService {
     public List<PrizeDTO> getAllPrizesOfBook(Long bookID);
 
     public Boolean isPrizeAlreadyAssignedToBook(String prizeName, Long bookID);
+
+    public PrizeDTO getPrizeOfBookFromName(Long bookID, String prizeName);
 }

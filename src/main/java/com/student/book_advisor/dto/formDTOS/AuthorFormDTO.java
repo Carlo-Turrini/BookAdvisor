@@ -18,7 +18,7 @@ public class AuthorFormDTO {
 
     @NotBlank
     @Size(min = 1, max = 4000)
-    private String bibliography;
+    private String biography;
 
     public String getAuthorsFullname() {
         return authorsFullname;
@@ -44,11 +44,11 @@ public class AuthorFormDTO {
         this.deathYear = deathYear;
     }
 
-    public String getBibliography() {
-        return bibliography;
+    public String getBiography() {
+        return biography;
     }
 
-    public void setBibliography(String bibliography) {
-        this.bibliography = bibliography;
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 }

@@ -3,15 +3,15 @@ package com.student.book_advisor.dto;
 public class AuthorDTO {
     private Long id;
     private String authorsFullname;
-    private String bibliography;
+    private String biography;
     private Integer birthYear;
     private Integer deathYear;
     private String authorsPhoto;
 
-    public AuthorDTO(Long id, String authorsFullname, String bibliography, Integer birthYear, Integer deathYear){
+    public AuthorDTO(Long id, String authorsFullname, String biography, Integer birthYear, Integer deathYear){
         this.id = id;
         this.authorsFullname = authorsFullname;
-        this.bibliography = bibliography;
+        this.biography = biography;
         this.birthYear = birthYear;
         this.deathYear = deathYear;
     }
@@ -32,12 +32,12 @@ public class AuthorDTO {
         this.authorsFullname = authorsFullname;
     }
 
-    public String getBibliography() {
-        return bibliography;
+    public String getBiography() {
+        return biography;
     }
 
-    public void setBibliography(String bibliography) {
-        this.bibliography = bibliography;
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 
     public Integer getBirthYear() {

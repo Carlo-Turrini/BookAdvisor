@@ -3,6 +3,7 @@ package com.student.book_advisor.controllers;
 import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.*;
 import com.student.book_advisor.dto.auxiliaryDTOs.LoggedUserDTO;
+import com.student.book_advisor.dto.auxiliaryDTOs.MyBooksReadDTO;
 import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
 import com.student.book_advisor.dto.formDTOS.UtenteUpdateFormDTO;
 import com.student.book_advisor.entities.UsersInfo;
@@ -248,6 +249,18 @@ public class UtenteController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @GetMapping("/utenti/{id}/myBooks/booksReadNotInRank")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public List<MyBooksReadDTO> getAllMyBooksReadNotInRank(@PathVariable("id")Long userID) {
+        try {
+            return myBooksService.findAllMyBooksRead(userID);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @GetMapping("/utenti/{id}/myBooks")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public List<MyBooksDTO> getAllMyBooks(@PathVariable("id")Long userID) {
@@ -258,6 +271,8 @@ public class UtenteController {
             throw new RuntimeException(e);
         }
     }
+
+
 
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PostMapping("/utenti/{id}/myBooks/{bookID}")
@@ -285,9 +300,9 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.prinicpal.usersInfo.id)")
     @PostMapping("/utenti/{id}/bookRank")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<BookRankingDTO> addBookRank(@PathVariable("id")Long userID, @RequestParam(name = "bookID") Long bookID, @RequestParam(name = "rank")Integer rank) {
+    public List<BookRankingDTO> addBookRank(@PathVariable("id")Long userID, @RequestParam(name = "myBookID") Long myBookID, @RequestParam(name = "rank")Integer rank) {
         try {
-            return bookRankingService.addBookToBookRank(userID, bookID, rank);
+            return bookRankingService.addBookToBookRank(userID, myBookID, rank);
         }
         catch(Exception e) {
             throw new RuntimeException(e);

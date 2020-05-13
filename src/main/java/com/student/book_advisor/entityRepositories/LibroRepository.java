@@ -50,4 +50,11 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'reading' GROUP BY l.id, l.titolo")
     public List<LibroCardDTO> findAllBooksBeingReadByUser(@Param("userID")Long userID);
 
+    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l JOIN l.authorJoinBookList  ajbl JOIN ajbl.author a LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE a.authorsFullname = :authorsFullname GROUP BY l.id, l.titolo")
+    public List<LibroCardDTO> findAllBooksByAuthor(@Param("authorsFullname")String authorsFullname);
+
+    @Query("SELECT b FROM Libro b JOIN MyBooks mb ON (mb.book.id = b.id) WHERE mb.id = :myBooksID")
+    public Libro getByMyBooksID(@Param("myBooksID")Long myBooksID);
+
+
 }

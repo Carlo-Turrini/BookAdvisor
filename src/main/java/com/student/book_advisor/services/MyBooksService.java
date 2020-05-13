@@ -1,6 +1,7 @@
 package com.student.book_advisor.services;
 
 import com.student.book_advisor.dto.MyBooksDTO;
+import com.student.book_advisor.dto.auxiliaryDTOs.MyBooksReadDTO;
 import com.student.book_advisor.enums.BookShelf;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface MyBooksService {
     public String updateShelf(Long userID, Long myBookID, BookShelf shelf);
 
     public List<MyBooksDTO> findAllMyBooks(Long userID);
+
+    public List<MyBooksReadDTO> findAllMyBooksRead(Long userID);
 }

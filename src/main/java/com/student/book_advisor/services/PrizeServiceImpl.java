@@ -56,4 +56,10 @@ public class PrizeServiceImpl implements PrizeService {
     public Boolean isPrizeAlreadyAssignedToBook(String prizeName, Long bookID) {
         return prizeRepository.findByBookIDAndPrizeName(bookID, prizeName) != null;
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public PrizeDTO getPrizeOfBookFromName(Long bookID, String prizeName) {
+        return prizeRepository.findDTOByBookIDAndPrizeName(bookID, prizeName);
+    }
 }

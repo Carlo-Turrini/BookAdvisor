@@ -3,7 +3,7 @@ package com.student.book_advisor.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "BookRanking", uniqueConstraints = {@UniqueConstraint(columnNames = {"BookRank", "UserID"}), @UniqueConstraint(columnNames = {"UserID", "BookID"})})
+@Table(name = "BookRanking", uniqueConstraints = {@UniqueConstraint(columnNames = {"MyBooksID"})})
 public class BookRanking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,13 +12,10 @@ public class BookRanking {
     @Column(name = "BookRank", precision = 2, nullable = false)
     private Integer bookRank;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BookID")
-    private Libro book;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MyBooksID")
+    private MyBooks myBooks;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UserID")
-    private UsersInfo usersInfo;
 
     public Long getId() {
         return id;
@@ -36,19 +33,11 @@ public class BookRanking {
         this.bookRank = bookRank;
     }
 
-    public Libro getBook() {
-        return book;
+    public MyBooks getMyBooks() {
+        return myBooks;
     }
 
-    public void setBook(Libro book) {
-        this.book = book;
-    }
-
-    public UsersInfo getUsersInfo() {
-        return usersInfo;
-    }
-
-    public void setUsersInfo(UsersInfo usersInfo) {
-        this.usersInfo = usersInfo;
+    public void setMyBooks(MyBooks myBooks) {
+        this.myBooks = myBooks;
     }
 }

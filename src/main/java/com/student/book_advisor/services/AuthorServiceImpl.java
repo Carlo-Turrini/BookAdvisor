@@ -31,7 +31,7 @@ public class AuthorServiceImpl implements AuthorService {
         newAuthor.setAuthorsFullname(author.getAuthorsFullname());
         newAuthor.setBirthYear(author.getBirthYear());
         newAuthor.setDeathYear(author.getDeathYear());
-        newAuthor.setBibliography(author.getBibliography());
+        newAuthor.setBiography(author.getBiography());
         authorRepository.save(newAuthor);
     }
 
@@ -81,7 +81,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void updateAuthor(Author author, AuthorFormDTO updateAuthorInfo) {
-        author.setBibliography(updateAuthorInfo.getBibliography());
+        author.setBiography(updateAuthorInfo.getBiography());
         author.setDeathYear(updateAuthorInfo.getDeathYear());
         author.setBirthYear(updateAuthorInfo.getBirthYear());
         author.setAuthorsFullname(updateAuthorInfo.getAuthorsFullname());
@@ -112,5 +112,17 @@ public class AuthorServiceImpl implements AuthorService {
         catch(Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<AuthorOfBook> getAllAuthorsOfBook() {
+        return this.authorRepository.findAllAuthorsOfBook();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AuthorOfBook getAuthorOfBookByFullname(String authorsFullname) {
+        return this.authorRepository.getAuthorOfBookByFullname(authorsFullname);
     }
 }

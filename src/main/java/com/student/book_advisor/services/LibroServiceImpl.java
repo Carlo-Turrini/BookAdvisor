@@ -358,5 +358,24 @@ public class LibroServiceImpl implements LibroService {
             }
             else return null;
         }
-        else return null;    }
+        else return null;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<LibroCardDTO> findAllBooksByAuthor(String authorsFullname) {
+        List<LibroCardDTO> booksByAuthor = libroRepo.findAllBooksByAuthor(authorsFullname);
+        for(LibroCardDTO book : booksByAuthor) {
+            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
+            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+            String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
+            if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
+                book.setCoverImage(bookCoverPath);
+            }
+            else {
+                book.setCoverImage(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
+            }
+        }
+        return booksByAuthor;
+    }
 }

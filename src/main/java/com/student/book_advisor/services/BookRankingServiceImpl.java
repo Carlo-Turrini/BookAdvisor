@@ -39,16 +39,16 @@ public class BookRankingServiceImpl implements BookRankingService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<BookRankingDTO> addBookToBookRank(Long userID, Long bookID, Integer bookRank) {
+    public List<BookRankingDTO> addBookToBookRank(Long userID, Long myBookID, Integer bookRank) {
         UsersInfo user = usersInfoRepository.getOne(userID);
         if(user != null) {
             List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
-            List<Long> bookIDsInRanking = bookRankingRepository.findAllBookIDsInRank(userID);
+            List<Long> myBookIDsInRanking = bookRankingRepository.findAllMyBookIDsInRank(userID);
             Integer numOfBooksInRank = bookRankingList.size();
-            Libro bookToAdd = libroRepository.getOne(bookID);
-            if (bookToAdd != null && !bookIDsInRanking.contains(bookID)) {
-                MyBooks myBook = myBooksRepository.getByBookIDAndUserID(bookID, userID);
-                if(myBook != null && myBook.getShelfType().compareTo(BookShelf.read)==0) {
+            MyBooks myBook = myBooksRepository.getByIdAndUserId(myBookID, userID);
+            if (myBook != null && !myBookIDsInRanking.contains(myBookID) && myBook.getShelfType().compareTo(BookShelf.read)==0) {
+                Libro bookToAdd = libroRepository.getByMyBooksID(myBookID);
+                if(bookToAdd != null) {
                     if (numOfBooksInRank == 10) {
                         bookRankingRepository.delete(bookRankingList.get(9));
                     }
@@ -65,8 +65,7 @@ public class BookRankingServiceImpl implements BookRankingService{
                     }
                     BookRanking newBookInRank = new BookRanking();
                     newBookInRank.setBookRank(bookRank);
-                    newBookInRank.setBook(bookToAdd);
-                    newBookInRank.setUsersInfo(user);
+                    newBookInRank.setMyBooks(myBook);
                     bookRankingRepository.save(newBookInRank);
                 }
             }
@@ -94,7 +93,7 @@ public class BookRankingServiceImpl implements BookRankingService{
         if(user != null) {
             List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
             BookRanking bookRankingToDelete = bookRankingRepository.getOne(bookRankID);
-            if(bookRankingToDelete.getUsersInfo().getId() == userID) {
+            if(bookRankingRepository.getUsersIDFromBookRanking(bookRankID) == userID) {
                 Integer bookRank = bookRankingToDelete.getBookRank();
                 Integer bookRankListSize = bookRankingList.size();
                 bookRankingRepository.delete(bookRankingToDelete);

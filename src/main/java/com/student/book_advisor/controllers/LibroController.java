@@ -40,7 +40,7 @@ public class LibroController {
 
     @GetMapping("/libri") //Il parametro è nella query string!
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<LibroCardDTO> getAllBooksByParam(@RequestParam(name = "genere", required = false) GenereLibro genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Long bookId) {
+    public List<LibroCardDTO> getAllBooksByParam(@RequestParam(name = "genere", required = false) GenereLibro genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Long bookId, @RequestParam(name = "author", required = false)String authorsFullname) {
         if(titolo != null) {
             return libroService.findBooksContainingTitolo(titolo);
         }
@@ -49,6 +49,9 @@ public class LibroController {
         }
         else if(titoloSaga != null && bookId != null) {
             return libroService.findAllBooksByTitoloSagaExcludingCurrent(titoloSaga, bookId);
+        }
+        else if(authorsFullname != null) {
+            return libroService.findAllBooksByAuthor(authorsFullname);
         }
         else return libroService.findAllBooks();
     }
@@ -268,6 +271,12 @@ public class LibroController {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public List<PrizeDTO> getPrizesOfBook(@PathVariable("id")Long bookID) {
         return prizeService.getAllPrizesOfBook(bookID);
+    }
+
+    @GetMapping("/libri/{id}/prizes/{prizeName}")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public PrizeDTO getPrizeOfBookFromName(@PathVariable("id")Long bookID, @PathVariable("prizeName")String prizeName) {
+        return prizeService.getPrizeOfBookFromName(bookID, prizeName);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

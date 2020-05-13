@@ -1,6 +1,7 @@
 package com.student.book_advisor.entityRepositories;
 
 import com.student.book_advisor.dto.MyBooksDTO;
+import com.student.book_advisor.dto.auxiliaryDTOs.MyBooksReadDTO;
 import com.student.book_advisor.entities.MyBooks;
 import com.student.book_advisor.enums.BookShelf;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,13 +20,17 @@ public interface MyBooksRepository extends JpaRepository<MyBooks, Long> {
     @Query("SELECT new com.student.book_advisor.dto.MyBooksDTO(mb.id, l.id, l.titolo, mb.ShelfType, mb.usersInfo.id, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (mb.book.id = l.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE mb.usersInfo.id = :userID GROUP BY mb.id, l.id, l.titolo, mb.ShelfType, mb.usersInfo.id")
     public List<MyBooksDTO> getMyBooksByUserID(@Param("userID")Long userID);
 
-    //Toglibile
     @Query("SELECT mb FROM MyBooks mb WHERE mb.id = :id AND mb.usersInfo.id = :userID")
     public MyBooks getByIdAndUserId(@Param("id")Long id, @Param("userID")Long userID);
 
+    //Toglibile
     @Query("SELECT mb FROM MyBooks mb WHERE mb.usersInfo.id = :userID AND mb.book.id = :bookID")
     public MyBooks getByBookIDAndUserID(@Param("bookID")Long bookID, @Param("userID")Long userID);
 
     @Query("SELECT mb.ShelfType FROM MyBooks mb WHERE mb.usersInfo.id = :userID AND mb.book.id = :bookID")
     public BookShelf getBookShelfByBookIDAndUserID(@Param("bookID")Long bookID, @Param("userID")Long userID);
+
+    @Query("SELECT new com.student.book_advisor.dto.auxiliaryDTOs.MyBooksReadDTO(mb.id, b.titolo) FROM MyBooks mb JOIN Libro b ON (mb.book.id = b.id) WHERE mb.ShelfType = 'read' AND mb.id NOT IN (SELECT br.myBooks.id FROM BookRanking br) ")
+    public List<MyBooksReadDTO> getAllMyBooksReadButNotInRank(@Param("userID")Long userID);
+
 }

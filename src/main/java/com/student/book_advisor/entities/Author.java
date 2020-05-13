@@ -25,8 +25,8 @@ public class Author {
     @Column(name = "DeathYear", precision = 4)
     private Integer deathYear;
 
-    @Column(name = "Bibliography", length = 4000, nullable = false)
-    private String bibliography;
+    @Column(name = "Biography", length = 4000, nullable = false)
+    private String biography;
 
     @Column(name = "AuthorsPhotoPath", length = 256, nullable = false)
     @ColumnDefault(Constants.DEF_PROFILE_PIC)
@@ -55,12 +55,12 @@ public class Author {
         this.deathYear = deathYear;
     }
 
-    public String getBibliography() {
-        return bibliography;
+    public String getBiography() {
+        return biography;
     }
 
-    public void setBibliography(String bibliography) {
-        this.bibliography = bibliography;
+    public void setBiography(String biography) {
+        this.biography = biography;
     }
 
     public String getAuthorsPhotoPath() {

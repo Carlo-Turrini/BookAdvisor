@@ -23,6 +23,9 @@ public class MyBooks {
     @JoinColumn(name = "BookID")
     private Libro book;
 
+    @OneToOne(mappedBy = "myBooks", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private BookRanking bookRanking;
+
     public Long getId() {
         return id;
     }
@@ -55,4 +58,11 @@ public class MyBooks {
         this.book = book;
     }
 
+    public BookRanking getBookRanking() {
+        return bookRanking;
+    }
+
+    public void setBookRanking(BookRanking bookRanking) {
+        this.bookRanking = bookRanking;
+    }
 }

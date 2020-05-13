@@ -3,6 +3,8 @@ package com.student.book_advisor.controllers;
 import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.dto.AuthorCardDTO;
 import com.student.book_advisor.dto.AuthorDTO;
+import com.student.book_advisor.dto.LibroCardDTO;
+import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 import com.student.book_advisor.dto.formDTOS.AuthorFormDTO;
 import com.student.book_advisor.entities.Author;
 import com.student.book_advisor.services.AuthorService;
@@ -60,8 +62,8 @@ public class AuthorController {
                         }
                         else errorCode = "maxLength";
                     }
-                    else if(field.equals("bibliography")) {
-                        if(authorFormDTO.getBibliography().length() < 1) {
+                    else if(field.equals("biography")) {
+                        if(authorFormDTO.getBiography().length() < 1) {
                             errorCode = "minLength";
                         }
                         else errorCode = "maxLength";
@@ -105,8 +107,8 @@ public class AuthorController {
                             if (authorFormDTO.getAuthorsFullname().length() < 3) {
                                 errorCode = "minLength";
                             } else errorCode = "maxLength";
-                        } else if (field.equals("bibliography")) {
-                            if (authorFormDTO.getBibliography().length() < 1) {
+                        } else if (field.equals("biography")) {
+                            if (authorFormDTO.getBiography().length() < 1) {
                                 errorCode = "minLength";
                             } else errorCode = "maxLength";
                         }
@@ -130,6 +132,13 @@ public class AuthorController {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAuthor(@RequestParam("id")Long id){
         authorService.deleteAuthor(id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/authors/authorsForBookForm")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public List<AuthorOfBook> getAuthorsForBookForm() {
+        return this.authorService.getAllAuthorsOfBook();
     }
 
     @GetMapping("/authors/{id}")
@@ -157,5 +166,11 @@ public class AuthorController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/authors/byName/{fullname}")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public AuthorOfBook getAuthorOfBookFromFullname(@PathVariable("fullname")String authorsFullname) {
+        return this.authorService.getAuthorOfBookByFullname(authorsFullname);
+    }
 
 }
