@@ -55,7 +55,7 @@ public class AuthUserPrincipal implements UserDetails {
         return this.usersInfo;
     }
 
-    public Long getId() {return this.usersInfo.getId();}
+    public Integer getId() {return this.usersInfo.getId();}
 
     public List<String> getAuthoritiesToString() {
         List<String> authoritiesToString = new ArrayList<String>();

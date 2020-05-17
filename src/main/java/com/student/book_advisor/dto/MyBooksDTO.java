@@ -9,18 +9,18 @@ import java.util.List;
 
 
 public class MyBooksDTO {
-    private Long id;
+    private Integer id;
     private String titolo;
     private List<AuthorOfBook> authors;
     private List<String> genres;
     private Double overallRating = 0.0;
     private String coverImage;
     private BookShelf shelf;
-    private Long bookID;
-    private Long userID;
+    private Integer bookID;
+    private Integer userID;
 
 
-    public MyBooksDTO(Long id, Long bookID, String titolo, BookShelf shelf, Long userID, Double overallRating) {
+    public MyBooksDTO(Integer id, Integer bookID, String titolo, BookShelf shelf, Integer userID, Double overallRating) {
         this.id = id;
         this.titolo = titolo;
         this.shelf = shelf;
@@ -31,11 +31,11 @@ public class MyBooksDTO {
         }
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -87,19 +87,19 @@ public class MyBooksDTO {
         this.shelf = shelf;
     }
 
-    public Long getBookID() {
+    public Integer getBookID() {
         return bookID;
     }
 
-    public void setBookID(Long bookID) {
+    public void setBookID(Integer bookID) {
         this.bookID = bookID;
     }
 
-    public Long getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
-    public void setUserID(Long userID) {
+    public void setUserID(Integer userID) {
         this.userID = userID;
     }
 }

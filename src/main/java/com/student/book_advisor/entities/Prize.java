@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Prize {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "YearAwarded", precision = 4, nullable = false)
     private Integer yearAwarded;
@@ -19,12 +19,8 @@ public class Prize {
     @JoinColumn(name = "BookID")
     private Libro book;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Integer getYearAwarded() {

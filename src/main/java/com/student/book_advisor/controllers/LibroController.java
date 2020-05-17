@@ -40,7 +40,7 @@ public class LibroController {
 
     @GetMapping("/libri") //Il parametro è nella query string!
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<LibroCardDTO> getAllBooksByParam(@RequestParam(name = "genere", required = false) GenereLibro genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Long bookId, @RequestParam(name = "author", required = false)String authorsFullname) {
+    public List<LibroCardDTO> getAllBooksByParam(@RequestParam(name = "genere", required = false) GenereLibro genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Integer bookId, @RequestParam(name = "author", required = false)String authorsFullname) {
         if(titolo != null) {
             return libroService.findBooksContainingTitolo(titolo);
         }
@@ -118,14 +118,14 @@ public class LibroController {
 
     @GetMapping("/libri/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public LibroDTO getBook(@PathVariable("id") @Min(1) @Max(1) Long id) {
+    public LibroDTO getBook(@PathVariable("id") @Min(1) @Max(1) Integer id) {
         return libroService.findBookDTOById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/libri/{id}/foto_copertina")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateBooksCoverPhoto(@RequestParam("copertina") MultipartFile coverPhoto, @PathVariable("id")Long bookId, HttpServletRequest request, HttpServletResponse response) {
+    public String updateBooksCoverPhoto(@RequestParam("copertina") MultipartFile coverPhoto, @PathVariable("id")Integer bookId, HttpServletRequest request, HttpServletResponse response) {
         try {
             Libro book = libroService.findBookById(bookId);
             if(book != null) {
@@ -141,7 +141,7 @@ public class LibroController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/libri/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> updateBook(@Valid @RequestBody LibroFormDTO bookForm, BindingResult result, @PathVariable("id")Long bookId, HttpServletRequest request, HttpServletResponse response) {
+    public Map<String, Set<String>> updateBook(@Valid @RequestBody LibroFormDTO bookForm, BindingResult result, @PathVariable("id")Integer bookId, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             Libro book = libroService.findBookById(bookId);
@@ -189,7 +189,7 @@ public class LibroController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/libri/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteBook(@PathVariable("id") @Min(1) @Max(1) Long id, HttpServletRequest request, HttpServletResponse response) {
+    public void deleteBook(@PathVariable("id") @Min(1) @Max(1) Integer id, HttpServletRequest request, HttpServletResponse response) {
         try {
             libroService.deleteBook(id);
         }
@@ -199,22 +199,21 @@ public class LibroController {
     }
 
     @GetMapping("/libri/{id}/overallRating")
-    @CrossOrigin(origins = "http://localhost:4200")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Double getBookOverallRating(@PathVariable("id")Long bookId) {
+    public Double getBookOverallRating(@PathVariable("id")Integer bookId) {
         return libroService.getBookOverallRating(bookId);
     }
 
     @GetMapping("/libri/{id}/overallRatings")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public OverallRatingsForBook getBookOverallRatiings(@PathVariable("id")Long bookID) {
+    public OverallRatingsForBook getBookOverallRatiings(@PathVariable("id")Integer bookID) {
         return libroService.getBookOverallRatings(bookID);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/libri/{id}/prizes")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> addPrize(@Valid @RequestBody PrizeFormDTO prizeForm, BindingResult result, @PathVariable("id")Long bookID) {
+    public Map<String, Set<String>> addPrize(@Valid @RequestBody PrizeFormDTO prizeForm, BindingResult result, @PathVariable("id")Integer bookID) {
         Map<String, Set<String>> errors = new HashMap<String, Set<String>>();
         try {
             Libro book = libroService.findBookById(bookID);
@@ -258,7 +257,7 @@ public class LibroController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/libri/{id}/prizes/{prizeID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deletePrize(@PathVariable("id")Long bookID, @PathVariable("prizeID")Long prizeID) {
+    public void deletePrize(@PathVariable("id")Integer bookID, @PathVariable("prizeID")Integer prizeID) {
         try {
             prizeService.deletePrize(prizeID, bookID);
         }
@@ -269,20 +268,21 @@ public class LibroController {
 
     @GetMapping("/libri/{id}/prizes")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<PrizeDTO> getPrizesOfBook(@PathVariable("id")Long bookID) {
+    public List<PrizeDTO> getPrizesOfBook(@PathVariable("id")Integer bookID) {
         return prizeService.getAllPrizesOfBook(bookID);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/libri/{id}/prizes/{prizeName}")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public PrizeDTO getPrizeOfBookFromName(@PathVariable("id")Long bookID, @PathVariable("prizeName")String prizeName) {
+    public PrizeDTO getPrizeOfBookFromName(@PathVariable("id")Integer bookID, @PathVariable("prizeName")String prizeName) {
         return prizeService.getPrizeOfBookFromName(bookID, prizeName);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/libri/{id}/prizes/isPrizeAssigned")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Boolean isPrizeAlreadyAssignedToBook(@PathVariable("id")Long bookID, @RequestBody()String prizeName) {
+    public Boolean isPrizeAlreadyAssignedToBook(@PathVariable("id")Integer bookID, @RequestBody()String prizeName) {
         return prizeService.isPrizeAlreadyAssignedToBook(prizeName, bookID);
     }
 }

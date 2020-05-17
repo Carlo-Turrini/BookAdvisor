@@ -4,27 +4,23 @@ import com.student.book_advisor.dto.*;
 import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
 import com.student.book_advisor.dto.formDTOS.UtenteUpdateFormDTO;
 import com.student.book_advisor.entities.UsersInfo;
-import com.student.book_advisor.entities.Utente;
-import com.student.book_advisor.enums.BookShelf;
-import com.student.book_advisor.enums.Credenziali;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface UtenteService {
 
     public List<UtenteCardDTO> findAllUsers();
 
-    public UsersInfoDTO findById(Long id);
+    public UsersInfoDTO findById(Integer id);
 
-    public UsersInfo getUser(Long userId);
+    public UsersInfo getUser(Integer userId);
 
     public UsersInfo newUser(UtenteFormDTO userForm);
 
     public UsersInfo updateUser(UsersInfo updatedUser, UtenteUpdateFormDTO userForm);
 
-    public void deleteUser(Long id);
+    public void deleteUser(Integer id);
 
     //public UsersInfo findUserToLogin(String username, String password);
 

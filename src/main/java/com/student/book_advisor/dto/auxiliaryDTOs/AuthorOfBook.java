@@ -1,19 +1,19 @@
 package com.student.book_advisor.dto.auxiliaryDTOs;
 
 public class AuthorOfBook {
-    private Long id;
+    private Integer id;
     private String authorsFullname;
 
-    public AuthorOfBook(Long id, String authorsFullname) {
+    public AuthorOfBook(Integer id, String authorsFullname) {
         this.id = id;
         this.authorsFullname = authorsFullname;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

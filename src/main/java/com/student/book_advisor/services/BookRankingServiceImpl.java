@@ -33,17 +33,17 @@ public class BookRankingServiceImpl implements BookRankingService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<BookRankingDTO> findUsersBookRank(Long userID) {
+    public List<BookRankingDTO> findUsersBookRank(Integer userID) {
         return bookRankingRepository.findBookRankingByUser(userID);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<BookRankingDTO> addBookToBookRank(Long userID, Long myBookID, Integer bookRank) {
+    public List<BookRankingDTO> addBookToBookRank(Integer userID, Integer myBookID, Integer bookRank) {
         UsersInfo user = usersInfoRepository.getOne(userID);
         if(user != null) {
             List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
-            List<Long> myBookIDsInRanking = bookRankingRepository.findAllMyBookIDsInRank(userID);
+            List<Integer> myBookIDsInRanking = bookRankingRepository.findAllMyBookIDsInRank(userID);
             Integer numOfBooksInRank = bookRankingList.size();
             MyBooks myBook = myBooksRepository.getByIdAndUserId(myBookID, userID);
             if (myBook != null && !myBookIDsInRanking.contains(myBookID) && myBook.getShelfType().compareTo(BookShelf.read)==0) {
@@ -88,7 +88,7 @@ public class BookRankingServiceImpl implements BookRankingService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<BookRankingDTO> removeBookFromBookRank(Long userID, Long bookRankID) {
+    public List<BookRankingDTO> removeBookFromBookRank(Integer userID, Integer bookRankID) {
         UsersInfo user = usersInfoRepository.getOne(userID);
         if(user != null) {
             List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
@@ -118,7 +118,7 @@ public class BookRankingServiceImpl implements BookRankingService{
                 }
                 return bookRankingDTOList;
             }
-            else throw new ApplicationException("This book rank doesn't belong to user");
+            else throw new ApplicationException("This book rank doesn't beInteger to user");
         }
         else throw new ApplicationException("This user doesn't exist");
     }

@@ -42,7 +42,7 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String username, Long userID, List<String> roles) {
+    public String createToken(String username, Integer userID, List<String> roles) {
         UUID jwtTokenID = UUID.randomUUID();
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", roles);

@@ -17,17 +17,17 @@ public interface LibroService {
 
     public List<LibroCardDTO> findAllBooksByGenre(GenereLibro genere);
 
-    public Libro findBookById(Long id);
+    public Libro findBookById(Integer id);
 
     public LibroDTO findBookByTitolo(String titolo);
 
-    public LibroDTO findBookDTOById(Long id);
+    public LibroDTO findBookDTOById(Integer id);
 
     public Libro newBook(LibroFormDTO libroForm);
 
-    public Libro updateBook(LibroFormDTO libroForm, Long bookID);
+    public Libro updateBook(LibroFormDTO libroForm, Integer bookID);
 
-    public void deleteBook(Long id);
+    public void deleteBook(Integer id);
 
     public boolean isTitleUnique(String titolo);
 
@@ -35,15 +35,15 @@ public interface LibroService {
 
     public List<LibroCardDTO> findBooksContainingTitolo(String titolo);
 
-    public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(String titoloSaga, Long bookId);
+    public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(String titoloSaga, Integer bookId);
 
-    public Double getBookOverallRating(Long id);
+    public Double getBookOverallRating(Integer id);
 
-    public List<PrizeDTO> addPrize(PrizeDTO prize, Long bookID);
+    public List<PrizeDTO> addPrize(PrizeDTO prize, Integer bookID);
 
-    public List<PrizeDTO> removePrize(Long prizeID, Long bookID);
+    public List<PrizeDTO> removePrize(Integer prizeID, Integer bookID);
 
-    public OverallRatingsForBook getBookOverallRatings(Long bookID);
+    public OverallRatingsForBook getBookOverallRatings(Integer bookID);
 
     public List<LibroCardDTO> findAllBooksByAuthor(String authorsFullname);
 }

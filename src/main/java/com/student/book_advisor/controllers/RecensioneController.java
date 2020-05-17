@@ -35,19 +35,19 @@ public class RecensioneController {
 
     @GetMapping("/libri/{id}/recensioni")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<RecensioneDTO> getAllReviewsByBook(@PathVariable("id") @Min(1) @Max(1) Long id) {
+    public List<RecensioneDTO> getAllReviewsByBook(@PathVariable("id") @Min(1) @Max(1) Integer id) {
         return recensioneService.getAllReviewsByBook(id);
     }
 
     @GetMapping("/utenti/{id}/recensioni")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<RecensioneDTO> getAllReviewsByUser(@PathVariable("id") @Min(1) @Max(1) Long id) {
+    public List<RecensioneDTO> getAllReviewsByUser(@PathVariable("id") @Min(1) @Max(1) Integer id) {
         return recensioneService.getAllReveiewsByUser(id);
     }
 
     @PostMapping("/libri/{id}/recensioni")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> addNewReview(@Valid @RequestBody RecensioneFormDTO reviewForm, BindingResult result, @PathVariable("id")Long bookId, HttpServletRequest request, HttpServletResponse response) {
+    public Map<String, Set<String>> addNewReview(@Valid @RequestBody RecensioneFormDTO reviewForm, BindingResult result, @PathVariable("id")Integer bookId, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             for(FieldError fieldError: result.getFieldErrors()) {
@@ -82,9 +82,31 @@ public class RecensioneController {
     @PreAuthorize("hasRole('ADMIN') OR isUsersReview(#id)")
     @DeleteMapping(value = {"/libri/{bookId}/recensioni/{id}", "/utenti/{userId}/recensioni/{id}"})
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteReview(@PathVariable("id") Long delReviewId, HttpServletRequest request, HttpServletResponse response) {
+    public void deleteReview(@PathVariable("id") Integer delReviewId, HttpServletRequest request, HttpServletResponse response) {
         try {
             recensioneService.deleteReview(delReviewId);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/recensioni/{id}/isReviewUseful")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void addUsefulReview(@PathVariable("id")Integer reviewID, @RequestBody() Integer userID) {
+        try {
+            recensioneService.addUsefulReview(reviewID, userID);
+        }
+        catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DeleteMapping("/recensioni/{reviewID}/isReviewUseful/{userID}")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void removeUsefulReview(@PathVariable("reviewID")Integer reviewID, @PathVariable("userID") Integer userID) {
+        try {
+            recensioneService.removeUsefulReview(reviewID, userID);
         }
         catch(Exception e) {
             throw new RuntimeException(e);

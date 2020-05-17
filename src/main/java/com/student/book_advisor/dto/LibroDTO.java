@@ -8,7 +8,7 @@ import java.util.List;
 
 public class LibroDTO {
 
-    private Long id;
+    private Integer id;
     private String titolo;
     private Integer annoPubblicazione;
     private Integer pagine;
@@ -25,7 +25,7 @@ public class LibroDTO {
     private List<String> genres;
     private BookShelf shelf;
 
-    public LibroDTO(Long id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga, Double overallRating, Double overallWritingQualityRating, Double overallPageTurnerRating, Double overallOriginalityRating) {
+    public LibroDTO(Integer id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga, Double overallRating, Double overallWritingQualityRating, Double overallPageTurnerRating, Double overallOriginalityRating) {
         this.id = id;
         this.titolo = titolo;
         this.annoPubblicazione = annoPubblicazione;
@@ -39,11 +39,11 @@ public class LibroDTO {
         this.overallOriginalityRating = overallOriginalityRating;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

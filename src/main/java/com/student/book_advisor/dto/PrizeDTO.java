@@ -1,21 +1,21 @@
 package com.student.book_advisor.dto;
 
 public class PrizeDTO {
-    private Long id;
+    private Integer id;
     private Integer yearAwarded;
     private String prizeName;
 
-    public PrizeDTO(Long id, Integer yearAwarded, String prizeName) {
+    public PrizeDTO(Integer id, Integer yearAwarded, String prizeName) {
         this.id = id;
         this.yearAwarded = yearAwarded;
         this.prizeName = prizeName;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

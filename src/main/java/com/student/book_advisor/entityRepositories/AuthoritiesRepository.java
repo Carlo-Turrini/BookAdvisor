@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @CrossOrigin(origins = "http://localhost:4200")
-public interface AuthoritiesRepository extends JpaRepository<Authorities, Long> {
+public interface AuthoritiesRepository extends JpaRepository<Authorities, Integer> {
     @Query("SELECT a FROM Authorities a WHERE a.usersInfo.id = :userID")
-    public List<Authorities> findAllByUserID(@Param("userID")Long userID);
+    public List<Authorities> findAllByUserID(@Param("userID")Integer userID);
 }

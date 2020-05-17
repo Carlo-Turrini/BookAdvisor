@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class UsefulReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ReviewID")
@@ -17,12 +17,8 @@ public class UsefulReview {
     @JoinColumn(name = "UserID")
     private UsersInfo usersInfo;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Recensione getReview() {

@@ -14,7 +14,7 @@ import java.util.List;
 
 @Repository
 @CrossOrigin(origins = "http://localhost:4200")
-public interface AuthorRepository extends JpaRepository<Author, Long> {
+public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
     @Query("SELECT new com.student.book_advisor.dto.AuthorCardDTO(a.id, a.authorsFullname, a.birthYear, a.deathYear) FROM Author a")
     public List<AuthorCardDTO> findAllToDTO();
@@ -26,16 +26,16 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     public AuthorDTO getAuthorsDTOByFullname(@Param("fullname")String fullname);
 
     @Query("SELECT new com.student.book_advisor.dto.AuthorDTO(a.id, a.authorsFullname, a.biography, a.birthYear, a.deathYear) FROM Author a WHERE a.id = :id")
-    public AuthorDTO getAuthorsDTOById(@Param("id")Long id);
+    public AuthorDTO getAuthorsDTOById(@Param("id")Integer id);
 
     @Query("SELECT new com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook(a.id, a.authorsFullname) FROM Author a JOIN a.authorJoinBookList authBook WHERE authBook.book.id = :bookID")
-    public List<AuthorOfBook> findAuthorsOfBook(@Param("bookID")Long bookID);
+    public List<AuthorOfBook> findAuthorsOfBook(@Param("bookID")Integer bookID);
 
-    @Query("SELECT COUNT(a) FROM Author a WHERE a.authorsFullname = :authorsFullname")
+    @Query("SELECT COUNT(a) FROM Author a WHERE a.authorsFullname = :fullname")
     public Integer countAllAuthorsWithName(@Param("fullname")String authorsFullname);
 
     @Query("SELECT a.authorsPhotoPath FROM Author a WHERE a.id = :id")
-    public String getAuthorsPhotoPath(@Param("id")Long id);
+    public String getAuthorsPhotoPath(@Param("id")Integer id);
 
     @Query("SELECT new com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook(a.id, a.authorsFullname) FROM Author a")
     public List<AuthorOfBook> findAllAuthorsOfBook();

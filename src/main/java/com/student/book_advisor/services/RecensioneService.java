@@ -8,17 +8,17 @@ import java.util.List;
 
 public interface RecensioneService {
 
-    public List<RecensioneDTO> getAllReviewsByBook(Long id);
+    public List<RecensioneDTO> getAllReviewsByBook(Integer id);
 
-    public List<RecensioneDTO> getAllReveiewsByUser(Long id);
+    public List<RecensioneDTO> getAllReveiewsByUser(Integer id);
 
-    public Recensione addNewReview(RecensioneFormDTO recensioneForm, Long bookID);
+    public Recensione addNewReview(RecensioneFormDTO recensioneForm, Integer bookID);
 
-    public void deleteReview(Long reviewId);
+    public void deleteReview(Integer reviewId);
 
-    public Recensione getReview(Long reviewId);
+    public Recensione getReview(Integer reviewId);
 
-    public Integer addUsefulReview(Long reviewID, Long userID);
+    public void addUsefulReview(Integer reviewID, Integer userID);
 
-    public Integer removeUsefulReview(Long reviewID, Long userID);
+    public void removeUsefulReview(Integer reviewID, Integer userID);
 }

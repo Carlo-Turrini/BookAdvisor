@@ -84,7 +84,7 @@ public class AuthorController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/authors/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> updateAuthor(@Valid @RequestBody AuthorFormDTO authorFormDTO, BindingResult result, @PathVariable("id")Long id) {
+    public Map<String, Set<String>> updateAuthor(@Valid @RequestBody AuthorFormDTO authorFormDTO, BindingResult result, @PathVariable("id")Integer id) {
         Map<String, Set<String>> errors = new HashMap<String, Set<String>>();
         try {
             Author author = authorService.getAuthor(id);
@@ -130,7 +130,7 @@ public class AuthorController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/authors/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteAuthor(@RequestParam("id")Long id){
+    public void deleteAuthor(@RequestParam("id")Integer id){
         authorService.deleteAuthor(id);
     }
 
@@ -143,11 +143,10 @@ public class AuthorController {
 
     @GetMapping("/authors/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public AuthorDTO getAuthor(@RequestParam("id")Long id) {
+    public AuthorDTO getAuthor(@RequestParam("id")Integer id) {
         return authorService.getAuthorsDTO(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/authors")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public List<AuthorCardDTO> getAllAuthors() {
@@ -157,7 +156,7 @@ public class AuthorController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/authors/{id}/authors_photo")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateAuthorsPhoto(@RequestParam("authorsPhoto")MultipartFile authorsPhoto, @PathVariable("id")Long authorID) {
+    public String updateAuthorsPhoto(@RequestParam("authorsPhoto")MultipartFile authorsPhoto, @PathVariable("id")Integer authorID) {
         try {
             return authorService.updateAuthorsPhoto(authorsPhoto, authorID);
         }

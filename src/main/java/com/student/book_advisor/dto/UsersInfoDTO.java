@@ -2,7 +2,7 @@ package com.student.book_advisor.dto;
 
 public class UsersInfoDTO {
 
-    private Long id;
+    private Integer id;
     private String name;
     private String surname;
     private String username;
@@ -10,7 +10,7 @@ public class UsersInfoDTO {
     private String profilePhoto;
     private String description;
 
-    public UsersInfoDTO(Long id, String name, String surname, String username, String email, String description) {
+    public UsersInfoDTO(Integer id, String name, String surname, String username, String email, String description) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -19,11 +19,11 @@ public class UsersInfoDTO {
         this.description = description;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

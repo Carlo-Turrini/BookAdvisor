@@ -4,7 +4,7 @@ import com.student.book_advisor.enums.Credenziali;
 
 public class UtenteDTO {
 
-    private Long id;
+    private Integer id;
     private String nome;
     private String cognome;
     private String username;
@@ -14,7 +14,7 @@ public class UtenteDTO {
     private Credenziali credenziali;
     private String descrizione;
 
-    public UtenteDTO(Long id, String nome, String cognome, String username, String password, String email, Credenziali credenziali, String descrizione) {
+    public UtenteDTO(Integer id, String nome, String cognome, String username, String password, String email, Credenziali credenziali, String descrizione) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -24,11 +24,11 @@ public class UtenteDTO {
         this.credenziali = credenziali;
         this.descrizione = descrizione;
     }
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

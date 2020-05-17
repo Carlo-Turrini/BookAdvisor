@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 @CrossOrigin(origins = "http://localhost:4200")
-public interface GenreRepository extends JpaRepository<Genre,Long> {
+public interface GenreRepository extends JpaRepository<Genre,Integer> {
 
     @Query("SELECT g.genre FROM Genre g JOIN g.genreJoinBookList genBook WHERE genBook.book.id = :bookID")
-    public List<String> findGenresOfBook(@Param("bookID")Long bookID);
+    public List<String> findGenresOfBook(@Param("bookID")Integer bookID);
 
     public Genre findByGenre(String genre);
 

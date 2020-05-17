@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Saga {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "SagaTitle", length = 64, nullable = false)
     private String sagaTitle;
@@ -19,12 +19,8 @@ public class Saga {
     @JoinColumn(name = "BookID")
     private Libro book;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getSagaTitle() {

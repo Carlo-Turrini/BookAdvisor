@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GenreJoinBookRepository extends JpaRepository<GenreJoinBook, Long> {
+public interface GenreJoinBookRepository extends JpaRepository<GenreJoinBook, Integer> {
 
     public GenreJoinBook findByGenre(Genre genre);
 }

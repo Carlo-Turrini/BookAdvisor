@@ -14,7 +14,7 @@ import java.util.Set;
 public class UsersInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "Username", length = 50, nullable = false, updatable = false)
     private String username;
@@ -56,12 +56,8 @@ public class UsersInfo {
     @OneToMany(mappedBy = "usersInfo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MyBooks> myBooksList = new ArrayList<MyBooks>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

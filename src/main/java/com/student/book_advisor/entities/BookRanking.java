@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class BookRanking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "BookRank", precision = 2, nullable = false)
     private Integer bookRank;
@@ -17,12 +17,8 @@ public class BookRanking {
     private MyBooks myBooks;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Integer getBookRank() {

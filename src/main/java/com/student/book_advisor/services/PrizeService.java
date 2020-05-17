@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface PrizeService {
 
-    public void deletePrize(Long prizeID, Long bookID);
+    public void deletePrize(Integer prizeID, Integer bookID);
 
-    public void addPrize(PrizeFormDTO prizeForm, Long bookID);
+    public void addPrize(PrizeFormDTO prizeForm, Integer bookID);
 
-    public List<PrizeDTO> getAllPrizesOfBook(Long bookID);
+    public List<PrizeDTO> getAllPrizesOfBook(Integer bookID);
 
-    public Boolean isPrizeAlreadyAssignedToBook(String prizeName, Long bookID);
+    public Boolean isPrizeAlreadyAssignedToBook(String prizeName, Integer bookID);
 
-    public PrizeDTO getPrizeOfBookFromName(Long bookID, String prizeName);
+    public PrizeDTO getPrizeOfBookFromName(Integer bookID, String prizeName);
 }

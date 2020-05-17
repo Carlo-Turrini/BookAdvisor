@@ -14,7 +14,7 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "AuthorsFullname", length = 50, nullable = false)
     private String authorsFullname;
@@ -35,7 +35,7 @@ public class Author {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AuthorJoinBook> authorJoinBookList = new ArrayList<AuthorJoinBook>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

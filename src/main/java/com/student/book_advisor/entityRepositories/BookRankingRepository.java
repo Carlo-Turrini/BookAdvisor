@@ -11,19 +11,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookRankingRepository extends JpaRepository<BookRanking, Long> {
+public interface BookRankingRepository extends JpaRepository<BookRanking, Integer> {
 
-    @Query("SELECT new com.student.book_advisor.dto.BookRankingDTO(br.id, br.bookRank, b.id, b.titolo) FROM BookRanking br JOIN MyBooks mb ON (br.myBooks.id = mb.id) JOIN mb.book b WHERE mb.usersInfo.id = :id")
-    public List<BookRankingDTO> findBookRankingByUser(@Param("userID")Long userID);
+    @Query("SELECT new com.student.book_advisor.dto.BookRankingDTO(br.id, br.bookRank, b.id, b.titolo) FROM BookRanking br JOIN MyBooks mb ON (br.myBooks.id = mb.id) JOIN mb.book b WHERE mb.usersInfo.id = :userID")
+    public List<BookRankingDTO> findBookRankingByUser(@Param("userID")Integer userID);
 
     @Query("SELECT br FROM BookRanking  br JOIN MyBooks mb ON (br.myBooks.id = mb.id) WHERE mb.usersInfo.id = :userID")
-    public List<BookRanking> findAllByUserID(@Param("userID")Long userID);
+    public List<BookRanking> findAllByUserID(@Param("userID")Integer userID);
 
     @Query("SELECT br.myBooks.id FROM BookRanking br JOIN MyBooks mb ON (br.myBooks.id = mb.id) WHERE mb.usersInfo.id = :userID")
-    public List<Long> findAllMyBookIDsInRank(@Param("userID")Long userID);
+    public List<Integer> findAllMyBookIDsInRank(@Param("userID")Integer userID);
 
     @Query("SELECT mb.usersInfo.id FROM BookRanking br JOIN MyBooks mb ON (br.myBooks.id = mb.id) WHERE br.id = :rankID")
-    public Long getUsersIDFromBookRanking(@Param("rankID")Long rankID);
+    public Integer getUsersIDFromBookRanking(@Param("rankID")Integer rankID);
 
     public BookRanking getBookRankingByMyBooks(MyBooks myBooks);
 }

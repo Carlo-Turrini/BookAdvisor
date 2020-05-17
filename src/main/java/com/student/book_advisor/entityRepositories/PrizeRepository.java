@@ -10,17 +10,17 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PrizeRepository extends JpaRepository<Prize, Long> {
+public interface PrizeRepository extends JpaRepository<Prize, Integer> {
 
     @Query("SELECT new com.student.book_advisor.dto.PrizeDTO(p.id, p.yearAwarded, p.prizeName) FROM Prize p WHERE p.book.id = :bookID")
-    public List<PrizeDTO> findAllPrizesForBook(@Param("bookID")Long bookID);
+    public List<PrizeDTO> findAllPrizesForBook(@Param("bookID")Integer bookID);
 
     @Query("SELECT p FROM Prize p WHERE p.id = :id AND p.book.id = :bookID")
-    public Prize findByIdAndBookID(@Param("id")Long id, @Param("bookID")Long bookID);
+    public Prize findByIdAndBookID(@Param("id")Integer id, @Param("bookID")Integer bookID);
 
     @Query("SELECT p FROM Prize p WHERE p.book.id = :bookID AND p.prizeName = :prizeName")
-    public Prize findByBookIDAndPrizeName(@Param("bookID")Long bookID, @Param("prizeName")String prizeName);
+    public Prize findByBookIDAndPrizeName(@Param("bookID")Integer bookID, @Param("prizeName")String prizeName);
 
     @Query("SELECT new com.student.book_advisor.dto.PrizeDTO(p.id, p.yearAwarded, p.prizeName) FROM Prize p WHERE p.book.id = :bookID AND p.prizeName = :prizeName")
-    public PrizeDTO findDTOByBookIDAndPrizeName(@Param("bookID")Long bookID, @Param("prizeName")String prizeName);
+    public PrizeDTO findDTOByBookIDAndPrizeName(@Param("bookID")Integer bookID, @Param("prizeName")String prizeName);
 }

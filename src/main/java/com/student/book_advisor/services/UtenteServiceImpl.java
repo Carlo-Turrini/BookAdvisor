@@ -48,7 +48,7 @@ public class UtenteServiceImpl implements UtenteService {
     }
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public UsersInfoDTO findById(Long id) {
+    public UsersInfoDTO findById(Integer id) {
         UsersInfoDTO user = usersInfoRepository.findUserById(id);
         String fotoProfiloPath = usersInfoRepository.getUserProfilePhotoPath(id);
         if(fotoProfiloPath.equals(Constants.DEF_PROFILE_PIC)) {
@@ -62,7 +62,7 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public UsersInfo getUser(Long userId) {
+    public UsersInfo getUser(Integer userId) {
         return usersInfoRepository.getOne(userId);
     }
 
@@ -100,7 +100,7 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         UsersInfo user = usersInfoRepository.getOne(id);
         if(user != null) {
             //user.setDelToken(UUID.randomUUID().toString());

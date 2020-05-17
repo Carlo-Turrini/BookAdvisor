@@ -104,7 +104,7 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Libro findBookById(Long id) {
+    public Libro findBookById(Integer id) {
         return libroRepo.getOne(id);
     }
 
@@ -125,7 +125,7 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public LibroDTO findBookDTOById(Long id) {
+    public LibroDTO findBookDTOById(Integer id) {
         LibroDTO book = libroRepo.getBookById(id);
         String bookCoverPath = libroRepo.findBookCoverPath(id);
         if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
@@ -186,7 +186,7 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Libro updateBook(LibroFormDTO libroForm, Long bookID) {
+    public Libro updateBook(LibroFormDTO libroForm, Integer bookID) {
         Libro book = libroRepo.getOne(bookID);
         if(book != null) {
             book.setTitolo(libroForm.getTitolo());
@@ -239,12 +239,14 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteBook(Long id) {
+    public void deleteBook(Integer id) {
         Libro delBook = libroRepo.getOne(id);
         if(delBook != null) {
-            delBook.setDelToken(UUID.randomUUID().toString());
-            libroRepo.save(delBook);
+            /*delBook.setDelToken(UUID.randomUUID().toString());
+            libroRepo.save(delBook);*/
+            libroRepo.delete(delBook);
         }
+
     }
 
     @Override
@@ -294,7 +296,7 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(String titoloSaga, Long bookId) {
+    public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(String titoloSaga, Integer bookId) {
         List<LibroCardDTO> sagaBooks = new ArrayList<LibroCardDTO>();
         sagaBooks = this.libroRepo.findAllBooksByTitoloSagaExcludingCurrent(titoloSaga, bookId);
         for(LibroCardDTO book: sagaBooks) {
@@ -318,18 +320,18 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Double getBookOverallRating(Long id) {
+    public Double getBookOverallRating(Integer id) {
         return this.recensioneRepo.getAverageRatingOfBook(id);
     }
 
     @Override
-    public OverallRatingsForBook getBookOverallRatings(Long bookID) {
+    public OverallRatingsForBook getBookOverallRatings(Integer bookID) {
         return recensioneRepo.getAverageRatingsOfBook(bookID);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<PrizeDTO> addPrize(PrizeDTO prize, Long bookID) {
+    public List<PrizeDTO> addPrize(PrizeDTO prize, Integer bookID) {
         Libro book = libroRepo.getOne(bookID);
         if(book != null) {
             Prize p = prizeRepository.findByBookIDAndPrizeName(bookID, prize.getPrizeName());
@@ -348,7 +350,7 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<PrizeDTO> removePrize(Long prizeID, Long bookID) {
+    public List<PrizeDTO> removePrize(Integer prizeID, Integer bookID) {
         Libro book = libroRepo.getOne(bookID);
         if(book != null) {
             Prize p = prizeRepository.findByIdAndBookID(prizeID, bookID);

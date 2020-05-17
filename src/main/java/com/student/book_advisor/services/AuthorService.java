@@ -13,13 +13,13 @@ public interface AuthorService {
 
     public void addAuthor(AuthorFormDTO author);
     public boolean isAuthorsFullnameUnique(String authorsFullname);
-    public Author getAuthor(Long id);
+    public Author getAuthor(Integer id);
     public List<AuthorCardDTO> getAllAuthors();
-    public void deleteAuthor(Long id);
+    public void deleteAuthor(Integer id);
     public void updateAuthor(Author author, AuthorFormDTO updateAuthorInfo);
-    public AuthorDTO getAuthorsDTO(Long id);
-    public List<AuthorOfBook> getAuthorsOfBook(Long bookID);
-    public String updateAuthorsPhoto(MultipartFile authorsPhoto, Long authorsID);
+    public AuthorDTO getAuthorsDTO(Integer id);
+    public List<AuthorOfBook> getAuthorsOfBook(Integer bookID);
+    public String updateAuthorsPhoto(MultipartFile authorsPhoto, Integer authorsID);
     public List<AuthorOfBook> getAllAuthorsOfBook();
     public AuthorOfBook getAuthorOfBookByFullname(String authorsFullname);
 }

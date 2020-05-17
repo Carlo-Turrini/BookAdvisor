@@ -1,13 +1,13 @@
 package com.student.book_advisor.dto;
 
 public class AuthorCardDTO {
-    private Long id;
+    private Integer id;
     private String authorsFullname;
     private Integer birthYear;
     private Integer deathYear;
     private String authorsPhoto;
 
-    public AuthorCardDTO(Long id, String authorsFullname, Integer birthYear, Integer deathYear) {
+    public AuthorCardDTO(Integer id, String authorsFullname, Integer birthYear, Integer deathYear) {
         this.id = id;
         this.authorsFullname = authorsFullname;
         this.birthYear = birthYear;
@@ -15,11 +15,11 @@ public class AuthorCardDTO {
 
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

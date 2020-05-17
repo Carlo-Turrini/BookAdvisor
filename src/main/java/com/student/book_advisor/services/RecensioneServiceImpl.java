@@ -40,7 +40,7 @@ public class RecensioneServiceImpl implements RecensioneService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
 
-    public List<RecensioneDTO> getAllReviewsByBook(Long id) {
+    public List<RecensioneDTO> getAllReviewsByBook(Integer id) {
         List<RecensioneDTO> recensioni = recensioneRepo.findAllByBook(id);
         for(RecensioneDTO recensione: recensioni) {
             String bookCoverPath = libroRepo.findBookCoverPath(recensione.getBookId());
@@ -60,7 +60,7 @@ public class RecensioneServiceImpl implements RecensioneService {
 
             }
             recensione.setAuthors(authorRepository.findAuthorsOfBook(recensione.getBookId()));
-            Long loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            Integer loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
             if(loggedUserID != null) {
                 recensione.setReviewUsefulForLoggedUser(usefulReviewRepository.findByUserIDAndReviewID(loggedUserID, recensione.getId())!=null);
             }
@@ -70,7 +70,7 @@ public class RecensioneServiceImpl implements RecensioneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<RecensioneDTO> getAllReveiewsByUser(Long id) {
+    public List<RecensioneDTO> getAllReveiewsByUser(Integer id) {
          List<RecensioneDTO> recensioni = recensioneRepo.findAllByUser(id);
         for(RecensioneDTO recensione: recensioni) {
             String bookCoverPath = libroRepo.findBookCoverPath(recensione.getBookId());
@@ -88,7 +88,7 @@ public class RecensioneServiceImpl implements RecensioneService {
 
             }
             recensione.setAuthors(authorRepository.findAuthorsOfBook(recensione.getBookId()));
-            Long loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            Integer loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
             if(loggedUserID != null) {
                 recensione.setReviewUsefulForLoggedUser(usefulReviewRepository.findByUserIDAndReviewID(loggedUserID, recensione.getId())!=null);
             }
@@ -98,7 +98,7 @@ public class RecensioneServiceImpl implements RecensioneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Recensione addNewReview(RecensioneFormDTO reviewForm, Long bookID) {
+    public Recensione addNewReview(RecensioneFormDTO reviewForm, Integer bookID) {
         Recensione newReview = new Recensione();
         Libro bookToReview = libroRepo.getOne(bookID);
         if (bookToReview != null) {
@@ -117,7 +117,7 @@ public class RecensioneServiceImpl implements RecensioneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(Integer reviewId) {
         Recensione delReview = recensioneRepo.getOne(reviewId);
         if(delReview != null) {
             recensioneRepo.delete(delReview);
@@ -126,13 +126,13 @@ public class RecensioneServiceImpl implements RecensioneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Recensione getReview(Long reviewId) {
+    public Recensione getReview(Integer reviewId) {
         return recensioneRepo.getOne(reviewId);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer addUsefulReview(Long reviewID, Long userID) {
+    public void addUsefulReview(Integer reviewID, Integer userID) {
         UsersInfo user = usersInfoRepository.getOne(userID);
         if(user != null) {
             Recensione review = recensioneRepo.getOne(reviewID);
@@ -143,17 +143,15 @@ public class RecensioneServiceImpl implements RecensioneService {
                     newUR.setReview(review);
                     newUR.setUsersInfo(user);
                     usefulReviewRepository.save(newUR);
-                    return usefulReviewRepository.countUsefulReview(reviewID);
                 }
-                else return null;
             }
         }
-        return null;
+
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer removeUsefulReview(Long reviewID, Long userID) {
+    public void removeUsefulReview(Integer reviewID, Integer userID) {
         UsersInfo user = usersInfoRepository.getOne(userID);
         if(user != null) {
             Recensione review = recensioneRepo.getOne(reviewID);
@@ -161,10 +159,8 @@ public class RecensioneServiceImpl implements RecensioneService {
                 UsefulReview ur = usefulReviewRepository.findByUserIDAndReviewID(userID, reviewID);
                 if(ur != null) {
                     usefulReviewRepository.delete(ur);
-                    return usefulReviewRepository.countUsefulReview(reviewID);
                 }
-                else return null;
             }
         }
-        return null;    }
+  }
 }

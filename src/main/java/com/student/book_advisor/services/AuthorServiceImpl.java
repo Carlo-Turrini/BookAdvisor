@@ -42,12 +42,12 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthor(Long id) {
+    public Author getAuthor(Integer id) {
         return authorRepository.getOne(id);
     }
 
     @Override
-    public AuthorDTO getAuthorsDTO(Long id) {
+    public AuthorDTO getAuthorsDTO(Integer id) {
         AuthorDTO author = authorRepository.getAuthorsDTOById(id);
         String authorsPhotoPath = authorRepository.getAuthorsPhotoPath(id);
         if(authorsPhotoPath.equals(Constants.DEF_PROFILE_PIC)) {
@@ -75,7 +75,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void deleteAuthor(Long id) {
+    public void deleteAuthor(Integer id) {
         authorRepository.deleteById(id);
     }
 
@@ -89,12 +89,12 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<AuthorOfBook> getAuthorsOfBook(Long bookID) {
+    public List<AuthorOfBook> getAuthorsOfBook(Integer bookID) {
         return authorRepository.findAuthorsOfBook(bookID);
     }
 
     @Override
-    public String updateAuthorsPhoto(MultipartFile authorsPhoto, Long authorsID) {
+    public String updateAuthorsPhoto(MultipartFile authorsPhoto, Integer authorsID) {
         try {
             Author author = authorRepository.getOne(authorsID);
             if (author != null) {

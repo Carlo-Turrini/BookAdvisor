@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public class LibroCardDTO {
-    private Long id;
+    private Integer id;
     private String titolo;
     private List<AuthorOfBook> authors;
     private List<String> genres;
@@ -16,7 +16,7 @@ public class LibroCardDTO {
     private String coverImage;
 
 
-    public LibroCardDTO(Long id, String titolo, Double overallRating) {
+    public LibroCardDTO(Integer id, String titolo, Double overallRating) {
         this.id = id;
         this.titolo = titolo;
         if(overallRating != null) {
@@ -24,11 +24,11 @@ public class LibroCardDTO {
         }
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

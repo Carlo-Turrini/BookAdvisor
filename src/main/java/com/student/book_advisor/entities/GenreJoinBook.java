@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class GenreJoinBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GenreID")
@@ -17,12 +17,8 @@ public class GenreJoinBook {
     @JoinColumn(name = "BookID")
     private Libro book;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Genre getGenre() {

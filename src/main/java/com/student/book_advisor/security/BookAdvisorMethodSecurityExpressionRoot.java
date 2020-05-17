@@ -17,8 +17,8 @@ public class BookAdvisorMethodSecurityExpressionRoot extends SecurityExpressionR
         super(authentication);
     }
 
-    public Boolean isUsersReview(Long reviewID) {
-        Long reviewUsersID = recensioneRepository.getReviewsUsersInfoID(reviewID);
+    public Boolean isUsersReview(Integer reviewID) {
+        Integer reviewUsersID = recensioneRepository.getReviewsUsersInfoID(reviewID);
         return reviewID == ((AuthUserPrincipal) this.getPrincipal()).getId();
     }
 

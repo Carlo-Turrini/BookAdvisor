@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class StatelessCsrfFilter extends OncePerRequestFilter {
-    private static final String CSRF_TOKEN = "CSRF-TOKEN";
-    private static final String X_CSRF_TOKEN = "X-CSRF-TOKEN";
+    private static final String CSRF_TOKEN = "XSRF-TOKEN";
+    private static final String X_CSRF_TOKEN = "X-XSRF-TOKEN";
     private final RequestMatcher requireCsrfProtectionMatcher = new DefaultRequiresCsrfMatcher();
     private final AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandlerImpl();
 

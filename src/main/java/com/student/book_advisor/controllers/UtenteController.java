@@ -50,9 +50,9 @@ public class UtenteController {
     //Rimuovibile
     @GetMapping("/utenti/id")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Long getUserID(HttpServletRequest request, HttpServletResponse response) {
+    public Integer getUserID(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Long id = ((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+            Integer id = ((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
             return id;
         }
         catch(Exception e) {
@@ -87,7 +87,7 @@ public class UtenteController {
 
     @GetMapping("/utenti/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public UsersInfoDTO getUser(@PathVariable("id") @Min(1) @Max(1) Long id) {
+    public UsersInfoDTO getUser(@PathVariable("id") @Min(1) @Max(1) Integer id) {
         return (UsersInfoDTO) utenteService.findById(id);
     }
 
@@ -154,7 +154,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}/foto_profilo")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateUsersProfilePhoto(@RequestParam("fotoProfilo") MultipartFile profilePhoto, @PathVariable("id")Long userId, HttpServletRequest request, HttpServletResponse response) {
+    public String updateUsersProfilePhoto(@RequestParam("fotoProfilo") MultipartFile profilePhoto, @PathVariable("id")Integer userId, HttpServletRequest request, HttpServletResponse response) {
         try {
             return utenteService.updateUsersProfilePhoto(profilePhoto, utenteService.getUser(userId));
         }
@@ -166,7 +166,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> updateUser(@Valid @RequestBody UtenteUpdateFormDTO userForm, BindingResult result, @PathVariable("id") Long userId, HttpServletRequest request, HttpServletResponse response) {
+    public Map<String, Set<String>> updateUser(@Valid @RequestBody UtenteUpdateFormDTO userForm, BindingResult result, @PathVariable("id") Integer userId, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             UsersInfo updatedUser = utenteService.getUser(userId);
@@ -215,7 +215,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @DeleteMapping("/utenti/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteUser(@PathVariable("id") @Min(1) @Max(1) Long id, HttpServletRequest request, HttpServletResponse response) {
+    public void deleteUser(@PathVariable("id") @Min(1) @Max(1) Integer id, HttpServletRequest request, HttpServletResponse response) {
         try {
             utenteService.deleteUser(id);
         }
@@ -228,7 +228,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @DeleteMapping("/utenti/{id}/myBooks/{myBookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("myBookID") @Min(1) @Max(1) Long myBookID, HttpServletRequest request, HttpServletResponse response) {
+    public void deleteBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("myBookID") @Min(1) @Max(1) Integer myBookID, HttpServletRequest request, HttpServletResponse response) {
         try {
             myBooksService.deleteFromShelf(userID, myBookID);
         }
@@ -240,7 +240,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Long userID, @PathVariable("bookID") @Min(1) @Max(1) Long bookID, @RequestParam("shelf") BookShelf shelf) {
+    public String updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("bookID") @Min(1) @Max(1) Integer bookID, @RequestParam("shelf") BookShelf shelf) {
         try {
             return myBooksService.updateShelf(userID, bookID, shelf);
         }
@@ -252,7 +252,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @GetMapping("/utenti/{id}/myBooks/booksReadNotInRank")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<MyBooksReadDTO> getAllMyBooksReadNotInRank(@PathVariable("id")Long userID) {
+    public List<MyBooksReadDTO> getAllMyBooksReadNotInRank(@PathVariable("id")Integer userID) {
         try {
             return myBooksService.findAllMyBooksRead(userID);
         }
@@ -263,7 +263,7 @@ public class UtenteController {
 
     @GetMapping("/utenti/{id}/myBooks")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<MyBooksDTO> getAllMyBooks(@PathVariable("id")Long userID) {
+    public List<MyBooksDTO> getAllMyBooks(@PathVariable("id")Integer userID) {
         try {
             return myBooksService.findAllMyBooks(userID);
         }
@@ -277,7 +277,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PostMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String addBookToShelf(@PathVariable("id")Long userID, @PathVariable("bookID")Long bookID, @RequestBody BookShelf shelf) {
+    public String addBookToShelf(@PathVariable("id")Integer userID, @PathVariable("bookID")Integer bookID, @RequestBody BookShelf shelf) {
         try {
             return myBooksService.addToShelf(userID, bookID, shelf);
         }
@@ -288,7 +288,7 @@ public class UtenteController {
 
     @GetMapping("/utenti/{id}/bookRank")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<BookRankingDTO> getUsersBookRanking(@PathVariable("id")Long userID) {
+    public List<BookRankingDTO> getUsersBookRanking(@PathVariable("id")Integer userID) {
         try {
             return bookRankingService.findUsersBookRank(userID);
         }
@@ -300,7 +300,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.prinicpal.usersInfo.id)")
     @PostMapping("/utenti/{id}/bookRank")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<BookRankingDTO> addBookRank(@PathVariable("id")Long userID, @RequestParam(name = "myBookID") Long myBookID, @RequestParam(name = "rank")Integer rank) {
+    public List<BookRankingDTO> addBookRank(@PathVariable("id")Integer userID, @RequestParam(name = "myBookID") Integer myBookID, @RequestParam(name = "rank")Integer rank) {
         try {
             return bookRankingService.addBookToBookRank(userID, myBookID, rank);
         }
@@ -312,7 +312,7 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @DeleteMapping("/utenti/{id}/bookRank/{rankID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<BookRankingDTO> removeBookRank(@PathVariable("id")Long userID, @PathVariable("rankID")Long rankID) {
+    public List<BookRankingDTO> removeBookRank(@PathVariable("id")Integer userID, @PathVariable("rankID")Integer rankID) {
         try {
             return bookRankingService.removeBookFromBookRank(userID, rankID);
         }

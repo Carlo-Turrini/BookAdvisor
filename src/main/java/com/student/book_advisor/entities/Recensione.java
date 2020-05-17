@@ -15,14 +15,14 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "Review", uniqueConstraints = {@UniqueConstraint(columnNames = {"UserID", "BookID"})})
-@SQLDelete(sql = "UPDATE RECENSIONE SET deleted = true WHERE id = ?")
-@Where(clause = "deleted = false")
+//@SQLDelete(sql = "UPDATE RECENSIONE SET deleted = true WHERE id = ?")
+//@Where(clause = "deleted = false")
 public class Recensione implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long id;
+    private Integer id;
 
     @Column(name = "text", length = 2048, nullable = false)
     private String testo;
@@ -51,9 +51,9 @@ public class Recensione implements Serializable {
     @CreatedDate
     private Timestamp timestamp;
 
-    @Column(name = "deleted", nullable = false)
+    /*@Column(name = "deleted", nullable = false)
     @ColumnDefault("false")
-    private Boolean deleted = false;
+    private Boolean deleted = false;*/
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -67,12 +67,8 @@ public class Recensione implements Serializable {
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UsefulReview> usefulReviewList = new ArrayList<UsefulReview>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getTesto() {
@@ -91,9 +87,13 @@ public class Recensione implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Boolean getDeleted() {
+    /*public Boolean getDeleted() {
         return deleted;
     }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }*/
 
     public Integer getRating() {
         return rating;
@@ -133,10 +133,6 @@ public class Recensione implements Serializable {
 
     public void setContainsSpoiler(Boolean containsSpoiler) {
         this.containsSpoiler = containsSpoiler;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 
     public UsersInfo getUsersInfo() {

@@ -30,13 +30,13 @@ public class MyBooksServiceImpl implements MyBooksService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteFromShelf(Long userID, Long myBookID) {
+    public void deleteFromShelf(Integer userID, Integer myBookID) {
         myBooksRepository.deleteMyBookByUserIDAndId(myBookID, userID);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public String addToShelf(Long userID, Long bookID, BookShelf shelf) {
+    public String addToShelf(Integer userID, Integer bookID, BookShelf shelf) {
         MyBooks myBook = myBooksRepository.getByBookIDAndUserID(bookID, userID);
         if(myBook == null) {
             MyBooks newMyBook = new MyBooks();
@@ -51,7 +51,7 @@ public class MyBooksServiceImpl implements MyBooksService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public String updateShelf(Long userID, Long myBookID, BookShelf shelf) {
+    public String updateShelf(Integer userID, Integer myBookID, BookShelf shelf) {
         MyBooks myBook = myBooksRepository.getByBookIDAndUserID(myBookID, userID);
         if(myBook != null) {
             if(myBook.getShelfType().compareTo(BookShelf.read)==0) {
@@ -70,13 +70,13 @@ public class MyBooksServiceImpl implements MyBooksService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<MyBooksDTO> findAllMyBooks(Long userID) {
+    public List<MyBooksDTO> findAllMyBooks(Integer userID) {
         return myBooksRepository.getMyBooksByUserID(userID);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<MyBooksReadDTO> findAllMyBooksRead(Long userID) {
+    public List<MyBooksReadDTO> findAllMyBooksRead(Integer userID) {
         return myBooksRepository.getAllMyBooksReadButNotInRank(userID);
     }
 }

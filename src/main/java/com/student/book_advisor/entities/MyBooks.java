@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class MyBooks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "ShelfType", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -26,12 +26,8 @@ public class MyBooks {
     @OneToOne(mappedBy = "myBooks", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private BookRanking bookRanking;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public BookShelf getShelfType() {

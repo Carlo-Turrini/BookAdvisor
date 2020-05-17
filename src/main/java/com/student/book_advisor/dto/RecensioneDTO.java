@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public class RecensioneDTO {
-    private Long id;
+    private Integer id;
     private String testo;
     private Integer rating;
     private Integer originalityRating;
@@ -19,19 +19,19 @@ public class RecensioneDTO {
     private Long numOfUsersConsideredReviewUseful;
     private Boolean isReviewUsefulForLoggedUser;
     //Info utente
-    private Long userId;
+    private Integer userId;
     private String username;
     private String profileImage;
 
     //Info Libro
-    private Long bookId;
+    private Integer bookId;
     private String titolo;
     private List<AuthorOfBook> authors;
     private String coverImage;
 
 
 
-    public RecensioneDTO(Long id, String testo, Integer rating, Date timestamp, Long userId, String username, Long bookId, String titolo, Integer originalityRating, Integer writingQualityRating, Integer pageTurnerRating, Boolean containsSpoilers, Long numOfUsersConsideredReviewUseful) {
+    public RecensioneDTO(Integer id, String testo, Integer rating, Date timestamp, Integer userId, String username, Integer bookId, String titolo, Integer originalityRating, Integer writingQualityRating, Integer pageTurnerRating, Boolean containsSpoilers, Long numOfUsersConsideredReviewUseful) {
         this.id = id;
         this.testo = testo;
         this.rating = rating;
@@ -47,11 +47,11 @@ public class RecensioneDTO {
         this.numOfUsersConsideredReviewUseful = numOfUsersConsideredReviewUseful;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -79,11 +79,11 @@ public class RecensioneDTO {
         this.timestamp = timestamp;
     }
 
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -95,11 +95,11 @@ public class RecensioneDTO {
         this.username = username;
     }
 
-    public Long getBookId() {
+    public Integer getBookId() {
         return bookId;
     }
 
-    public void setBookId(Long bookId) {
+    public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
 

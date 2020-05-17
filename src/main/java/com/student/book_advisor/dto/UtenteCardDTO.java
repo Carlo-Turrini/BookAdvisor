@@ -2,25 +2,25 @@ package com.student.book_advisor.dto;
 
 
 public class UtenteCardDTO {
-    private Long id;
+    private Integer id;
     private String username;
     private String nome;
     private String cognome;
     private String profileImage;
 
 
-    public UtenteCardDTO(Long id, String username, String nome, String cognome) {
+    public UtenteCardDTO(Integer id, String username, String nome, String cognome) {
         this.id = id;
         this.username = username;
         this.nome = nome;
         this.cognome = cognome;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

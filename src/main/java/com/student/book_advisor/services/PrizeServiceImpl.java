@@ -24,7 +24,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deletePrize(Long prizeID, Long bookID) {
+    public void deletePrize(Integer prizeID, Integer bookID) {
         Prize prizeToDelete = prizeRepository.findByIdAndBookID(prizeID, bookID);
         if(prizeToDelete != null) {
             prizeRepository.delete(prizeToDelete);
@@ -33,7 +33,7 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void addPrize(PrizeFormDTO prizeForm, Long bookID) {
+    public void addPrize(PrizeFormDTO prizeForm, Integer bookID) {
         Libro book = libroRepository.getOne(bookID);
         if(book != null) {
             Prize prize = new Prize();
@@ -47,19 +47,19 @@ public class PrizeServiceImpl implements PrizeService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<PrizeDTO> getAllPrizesOfBook(Long bookID) {
+    public List<PrizeDTO> getAllPrizesOfBook(Integer bookID) {
         return prizeRepository.findAllPrizesForBook(bookID);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public Boolean isPrizeAlreadyAssignedToBook(String prizeName, Long bookID) {
+    public Boolean isPrizeAlreadyAssignedToBook(String prizeName, Integer bookID) {
         return prizeRepository.findByBookIDAndPrizeName(bookID, prizeName) != null;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public PrizeDTO getPrizeOfBookFromName(Long bookID, String prizeName) {
+    public PrizeDTO getPrizeOfBookFromName(Integer bookID, String prizeName) {
         return prizeRepository.findDTOByBookIDAndPrizeName(bookID, prizeName);
     }
 }

@@ -8,7 +8,7 @@ public class Authorities {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "Authority", length = 50, nullable = false)
     private String authority;
@@ -17,7 +17,9 @@ public class Authorities {
     @JoinColumn(name = "UserID")
     private UsersInfo usersInfo;
 
-
+    public Integer getId() {
+        return id;
+    }
     public String getAuthority() {
         return authority;
     }

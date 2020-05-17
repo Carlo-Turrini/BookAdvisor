@@ -5,33 +5,33 @@ import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 import java.util.List;
 
 public class BookRankingDTO {
-    private Long id;
-    private Long bookID;
+    private Integer id;
+    private Integer bookID;
     private Integer bookRank;
     private String bookTitle;
     private String bookCoverPhoto;
     private List<AuthorOfBook> bookAuthors;
 
-    public BookRankingDTO(Long id, Integer bookRank, Long bookID, String bookTitle) {
+    public BookRankingDTO(Integer id, Integer bookRank, Integer bookID, String bookTitle) {
         this.id = id;
         this.bookRank = bookRank;
         this.bookID = bookID;
         this.bookTitle = bookTitle;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getBookID() {
+    public Integer getBookID() {
         return bookID;
     }
 
-    public void setBookID(Long bookID) {
+    public void setBookID(Integer bookID) {
         this.bookID = bookID;
     }
 

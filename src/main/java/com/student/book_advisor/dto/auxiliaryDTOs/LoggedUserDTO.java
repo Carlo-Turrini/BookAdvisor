@@ -3,19 +3,19 @@ package com.student.book_advisor.dto.auxiliaryDTOs;
 import java.util.List;
 
 public class LoggedUserDTO {
-    private Long id;
+    private Integer id;
     private Boolean isAdmin;
 
-    public LoggedUserDTO(Long id, Boolean isAdmin) {
+    public LoggedUserDTO(Integer id, Boolean isAdmin) {
         this.id = id;
         this.isAdmin = isAdmin;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -14,17 +14,17 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "Book", uniqueConstraints = {@UniqueConstraint(columnNames = {"Title"})})
-@Where(clause = "del_token = 00000000-0000-0000-0000-000000000000")
+//@Where(clause = "del_token = 00000000-0000-0000-0000-000000000000")
 public class Libro implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private Long id;
+    private Integer id;
 
-    @Column(name = "del_token", nullable = false)
+    /*@Column(name = "del_token", nullable = false)
     @ColumnDefault("0")
-    private String delToken = Constants.nilUUID;
+    private String delToken = Constants.nilUUID;*/
 
     @Column(name = "PubblicationYear", precision = 4, nullable = false)
     private Integer annoPubblicazione;
@@ -60,21 +60,17 @@ public class Libro implements Serializable {
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MyBooks> myBooksList = new ArrayList<MyBooks>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDelToken() {
+    /*public String getDelToken() {
         return delToken;
     }
 
     public void setDelToken(String delToken) {
         this.delToken = delToken;
-    }
+    }*/
 
     public Integer getAnnoPubblicazione() {
         return annoPubblicazione;
