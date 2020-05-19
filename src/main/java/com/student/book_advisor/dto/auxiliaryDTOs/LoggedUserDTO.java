@@ -23,7 +23,7 @@ public class LoggedUserDTO {
         return isAdmin;
     }
 
-    public void setAdmin(Boolean admin) {
-        isAdmin = admin;
+    public void setAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

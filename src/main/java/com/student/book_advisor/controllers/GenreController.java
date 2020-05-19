@@ -52,7 +52,6 @@ public class GenreController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/genres")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public List<String> getAllGenres() {

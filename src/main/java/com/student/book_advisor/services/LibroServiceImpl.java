@@ -16,6 +16,7 @@ import com.student.book_advisor.enums.GenereLibro;
 import com.student.book_advisor.security.AuthUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,7 +137,11 @@ public class LibroServiceImpl implements LibroService {
         }
         book.setGenres(genreRepository.findGenresOfBook(book.getId()));
         book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
-        AuthUserPrincipal authUserPrincipal = (AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AuthUserPrincipal authUserPrincipal = null;
+        if(principal instanceof AuthUserPrincipal) {
+            authUserPrincipal = (AuthUserPrincipal) principal;
+        }
         if(authUserPrincipal != null) {
             book.setShelf(myBooksRepository.getBookShelfByBookIDAndUserID(book.getId(), authUserPrincipal.getId()));
         }

@@ -14,11 +14,11 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends BasicAuthenticationFilter {
 
-    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    public JwtTokenFilter(AuthenticationManager authenticationManager) {
+    public JwtTokenFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         super(authenticationManager);
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override

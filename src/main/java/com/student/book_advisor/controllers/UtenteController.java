@@ -40,7 +40,6 @@ public class UtenteController {
     @Autowired
     private BookRankingService bookRankingService;
 
-
     @GetMapping("/utenti/loggedUserInfo")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public LoggedUserDTO getLoggedUserInfo() {
@@ -88,12 +87,12 @@ public class UtenteController {
     @GetMapping("/utenti/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public UsersInfoDTO getUser(@PathVariable("id") @Min(1) @Max(1) Integer id) {
-        return (UsersInfoDTO) utenteService.findById(id);
+        return utenteService.findById(id);
     }
 
     @PostMapping("/utenti")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Map<String, Set<String>> newUser(@Valid @RequestBody UtenteFormDTO userForm, BindingResult result) {
+    public Map<String, Set<String>> newUser(@Valid @RequestBody() UtenteFormDTO userForm, BindingResult result) {
         Map<String, Set<String>> errors = new HashMap<>();
         try {
             if(!this.utenteService.isUsernameUnique(userForm.getUsername())) {

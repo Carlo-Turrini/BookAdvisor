@@ -26,10 +26,10 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource(name = "userDetailsService")
-    private UserDetailsService userDetailsService;
+    UserDetailsService userDetailsService;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     LoginSuccessHandler loginSuccessHandler;
@@ -50,11 +50,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().addFilterBefore(new StatelessCsrfFilter(), CsrfFilter.class)
-                .formLogin(form -> form
-                        .loginPage("/login").permitAll()
+                /*.formLogin(form -> form
+                        .loginProcessingUrl("/login").permitAll()
                         .successHandler(loginSuccessHandler)
-                        .failureHandler(loginFailureHandler))
+                        .failureHandler(loginFailureHandler))*/
+                .headers(headers -> headers.disable())
                 .authorizeRequests()
+                .mvcMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/authors").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/utenti").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/utenti/{id}").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/utenti/isUsernameUnique").permitAll()
@@ -67,12 +70,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET,"/libri/{id}/prizes").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/libri/{id}/recensioni").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/utenti/{id}/recensioni").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/authors").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/authors/{id}").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/genres").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                .and().addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider))
-                .addFilter(new JwtTokenFilter(authenticationManager()))
+                .and()//.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider))
+                .addFilter(new JwtTokenFilter(authenticationManager(), jwtTokenProvider))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().logout(logout -> logout
                 .logoutUrl("/logout")
@@ -84,13 +87,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    /*@Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
+    }*/
 }

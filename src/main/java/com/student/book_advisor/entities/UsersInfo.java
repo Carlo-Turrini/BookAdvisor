@@ -19,13 +19,12 @@ public class UsersInfo {
     @Column(name = "Username", length = 50, nullable = false, updatable = false)
     private String username;
 
-    @Column(name = "Password", length = 50, nullable = false)
+    @Column(name = "Password", length = 100, nullable = false)
     private String password;
 
     @Column(name = "Enabled", nullable = false)
     @ColumnDefault("true")
     private Boolean enabled = true;
-
 
     @Column(name = "Name", length = 20, nullable = false)
     private String name;
