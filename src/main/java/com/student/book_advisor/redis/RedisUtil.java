@@ -10,13 +10,13 @@ import java.util.Date;
 public class RedisUtil {
 
     private final JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
-    private Jedis jedis = new Jedis("localhost");
+    //private Jedis jedis = new Jedis("localhost");
 
     public void set(String key, String value, Date expirationDate) {
-        //Jedis jedis = null;
+        Jedis jedis = null;
         try {
             Long timeout = (expirationDate.getTime() - new Date().getTime())/1000;
-            //jedis = pool.getResource();
+            jedis = pool.getResource();
             jedis.set(key, value);
             jedis.expireAt(key, timeout);
         }
@@ -31,13 +31,14 @@ public class RedisUtil {
     }
 
     public boolean isMember(String key, String value) {
-        //Jedis jedis = null;
+        Jedis jedis = null;
         try {
-            System.out.println("IsMember");
-            //jedis = pool.getResource();
-            System.out.println("NullPointer");
+            jedis = pool.getResource();
             String cachedToken = jedis.get(key);
-            return cachedToken.equals(value);
+            if(cachedToken != null) {
+                return cachedToken.equals(value);
+            }
+            else return false;
         }
         catch(Exception e) {
             throw new RuntimeException(e);

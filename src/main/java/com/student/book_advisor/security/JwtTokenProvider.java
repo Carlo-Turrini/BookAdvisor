@@ -83,11 +83,11 @@ public class JwtTokenProvider {
             }
             else {
                 String jwtTokenID = claimsJws.getBody().getId();
-                /*if(redisUtil.isMember(jwtTokenID, token)) {
+                if(redisUtil.isMember(jwtTokenID, token)) {
                     return false;
                 }
-                else return true;*/
-                return true;
+                else return true;
+                //return true;
             }
         }
         catch (JwtException | IllegalArgumentException e) {
