@@ -76,10 +76,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and()//.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider))
                 .addFilter(new JwtTokenFilter(authenticationManager(), jwtTokenProvider))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().logout(logout -> logout
-                .logoutUrl("/logout")
-                .addLogoutHandler(new CustomLogoutHandler(jwtTokenProvider)));
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                /*.and().logout(logout -> logout
+                .logoutUrl("/logout").permitAll()
+                .addLogoutHandler(new CustomLogoutHandler(jwtTokenProvider)));*/
     }
 
     @Bean

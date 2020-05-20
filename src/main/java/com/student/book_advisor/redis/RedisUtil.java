@@ -10,7 +10,6 @@ import java.util.Date;
 public class RedisUtil {
 
     private final JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
-    //private Jedis jedis = new Jedis("localhost");
 
     public void set(String key, String value, Date expirationDate) {
         Jedis jedis = null;

@@ -8,11 +8,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -52,9 +54,17 @@ public class AuthenticationController {
         }
     }
 
-    /*@PostMapping("/logout")
+    @GetMapping("/logoutUser")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void logout(HttpServletResponse response) {
-
-    }*/
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            jwtTokenProvider.invalidateJwtToken(request, response);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+        catch(Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            throw new RuntimeException(e);
+        }
+    }
 }

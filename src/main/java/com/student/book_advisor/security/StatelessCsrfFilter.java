@@ -21,13 +21,12 @@ public class StatelessCsrfFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if(requireCsrfProtectionMatcher.matches(request)) {
-            final String csrfTokenValue = request.getHeader(X_CSRF_TOKEN);
+            String csrfTokenValue = request.getHeader(X_CSRF_TOKEN);
             final String csrfCookie = CookieUtil.getValue(request, CSRF_TOKEN);
-            /*if(csrfTokenValue == null || !csrfTokenValue.equals(csrfCookie)){
-                System.out.println("Porconi");
+            if(csrfTokenValue == null || !csrfTokenValue.equals(csrfCookie)){
                 accessDeniedHandler.handle(request, response, new AccessDeniedException("Missing or non-matching CSRF token"));
                 return;
-            }*/
+            }
         }
         filterChain.doFilter(request, response);
     }

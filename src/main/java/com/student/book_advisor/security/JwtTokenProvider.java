@@ -29,7 +29,6 @@ import java.util.UUID;
 public class JwtTokenProvider {
     private String secret = JwtProperties.JWT_SECRET;
     private Long validityInMillis = JwtProperties.JWT_EXPIRATION;
-    private static final String REDIS_ACTIVE_SUBJECTS_ID = "active_subjects";
 
     @Autowired
     private RedisUtil redisUtil;
@@ -84,10 +83,10 @@ public class JwtTokenProvider {
             else {
                 String jwtTokenID = claimsJws.getBody().getId();
                 if(redisUtil.isMember(jwtTokenID, token)) {
+                    System.out.println("IsMember");
                     return false;
                 }
                 else return true;
-                //return true;
             }
         }
         catch (JwtException | IllegalArgumentException e) {
