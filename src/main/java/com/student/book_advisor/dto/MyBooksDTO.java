@@ -3,7 +3,6 @@ package com.student.book_advisor.dto;
 
 import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 import com.student.book_advisor.enums.BookShelf;
-import com.student.book_advisor.enums.GenereLibro;
 
 import java.util.List;
 

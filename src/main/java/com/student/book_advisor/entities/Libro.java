@@ -2,15 +2,12 @@ package com.student.book_advisor.entities;
 
 
 import com.student.book_advisor.constants.Constants;
-import com.student.book_advisor.enums.GenereLibro;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "Book", uniqueConstraints = {@UniqueConstraint(columnNames = {"Title"})})

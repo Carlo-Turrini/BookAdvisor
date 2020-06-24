@@ -130,7 +130,7 @@ public class AuthorController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/authors/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteAuthor(@RequestParam("id")Integer id){
+    public void deleteAuthor(@PathVariable("id")Integer id){
         authorService.deleteAuthor(id);
     }
 
@@ -143,7 +143,7 @@ public class AuthorController {
 
     @GetMapping("/authors/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public AuthorDTO getAuthor(@RequestParam("id")Integer id) {
+    public AuthorDTO getAuthor(@PathVariable("id")Integer id) {
         return authorService.getAuthorsDTO(id);
     }
 

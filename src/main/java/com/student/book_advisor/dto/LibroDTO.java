@@ -2,7 +2,6 @@ package com.student.book_advisor.dto;
 
 import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 import com.student.book_advisor.enums.BookShelf;
-import com.student.book_advisor.enums.GenereLibro;
 
 import java.util.List;
 
@@ -21,8 +20,8 @@ public class LibroDTO {
     private Double overallWritingQualityRating;
     private Double overallPageTurnerRating;
     private Double overallOriginalityRating;
-    private List<AuthorOfBook> authors;
-    private List<String> genres;
+    private List<AuthorOfBook> autori;
+    private List<String> generi;
     private BookShelf shelf;
 
     public LibroDTO(Integer id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga, Double overallRating, Double overallWritingQualityRating, Double overallPageTurnerRating, Double overallOriginalityRating) {
@@ -135,20 +134,20 @@ public class LibroDTO {
         this.overallOriginalityRating = overallOriginalityRating;
     }
 
-    public List<AuthorOfBook> getAuthors() {
-        return authors;
+    public List<AuthorOfBook> getAutori() {
+        return autori;
     }
 
-    public void setAuthors(List<AuthorOfBook> authors) {
-        this.authors = authors;
+    public void setAutori(List<AuthorOfBook> autori) {
+        this.autori = autori;
     }
 
-    public List<String> getGenres() {
-        return genres;
+    public List<String> getGeneri() {
+        return generi;
     }
 
-    public void setGenres(List<String> genres) {
-        this.genres = genres;
+    public void setGeneri(List<String> generi) {
+        this.generi = generi;
     }
 
     public BookShelf getShelf() {

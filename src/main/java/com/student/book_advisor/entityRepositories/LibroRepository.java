@@ -3,7 +3,6 @@ package com.student.book_advisor.entityRepositories;
 import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
 import com.student.book_advisor.entities.Libro;
-import com.student.book_advisor.enums.GenereLibro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +17,7 @@ import java.util.List;
 public interface LibroRepository extends JpaRepository<Libro, Integer> {
     //Aggiungi clausola OrderBy AVG on rating recensioni libro!
     @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating) ) FROM Libro l JOIN l.genreJoinBookList genres LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE genres.genre.genre = :genere GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC ")
-    public List<LibroCardDTO> findLibriByGenere(@Param("genere")GenereLibro genere);
+    public List<LibroCardDTO> findLibriByGenere(@Param("genere")String genere);
 
     @Query("SELECT DISTINCT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l LEFT JOIN Recensione r ON (r.libro.id = l.id) GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC ")
     public List<LibroCardDTO> findAllBooks();

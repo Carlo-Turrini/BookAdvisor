@@ -12,11 +12,9 @@ import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.entities.*;
 import com.student.book_advisor.entityRepositories.*;
 import com.student.book_advisor.enums.FileUploadDir;
-import com.student.book_advisor.enums.GenereLibro;
 import com.student.book_advisor.security.AuthUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @CrossOrigin(origins = "http://localhost:4200")
@@ -64,8 +60,8 @@ public class LibroServiceImpl implements LibroService {
                 book.setOverallRating(new Double(0));
             }
             else book.setOverallRating(rating);*/
-            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
-            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+            book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
+            book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
@@ -80,7 +76,7 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public List<LibroCardDTO> findAllBooksByGenre(GenereLibro genere) {
+    public List<LibroCardDTO> findAllBooksByGenre(String genere) {
         List<LibroCardDTO> allBooksByGenre = new ArrayList<LibroCardDTO>();
         allBooksByGenre = libroRepo.findLibriByGenere(genere);
         for(LibroCardDTO book: allBooksByGenre) {
@@ -89,8 +85,8 @@ public class LibroServiceImpl implements LibroService {
                 book.setOverallRating(new Double(0));
             }
             else book.setOverallRating(rating);*/
-            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
-            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+            book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
+            book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
@@ -135,8 +131,8 @@ public class LibroServiceImpl implements LibroService {
         else {
             book.setCopertina(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
         }
-        book.setGenres(genreRepository.findGenresOfBook(book.getId()));
-        book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+        book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
+        book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AuthUserPrincipal authUserPrincipal = null;
         if(principal instanceof AuthUserPrincipal) {
@@ -175,7 +171,7 @@ public class LibroServiceImpl implements LibroService {
             saga.setSagaTitle(libroForm.getTitoloSaga());
             sagaRepository.save(saga);
         }
-        for(AuthorOfBook author : libroForm.getAuthors()) {
+        for(AuthorOfBook author : libroForm.getAutori()) {
             Author auth = authorRepository.getOne(author.getId());
             if(auth != null) {
                 AuthorJoinBook ajb = new AuthorJoinBook();
@@ -224,7 +220,7 @@ public class LibroServiceImpl implements LibroService {
                     sagaRepository.delete(saga);
                 }
             }
-            for (AuthorOfBook author : libroForm.getAuthors()) {
+            for (AuthorOfBook author : libroForm.getAutori()) {
                 Author auth = authorRepository.getOne(author.getId());
                 if(auth != null) {
                     AuthorJoinBook ajb = authorJoinBookRepository.findByAuthorAndBook(auth, book);
@@ -285,8 +281,8 @@ public class LibroServiceImpl implements LibroService {
                 book.setOverallRating(new Double(0));
             }
             else book.setOverallRating(rating);*/
-            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
-            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+            book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
+            book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
@@ -310,8 +306,8 @@ public class LibroServiceImpl implements LibroService {
                 book.setOverallRating(new Double(0));
             }
             else book.setOverallRating(rating);*/
-            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
-            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+            book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
+            book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);
@@ -373,8 +369,8 @@ public class LibroServiceImpl implements LibroService {
     public List<LibroCardDTO> findAllBooksByAuthor(String authorsFullname) {
         List<LibroCardDTO> booksByAuthor = libroRepo.findAllBooksByAuthor(authorsFullname);
         for(LibroCardDTO book : booksByAuthor) {
-            book.setGenres(genreRepository.findGenresOfBook(book.getId()));
-            book.setAuthors(authorRepository.findAuthorsOfBook(book.getId()));
+            book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
+            book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
             if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
                 book.setCoverImage(bookCoverPath);

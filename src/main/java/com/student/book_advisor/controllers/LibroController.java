@@ -9,7 +9,6 @@ import com.student.book_advisor.dto.auxiliaryDTOs.OverallRatingsForBook;
 import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.dto.formDTOS.PrizeFormDTO;
 import com.student.book_advisor.entities.Libro;
-import com.student.book_advisor.enums.GenereLibro;
 import com.student.book_advisor.services.LibroService;
 import com.student.book_advisor.services.PrizeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class LibroController {
 
     @GetMapping("/libri") //Il parametro è nella query string!
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<LibroCardDTO> getAllBooksByParam(@RequestParam(name = "genere", required = false) GenereLibro genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Integer bookId, @RequestParam(name = "author", required = false)String authorsFullname) {
+    public List<LibroCardDTO> getAllBooksByParam(@RequestParam(name = "genere", required = false) String genere, @RequestParam(name = "titolo", required = false)String titolo, @RequestParam(name ="titoloSaga", required = false)String titoloSaga, @RequestParam(name = "bookId", required = false)Integer bookId, @RequestParam(name = "author", required = false)String authorsFullname) {
         if(titolo != null) {
             return libroService.findBooksContainingTitolo(titolo);
         }
@@ -57,9 +56,9 @@ public class LibroController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/libri/isTitleUnique")
+    @PostMapping("/libri/isTitleUnique")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public boolean verifyTitleUniqueness(@RequestParam(name = "titolo")String titolo) {
+    public boolean verifyTitleUniqueness(@RequestBody()String titolo) {
         return libroService.isTitleUnique(titolo);
     }
 

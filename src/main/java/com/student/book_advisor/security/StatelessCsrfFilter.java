@@ -24,6 +24,9 @@ public class StatelessCsrfFilter extends OncePerRequestFilter {
             String csrfTokenValue = request.getHeader(X_CSRF_TOKEN);
             final String csrfCookie = CookieUtil.getValue(request, CSRF_TOKEN);
             if(csrfTokenValue == null || !csrfTokenValue.equals(csrfCookie)){
+                System.out.println("Missing or non-matching CSRF token");
+                System.out.println(csrfCookie);
+                System.out.println(csrfTokenValue);
                 accessDeniedHandler.handle(request, response, new AccessDeniedException("Missing or non-matching CSRF token"));
                 return;
             }

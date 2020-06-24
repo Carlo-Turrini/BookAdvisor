@@ -8,6 +8,9 @@ public class AuthorOfBook {
         this.id = id;
         this.authorsFullname = authorsFullname;
     }
+    public AuthorOfBook() {
+
+    }
 
     public Integer getId() {
         return id;

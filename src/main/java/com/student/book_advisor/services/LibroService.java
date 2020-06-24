@@ -6,7 +6,6 @@ import com.student.book_advisor.dto.PrizeDTO;
 import com.student.book_advisor.dto.auxiliaryDTOs.OverallRatingsForBook;
 import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.entities.Libro;
-import com.student.book_advisor.enums.GenereLibro;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface LibroService {
 
     public List<LibroCardDTO> findAllBooks();
 
-    public List<LibroCardDTO> findAllBooksByGenre(GenereLibro genere);
+    public List<LibroCardDTO> findAllBooksByGenre(String genere);
 
     public Libro findBookById(Integer id);
 
