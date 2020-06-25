@@ -239,9 +239,9 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("bookID") @Min(1) @Max(1) Integer bookID, @RequestParam("shelf") BookShelf shelf) {
+    public String updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("bookID") @Min(1) @Max(1) Integer bookID, @RequestBody() String shelf) {
         try {
-            return myBooksService.updateShelf(userID, bookID, shelf);
+            return myBooksService.updateShelf(userID, bookID, BookShelf.valueOf(shelf));
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -276,9 +276,9 @@ public class UtenteController {
     @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
     @PostMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String addBookToShelf(@PathVariable("id")Integer userID, @PathVariable("bookID")Integer bookID, @RequestBody BookShelf shelf) {
+    public String addBookToShelf(@PathVariable("id")Integer userID, @PathVariable("bookID")Integer bookID, @RequestBody() String shelf) {
         try {
-            return myBooksService.addToShelf(userID, bookID, shelf);
+            return myBooksService.addToShelf(userID, bookID, BookShelf.valueOf(shelf));
         }
         catch(Exception e) {
             throw new RuntimeException(e);

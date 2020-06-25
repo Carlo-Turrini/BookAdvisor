@@ -4,6 +4,8 @@ import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 import com.student.book_advisor.entities.Author;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +17,7 @@ public class RecensioneDTO {
     private Integer writingQualityRating;
     private Integer pageTurnerRating;
     private Boolean containsSpoilers;
-    private Timestamp timestamp;
+    private String timestamp;
     private Long numOfUsersConsideredReviewUseful;
     private Boolean isReviewUsefulForLoggedUser;
     //Info utente
@@ -26,7 +28,7 @@ public class RecensioneDTO {
     //Info Libro
     private Integer bookId;
     private String titolo;
-    private List<AuthorOfBook> authors;
+    private List<AuthorOfBook> autori;
     private String coverImage;
 
 
@@ -35,7 +37,8 @@ public class RecensioneDTO {
         this.id = id;
         this.testo = testo;
         this.rating = rating;
-        this.timestamp = new Timestamp(timestamp.getTime());
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        this.timestamp = dateFormat.format(timestamp);
         this.userId = userId;
         this.username = username;
         this.bookId = bookId;
@@ -71,11 +74,11 @@ public class RecensioneDTO {
         this.rating = rating;
     }
 
-    public Timestamp getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -159,12 +162,12 @@ public class RecensioneDTO {
         this.containsSpoilers = containsSpoilers;
     }
 
-    public List<AuthorOfBook> getAuthors() {
-        return authors;
+    public List<AuthorOfBook> getAutori() {
+        return autori;
     }
 
-    public void setAuthors(List<AuthorOfBook> authors) {
-        this.authors = authors;
+    public void setAutori(List<AuthorOfBook> autori) {
+        this.autori = autori;
     }
 
     public Long getNumOfUsersConsideredReviewUseful() {

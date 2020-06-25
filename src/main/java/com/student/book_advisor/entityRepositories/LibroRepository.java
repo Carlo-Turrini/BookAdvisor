@@ -37,7 +37,7 @@ public interface LibroRepository extends JpaRepository<Libro, Integer> {
     @Query("SELECT new com.student.book_advisor.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga, AVG(r.rating), AVG(r.writingQualityRating), AVG(r.pageTurnerRating), AVG(r.pageTurnerRating)) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE l.id = :id GROUP BY l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga")
     public LibroDTO getBookById(@Param("id")Integer bookId);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l JOIN l.saga s LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE s.sagaTitle = :titoloSaga AND l.id <> :bookId GROUP BY l.id, l.titolo ORDER BY s.numberInSaga")
+    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l JOIN l.saga s LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE s.sagaTitle = :titoloSaga AND l.id <> :bookId GROUP BY l.id, l.titolo")
     public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(@Param("titoloSaga")String titoloSaga, @Param("bookId")Integer id);
 
     @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'read' GROUP BY l.id, l.titolo")

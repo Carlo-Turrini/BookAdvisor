@@ -22,7 +22,7 @@ public class LibroDTO {
     private Double overallOriginalityRating;
     private List<AuthorOfBook> autori;
     private List<String> generi;
-    private BookShelf shelf;
+    private BookShelf bookShelf;
 
     public LibroDTO(Integer id, String titolo, Integer annoPubblicazione, Integer pagine, String sinossi, String titoloSaga, Integer numInSaga, Double overallRating, Double overallWritingQualityRating, Double overallPageTurnerRating, Double overallOriginalityRating) {
         this.id = id;
@@ -150,12 +150,12 @@ public class LibroDTO {
         this.generi = generi;
     }
 
-    public BookShelf getShelf() {
-        return shelf;
+    public BookShelf getBookShelf() {
+        return bookShelf;
     }
 
-    public void setShelf(BookShelf shelf) {
-        this.shelf = shelf;
+    public void setBookShelf(BookShelf bookShelf) {
+        this.bookShelf = bookShelf;
     }
 
     public Boolean getSaga() {

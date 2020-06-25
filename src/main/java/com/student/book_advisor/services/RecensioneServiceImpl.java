@@ -12,6 +12,8 @@ import com.student.book_advisor.entityRepositories.*;
 import com.student.book_advisor.enums.FileUploadDir;
 import com.student.book_advisor.security.AuthUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -59,9 +61,10 @@ public class RecensioneServiceImpl implements RecensioneService {
                 recensione.setProfileImage(storageService.serve(profilePhotoPath,FileUploadDir.profileImage));
 
             }
-            recensione.setAuthors(authorRepository.findAuthorsOfBook(recensione.getBookId()));
-            Integer loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-            if(loggedUserID != null) {
+            recensione.setAutori(authorRepository.findAuthorsOfBook(recensione.getBookId()));
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+                Integer loggedUserID = ((AuthUserPrincipal) auth.getPrincipal()).getId();
                 recensione.setReviewUsefulForLoggedUser(usefulReviewRepository.findByUserIDAndReviewID(loggedUserID, recensione.getId())!=null);
             }
         }
@@ -87,9 +90,10 @@ public class RecensioneServiceImpl implements RecensioneService {
                 recensione.setProfileImage(storageService.serve(profilePhotoPath, FileUploadDir.profileImage));
 
             }
-            recensione.setAuthors(authorRepository.findAuthorsOfBook(recensione.getBookId()));
-            Integer loggedUserID = ((AuthUserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-            if(loggedUserID != null) {
+            recensione.setAutori(authorRepository.findAuthorsOfBook(recensione.getBookId()));
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
+                Integer loggedUserID = ((AuthUserPrincipal) auth.getPrincipal()).getId();
                 recensione.setReviewUsefulForLoggedUser(usefulReviewRepository.findByUserIDAndReviewID(loggedUserID, recensione.getId())!=null);
             }
         }

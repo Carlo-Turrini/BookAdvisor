@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "Review", uniqueConstraints = {@UniqueConstraint(columnNames = {"UserID", "BookID"})})
+@Table(name = "Review")
 //@SQLDelete(sql = "UPDATE RECENSIONE SET deleted = true WHERE id = ?")
 //@Where(clause = "deleted = false")
 public class Recensione implements Serializable {
