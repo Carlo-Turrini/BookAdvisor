@@ -30,6 +30,10 @@ public class UtenteServiceImpl implements UtenteService {
     private AuthoritiesRepository authoritiesRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BookRankingRepository bookRankingRepository;
+    @Autowired
+    private UsefulReviewRepository usefulReviewRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -103,8 +107,12 @@ public class UtenteServiceImpl implements UtenteService {
     public void deleteUser(Integer id) {
         UsersInfo user = usersInfoRepository.getOne(id);
         if(user != null) {
+            List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(id);
+            bookRankingRepository.deleteInBatch(bookRankingList);
+            List<UsefulReview> usefulReviewList = usefulReviewRepository.findAllUsefulReviewsByUserID(id);
+            usefulReviewRepository.deleteInBatch(usefulReviewList);
             //user.setDelToken(UUID.randomUUID().toString());
-            usersInfoRepository.save(user);
+            usersInfoRepository.delete(user);
         }
     }
 

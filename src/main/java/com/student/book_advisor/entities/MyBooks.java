@@ -23,7 +23,7 @@ public class MyBooks {
     @JoinColumn(name = "BookID")
     private Libro book;
 
-    @OneToOne(mappedBy = "myBooks", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "myBooks", fetch = FetchType.LAZY)
     private BookRanking bookRanking;
 
     public Integer getId() {

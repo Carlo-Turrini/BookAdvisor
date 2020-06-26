@@ -9,9 +9,9 @@ import java.util.List;
 public interface MyBooksService {
     public String addToShelf(Integer userID, Integer bookID, BookShelf shef);
 
-    public void deleteFromShelf(Integer userID, Integer myBookID);
+    public Boolean deleteFromShelf(Integer userID, Integer myBookID);
 
-    public String updateShelf(Integer userID, Integer myBookID, BookShelf shelf);
+    public Boolean updateShelf(Integer userID, Integer myBookID, BookShelf shelf);
 
     public List<MyBooksDTO> findAllMyBooks(Integer userID);
 

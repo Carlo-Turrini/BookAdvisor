@@ -7,6 +7,7 @@ import com.student.book_advisor.dto.LibroCardDTO;
 import com.student.book_advisor.dto.LibroDTO;
 import com.student.book_advisor.dto.PrizeDTO;
 import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
+import com.student.book_advisor.dto.auxiliaryDTOs.BookRankRemovalInfoDTO;
 import com.student.book_advisor.dto.auxiliaryDTOs.OverallRatingsForBook;
 import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
 import com.student.book_advisor.entities.*;
@@ -48,6 +49,10 @@ public class LibroServiceImpl implements LibroService {
     private AuthorJoinBookRepository authorJoinBookRepository;
     @Autowired
     private MyBooksRepository myBooksRepository;
+    @Autowired
+    private BookRankingService bookRankingService;
+    @Autowired
+    private BookRankingRepository bookRankingRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -245,6 +250,10 @@ public class LibroServiceImpl implements LibroService {
         if(delBook != null) {
             /*delBook.setDelToken(UUID.randomUUID().toString());
             libroRepo.save(delBook);*/
+            List<BookRankRemovalInfoDTO> bookRankingInfoList = bookRankingRepository.getAllBookRanksByBookID(id);
+            for(BookRankRemovalInfoDTO bookRankInfo : bookRankingInfoList) {
+                bookRankingService.removeBookFromBookRank(bookRankInfo.getUserID(), bookRankInfo.getBookRankID());
+            }
             libroRepo.delete(delBook);
         }
 

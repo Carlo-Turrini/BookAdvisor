@@ -34,7 +34,18 @@ public class BookRankingServiceImpl implements BookRankingService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<BookRankingDTO> findUsersBookRank(Integer userID) {
-        return bookRankingRepository.findBookRankingByUser(userID);
+        List<BookRankingDTO> bookRank = bookRankingRepository.findBookRankingByUser(userID);
+        for(BookRankingDTO book: bookRank) {
+            book.setBookAuthors(authorRepository.findAuthorsOfBook(book.getBookID()));
+            String bookCoverPath = libroRepository.findBookCoverPath(book.getBookID());
+            if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
+                book.setBookCoverPhoto(bookCoverPath);
+            }
+            else {
+                book.setBookCoverPhoto(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
+            }
+        }
+        return bookRank;
     }
 
     @Override
@@ -58,9 +69,11 @@ public class BookRankingServiceImpl implements BookRankingService{
                         bookRank = numOfBooksInRank + 1;
                     }
                     Integer maxIndex = numOfBooksInRank == 10 ? 8 : numOfBooksInRank - 1;
+                    System.out.println("MaxIndex: " + maxIndex);
                     for (int i = maxIndex; i >= bookRank - 1; i--) {
+                        System.out.println("Entro nel ciclo for");
                         BookRanking br = bookRankingList.get(i);
-                        br.setBookRank(i + 1);
+                        br.setBookRank(br.getBookRank() + 1);
                         bookRankingRepository.save(br);
                     }
                     BookRanking newBookInRank = new BookRanking();
@@ -95,14 +108,14 @@ public class BookRankingServiceImpl implements BookRankingService{
             BookRanking bookRankingToDelete = bookRankingRepository.getOne(bookRankID);
             if(bookRankingRepository.getUsersIDFromBookRanking(bookRankID) == userID) {
                 Integer bookRank = bookRankingToDelete.getBookRank();
+                bookRankingList.remove(bookRankingToDelete);
                 Integer bookRankListSize = bookRankingList.size();
+                System.out.println("Arrivo fino al comando di delete");
                 bookRankingRepository.delete(bookRankingToDelete);
-                if(bookRank < bookRankListSize) {
-                    for(int i=bookRank; i<bookRankListSize; i++) {
-                        BookRanking br = bookRankingList.get(i);
-                        br.setBookRank(i-1);
-                        bookRankingRepository.save(br);
-                    }
+                for(int i=bookRank-1; i<bookRankListSize; i++) {
+                    BookRanking br = bookRankingList.get(i);
+                    br.setBookRank(br.getBookRank()-1);
+                    bookRankingRepository.save(br);
                 }
                 List<BookRankingDTO> bookRankingDTOList = bookRankingRepository.findBookRankingByUser(userID);
                 for(BookRankingDTO bookRankingDTO : bookRankingDTOList) {
