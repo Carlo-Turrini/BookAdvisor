@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Resource(name = "userDetailsService")
     UserDetailsService userDetailsService;
@@ -50,10 +52,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().addFilterBefore(new StatelessCsrfFilter(), CsrfFilter.class)
-                /*.formLogin(form -> form
-                        .loginProcessingUrl("/login").permitAll()
-                        .successHandler(loginSuccessHandler)
-                        .failureHandler(loginFailureHandler))*/
                 .headers(headers -> headers.disable())
                 .authorizeRequests()
                 .mvcMatchers(HttpMethod.POST, "/authenticate").permitAll()
@@ -77,24 +75,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()//.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider))
                 .addFilter(new JwtTokenFilter(authenticationManager(), jwtTokenProvider))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                /*.and().logout(logout -> logout
-                .logoutUrl("/logout").permitAll()
-                .addLogoutHandler(new CustomLogoutHandler(jwtTokenProvider)));*/
     }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    /*@Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }*/
 }

@@ -202,12 +202,14 @@ public class LibroServiceImpl implements LibroService {
             book = libroRepo.save(book);
             for (String gen : libroForm.getGeneri()) {
                 Genre genre = genreRepository.findByGenre(gen);
-                GenreJoinBook gjb = genreJoinBookRepository.findByGenre(genre);
-                if (gjb == null) {
-                    gjb = new GenreJoinBook();
-                    gjb.setBook(book);
-                    gjb.setGenre(genre);
-                    genreJoinBookRepository.save(gjb);
+                if(genre != null) {
+                    GenreJoinBook gjb = genreJoinBookRepository.findByGenreAndBookID(gen, bookID);
+                    if (gjb == null) {
+                        gjb = new GenreJoinBook();
+                        gjb.setBook(book);
+                        gjb.setGenre(genre);
+                        genreJoinBookRepository.save(gjb);
+                    }
                 }
             }
             if (libroForm.getSaga()) {

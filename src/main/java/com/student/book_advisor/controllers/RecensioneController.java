@@ -79,10 +79,10 @@ public class RecensioneController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR isUsersReview(#id)")
-    @DeleteMapping(value = {"/libri/{bookId}/recensioni/{id}", "/utenti/{userId}/recensioni/{id}"})
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
+    @DeleteMapping("/utenti/{userId}/recensioni/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteReview(@PathVariable("id") Integer delReviewId, HttpServletRequest request, HttpServletResponse response) {
+    public void deleteReview(@PathVariable("id") Integer delReviewId, @PathVariable("userId")Integer userID, HttpServletRequest request, HttpServletResponse response) {
         try {
             recensioneService.deleteReview(delReviewId);
         }

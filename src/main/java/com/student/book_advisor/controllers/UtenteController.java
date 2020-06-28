@@ -151,7 +151,7 @@ public class UtenteController {
 
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userId == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}/foto_profilo")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String updateUsersProfilePhoto(@RequestParam("fotoProfilo") MultipartFile profilePhoto, @PathVariable("id")Integer userId, HttpServletRequest request, HttpServletResponse response) {
@@ -163,7 +163,7 @@ public class UtenteController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userId == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Map<String, Set<String>> updateUser(@Valid @RequestBody UtenteUpdateFormDTO userForm, BindingResult result, @PathVariable("id") Integer userId, HttpServletRequest request, HttpServletResponse response) {
@@ -225,7 +225,7 @@ public class UtenteController {
 
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
     @DeleteMapping("/utenti/{id}/myBooks/{myBookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Boolean deleteBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("myBookID") @Min(1) @Max(1) Integer myBookID, HttpServletRequest request, HttpServletResponse response) {
@@ -238,7 +238,7 @@ public class UtenteController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
     @PutMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Boolean updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("bookID") @Min(1) @Max(1) Integer bookID, @RequestBody() String shelf) {
@@ -250,7 +250,7 @@ public class UtenteController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
     @GetMapping("/utenti/{id}/myBooks/booksReadNotInRank")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public List<MyBooksReadDTO> getAllMyBooksReadNotInRank(@PathVariable("id")Integer userID) {
@@ -275,7 +275,7 @@ public class UtenteController {
 
 
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
     @PostMapping("/utenti/{id}/myBooks/{bookID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String addBookToShelf(@PathVariable("id")Integer userID, @PathVariable("bookID")Integer bookID, @RequestBody() String shelf) {
@@ -298,7 +298,7 @@ public class UtenteController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.prinicpal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.prinicpal.usersInfo.id)")
     @PostMapping("/utenti/{id}/bookRank")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<BookRankingDTO> addBookRank(@PathVariable("id")Integer userID, @RequestBody() BookForRankDTO bookForRankDTO) {
@@ -310,7 +310,7 @@ public class UtenteController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#id == authentication.principal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
     @DeleteMapping("/utenti/{id}/bookRank/{rankID}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<BookRankingDTO> removeBookRank(@PathVariable("id")Integer userID, @PathVariable("rankID")Integer rankID) {
