@@ -200,14 +200,33 @@ public class LibroServiceImpl implements LibroService {
             book.setPagine(libroForm.getPagine());
             book.setAnnoPubblicazione(libroForm.getAnnoPubblicazione());
             book = libroRepo.save(book);
-            for (String gen : libroForm.getGeneri()) {
-                Genre genre = genreRepository.findByGenre(gen);
-                if(genre != null) {
-                    GenreJoinBook gjb = genreJoinBookRepository.findByGenreAndBookID(gen, bookID);
-                    if (gjb == null) {
+            List<String> genresUpdated = libroForm.getGeneri();
+            List<String> genresOfBook = genreRepository.findGenresOfBook(bookID);
+            for(String genre: genresOfBook) {
+                for(String genreUpdated: genresUpdated) {
+                    if(genre==genreUpdated) {
+                        genresOfBook.remove(genre);
+                        genresUpdated.remove(genreUpdated);
+                    }
+                }
+            }
+            for(String genre: genresOfBook) {
+                Genre gen = genreRepository.findByGenre(genre);
+                if(gen != null) {
+                    GenreJoinBook gjb = genreJoinBookRepository.findByGenreAndBookID(genre, bookID);
+                    if(gjb != null) {
+                        genreJoinBookRepository.delete(gjb);
+                    }
+                }
+            }
+            for(String genreUpdated: genresUpdated) {
+                Genre gen = genreRepository.findByGenre(genreUpdated);
+                if(gen!=null) {
+                    GenreJoinBook gjb = genreJoinBookRepository.findByGenreAndBookID(genreUpdated, bookID);
+                    if(gjb == null) {
                         gjb = new GenreJoinBook();
+                        gjb.setGenre(gen);
                         gjb.setBook(book);
-                        gjb.setGenre(genre);
                         genreJoinBookRepository.save(gjb);
                     }
                 }
@@ -227,9 +246,28 @@ public class LibroServiceImpl implements LibroService {
                     sagaRepository.delete(saga);
                 }
             }
-            for (AuthorOfBook author : libroForm.getAutori()) {
+            List<AuthorOfBook> authorList = authorRepository.findAuthorsOfBook(bookID);
+            List<AuthorOfBook> authorUpdatedList = libroForm.getAutori();
+            for(AuthorOfBook author: authorList) {
+                for(AuthorOfBook authUpdated: authorUpdatedList) {
+                    if(author.getAuthorsFullname()==authUpdated.getAuthorsFullname() && author.getId()==authUpdated.getId()) {
+                        authorList.remove(author);
+                        authorUpdatedList.remove(authUpdated);
+                    }
+                }
+            }
+            for(AuthorOfBook author: authorList) {
                 Author auth = authorRepository.getOne(author.getId());
-                if(auth != null) {
+                if(auth!=null) {
+                    AuthorJoinBook ajb = authorJoinBookRepository.findByAuthorAndBook(auth, book);
+                    if(ajb != null) {
+                        authorJoinBookRepository.delete(ajb);
+                    }
+                }
+            }
+            for(AuthorOfBook authUpdated: authorUpdatedList) {
+                Author auth = authorRepository.getOne(authUpdated.getId());
+                if(auth!=null) {
                     AuthorJoinBook ajb = authorJoinBookRepository.findByAuthorAndBook(auth, book);
                     if(ajb == null) {
                         ajb = new AuthorJoinBook();
@@ -238,7 +276,6 @@ public class LibroServiceImpl implements LibroService {
                         authorJoinBookRepository.save(ajb);
                     }
                 }
-                else throw new ApplicationException("This author doesn't exist!");
             }
             return book;
         }
