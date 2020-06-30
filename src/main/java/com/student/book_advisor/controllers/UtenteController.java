@@ -187,16 +187,19 @@ public class UtenteController {
                         if (userForm.getCognome().length() < 2) {
                             errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
                         } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                    } else if (code.equals("Size") && field.equals("password")) {
-                        if (userForm.getPassword().length() < 8) {
-                            errors.computeIfAbsent(field, key -> new HashSet<>()).add("minlength");
-                        } else errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
-                    } else if (code.equals("Size") && field.equals("descrizione")) {
+                    }  else if (code.equals("Size") && field.equals("descrizione")) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
                     } else if (code.equals("Email") && field.equals("email")) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("email");
                     }
-
+                }
+                if(userForm.getPassword()!="") {
+                    if(userForm.getPassword().length()<8) {
+                        errors.computeIfAbsent("password", key -> new HashSet<>()).add("minlength");
+                    }
+                    else if(userForm.getPassword().length()>50) {
+                        errors.computeIfAbsent("password", key -> new HashSet<>()).add("maxlength");
+                    }
                 }
                 if (errors.isEmpty()) {
                     utenteService.updateUser(updatedUser, userForm);
