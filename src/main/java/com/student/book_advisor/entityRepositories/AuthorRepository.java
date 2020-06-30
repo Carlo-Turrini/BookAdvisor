@@ -19,12 +19,6 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     @Query("SELECT new com.student.book_advisor.dto.AuthorCardDTO(a.id, a.authorsFullname, a.birthYear, a.deathYear) FROM Author a")
     public List<AuthorCardDTO> findAllToDTO();
 
-    @Query("SELECT new com.student.book_advisor.dto.AuthorCardDTO(a.id, a.authorsFullname, a.birthYear, a.deathYear) FROM Author a WHERE a.authorsFullname LIKE CONCAT('%', :fullname, '%')")
-    public List<AuthorCardDTO> findAllWithFullnameLikeX(@Param("fullname")String fullname);
-
-    @Query("SELECT new com.student.book_advisor.dto.AuthorDTO(a.id, a.authorsFullname, a.biography, a.birthYear, a.deathYear) FROM Author a WHERE  a.authorsFullname = :fullname")
-    public AuthorDTO getAuthorsDTOByFullname(@Param("fullname")String fullname);
-
     @Query("SELECT new com.student.book_advisor.dto.AuthorDTO(a.id, a.authorsFullname, a.biography, a.birthYear, a.deathYear) FROM Author a WHERE a.id = :id")
     public AuthorDTO getAuthorsDTOById(@Param("id")Integer id);
 

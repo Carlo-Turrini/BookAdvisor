@@ -26,6 +26,4 @@ public interface RecensioneRepository extends JpaRepository<Recensione, Integer>
     @Query("SELECT new com.student.book_advisor.dto.auxiliaryDTOs.OverallRatingsForBook(AVG(r.rating), AVG(r.originalityRating), AVG(r.pageTurnerRating), AVG(r.writingQualityRating)) FROM Recensione r WHERE r.libro.id = :bookID")
     public OverallRatingsForBook getAverageRatingsOfBook(@Param("bookID")Integer bookID);
 
-    @Query("SELECT r.usersInfo.id FROM Recensione r WHERE r.id = :reviewID")
-    public Integer getReviewsUsersInfoID(@Param("reviewID")Integer reviewID);
 }

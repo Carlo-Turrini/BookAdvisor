@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GenreJoinBookRepository extends JpaRepository<GenreJoinBook, Integer> {
 
-    public GenreJoinBook findByGenre(Genre genre);
-
     @Query("SELECT gjb FROM GenreJoinBook gjb WHERE gjb.genre.genre = :genre AND gjb.book.id = :bookID")
     public GenreJoinBook findByGenreAndBookID(@Param("genre")String genre, @Param("bookID")Integer bookID);
 }

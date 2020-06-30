@@ -40,15 +40,6 @@ public interface LibroRepository extends JpaRepository<Libro, Integer> {
     @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l JOIN l.saga s LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE s.sagaTitle = :titoloSaga AND l.id <> :bookId GROUP BY l.id, l.titolo")
     public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(@Param("titoloSaga")String titoloSaga, @Param("bookId")Integer id);
 
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'read' GROUP BY l.id, l.titolo")
-    public List<LibroCardDTO> findAllBooksReadByUser(@Param("userID")Integer userID);
-
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'toRead' GROUP BY l.id, l.titolo")
-    public List<LibroCardDTO> findUsersBooksToRead(@Param("userID")Integer userID);
-
-    @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (l.id = mb.book.id) LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE mb.usersInfo.id = :userID AND mb.ShelfType = 'reading' GROUP BY l.id, l.titolo")
-    public List<LibroCardDTO> findAllBooksBeingReadByUser(@Param("userID")Integer userID);
-
     @Query("SELECT new com.student.book_advisor.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l JOIN l.authorJoinBookList  ajbl JOIN ajbl.author a LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE a.authorsFullname = :authorsFullname GROUP BY l.id, l.titolo")
     public List<LibroCardDTO> findAllBooksByAuthor(@Param("authorsFullname")String authorsFullname);
 

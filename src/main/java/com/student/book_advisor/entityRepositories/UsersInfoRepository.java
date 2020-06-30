@@ -16,8 +16,6 @@ import java.util.List;
 @Repository
 @CrossOrigin(origins = "http://localhost:4200")
 public interface UsersInfoRepository extends JpaRepository<UsersInfo, Integer> {
-    @Query("SELECT new com.student.book_advisor.dto.UsersInfoDTO(ui.id, ui.name, ui.surname, ui.username, ui.email, ui.description) FROM UsersInfo ui WHERE ui.username = :username")
-    public UsersInfoDTO findUserDTOByUsername(@Param("username")String username);
 
     @Query("SELECT new com.student.book_advisor.dto.UsersInfoDTO(ui.id, ui.name, ui.surname, ui.username, ui.email, ui.description) FROM UsersInfo ui WHERE ui.id = :id")
     public UsersInfoDTO findUserById(@Param("id")Integer id);

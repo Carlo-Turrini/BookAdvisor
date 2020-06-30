@@ -29,8 +29,6 @@ public interface BookRankingRepository extends JpaRepository<BookRanking, Intege
     @Query("SELECT br FROM BookRanking br JOIN MyBooks mb ON (br.myBooks.id = mb.id) WHERE mb.id = :id")
     public BookRanking getBookRankingByMyBooksID(@Param("id")Integer myBookID);
 
-    public BookRanking getBookRankingByMyBooks(MyBooks myBooks);
-
     @Query("SELECT new com.student.book_advisor.dto.auxiliaryDTOs.BookRankRemovalInfoDTO(mb.usersInfo.id, br.id) FROM BookRanking br JOIN MyBooks mb ON (br.myBooks.id = mb.id) WHERE mb.book.id = :bookID")
     public List<BookRankRemovalInfoDTO> getAllBookRanksByBookID(@Param("bookID")Integer bookID);
 
