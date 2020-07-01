@@ -1,7 +1,7 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.dto.PrizeDTO;
-import com.student.book_advisor.dto.formDTOS.PrizeFormDTO;
+import com.student.book_advisor.db_access.dto.PrizeDTO;
+import com.student.book_advisor.db_access.dto.formDTOS.PrizeFormDTO;
 
 import java.util.List;
 

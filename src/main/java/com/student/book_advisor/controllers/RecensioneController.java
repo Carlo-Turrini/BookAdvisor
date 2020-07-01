@@ -1,17 +1,11 @@
 package com.student.book_advisor.controllers;
 
 
-import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.dto.RecensioneDTO;
-import com.student.book_advisor.dto.formDTOS.RecensioneFormDTO;
-import com.student.book_advisor.entities.Libro;
-import com.student.book_advisor.entities.Recensione;
-import com.student.book_advisor.security.AuthUserPrincipal;
-import com.student.book_advisor.services.LibroService;
+import com.student.book_advisor.db_access.dto.RecensioneDTO;
+import com.student.book_advisor.db_access.dto.formDTOS.RecensioneFormDTO;
 import com.student.book_advisor.services.RecensioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;

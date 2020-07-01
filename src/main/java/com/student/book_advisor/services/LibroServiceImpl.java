@@ -1,19 +1,20 @@
 package com.student.book_advisor.services;
 
 
-import com.student.book_advisor.constants.Constants;
+import com.student.book_advisor.storage.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.dto.LibroCardDTO;
-import com.student.book_advisor.dto.LibroDTO;
-import com.student.book_advisor.dto.PrizeDTO;
-import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
-import com.student.book_advisor.dto.auxiliaryDTOs.BookRankRemovalInfoDTO;
-import com.student.book_advisor.dto.auxiliaryDTOs.OverallRatingsForBook;
-import com.student.book_advisor.dto.formDTOS.LibroFormDTO;
-import com.student.book_advisor.entities.*;
-import com.student.book_advisor.entityRepositories.*;
-import com.student.book_advisor.enums.FileUploadDir;
+import com.student.book_advisor.db_access.dto.LibroCardDTO;
+import com.student.book_advisor.db_access.dto.LibroDTO;
+import com.student.book_advisor.db_access.dto.PrizeDTO;
+import com.student.book_advisor.db_access.dto.auxiliaryDTOs.AuthorOfBook;
+import com.student.book_advisor.db_access.dto.auxiliaryDTOs.BookRankRemovalInfoDTO;
+import com.student.book_advisor.db_access.dto.auxiliaryDTOs.OverallRatingsForBook;
+import com.student.book_advisor.db_access.dto.formDTOS.LibroFormDTO;
+import com.student.book_advisor.db_access.entities.*;
+import com.student.book_advisor.db_access.entityRepositories.*;
+import com.student.book_advisor.storage.FileUploadDir;
 import com.student.book_advisor.security.AuthUserPrincipal;
+import com.student.book_advisor.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

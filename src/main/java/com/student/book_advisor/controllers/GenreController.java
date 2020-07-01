@@ -1,7 +1,7 @@
 package com.student.book_advisor.controllers;
 
 
-import com.student.book_advisor.dto.formDTOS.GenreFormDTO;
+import com.student.book_advisor.db_access.dto.formDTOS.GenreFormDTO;
 import com.student.book_advisor.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

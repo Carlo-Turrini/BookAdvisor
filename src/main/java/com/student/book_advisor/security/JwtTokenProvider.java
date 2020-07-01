@@ -1,11 +1,10 @@
 package com.student.book_advisor.security;
 
-import com.student.book_advisor.redis.RedisUtil;
+import com.student.book_advisor.security.redis.RedisUtil;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;

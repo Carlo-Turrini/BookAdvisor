@@ -1,9 +1,9 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.dto.*;
-import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
-import com.student.book_advisor.dto.formDTOS.UtenteUpdateFormDTO;
-import com.student.book_advisor.entities.UsersInfo;
+import com.student.book_advisor.db_access.dto.*;
+import com.student.book_advisor.db_access.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.db_access.dto.formDTOS.UtenteUpdateFormDTO;
+import com.student.book_advisor.db_access.entities.UsersInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

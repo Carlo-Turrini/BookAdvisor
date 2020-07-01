@@ -1,17 +1,12 @@
 package com.student.book_advisor.controllers;
 
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.dto.*;
-import com.student.book_advisor.dto.auxiliaryDTOs.BookForRankDTO;
-import com.student.book_advisor.dto.auxiliaryDTOs.LoggedUserDTO;
-import com.student.book_advisor.dto.auxiliaryDTOs.MyBooksReadDTO;
-import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
-import com.student.book_advisor.dto.formDTOS.UtenteUpdateFormDTO;
-import com.student.book_advisor.entities.UsersInfo;
-import com.student.book_advisor.enums.BookShelf;
+import com.student.book_advisor.db_access.dto.*;
+import com.student.book_advisor.db_access.dto.auxiliaryDTOs.LoggedUserDTO;
+import com.student.book_advisor.db_access.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.db_access.dto.formDTOS.UtenteUpdateFormDTO;
+import com.student.book_advisor.db_access.entities.UsersInfo;
 import com.student.book_advisor.security.AuthUserPrincipal;
-import com.student.book_advisor.services.BookRankingService;
-import com.student.book_advisor.services.MyBooksService;
 import com.student.book_advisor.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,10 +31,6 @@ public class UtenteController {
 
     @Autowired
     private UtenteService utenteService;
-    @Autowired
-    private MyBooksService myBooksService;
-    @Autowired
-    private BookRankingService bookRankingService;
 
     @GetMapping("/utenti/loggedUserInfo")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
@@ -227,103 +218,4 @@ public class UtenteController {
         }
 
     }
-
-    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
-    @DeleteMapping("/utenti/{id}/myBooks/{myBookID}")
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Boolean deleteBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("myBookID") @Min(1) @Max(1) Integer myBookID, HttpServletRequest request, HttpServletResponse response) {
-        try {
-            //Il boolean ritornato identifica se è stato modificato il rank oppure no.
-            return myBooksService.deleteFromShelf(userID, myBookID);
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
-    @PutMapping("/utenti/{id}/myBooks/{bookID}")
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Boolean updateBookFromMyBooks(@PathVariable("id") @Min(1) @Max(1) Integer userID, @PathVariable("bookID") @Min(1) @Max(1) Integer bookID, @RequestBody() String shelf) {
-        try {
-            return myBooksService.updateShelf(userID, bookID, BookShelf.valueOf(shelf));
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
-    @GetMapping("/utenti/{id}/myBooks/booksReadNotInRank")
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<MyBooksReadDTO> getAllMyBooksReadNotInRank(@PathVariable("id")Integer userID) {
-        try {
-            return myBooksService.findAllMyBooksRead(userID);
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GetMapping("/utenti/{id}/myBooks")
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<MyBooksDTO> getAllMyBooks(@PathVariable("id")Integer userID) {
-        try {
-            return myBooksService.findAllMyBooks(userID);
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
-    @PostMapping("/utenti/{id}/myBooks/{bookID}")
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String addBookToShelf(@PathVariable("id")Integer userID, @PathVariable("bookID")Integer bookID, @RequestBody() String shelf) {
-        try {
-            return myBooksService.addToShelf(userID, bookID, BookShelf.valueOf(shelf));
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @GetMapping("/utenti/{id}/bookRank")
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public List<BookRankingDTO> getUsersBookRanking(@PathVariable("id")Integer userID) {
-        try {
-            return bookRankingService.findUsersBookRank(userID);
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.prinicpal.usersInfo.id)")
-    @PostMapping("/utenti/{id}/bookRank")
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<BookRankingDTO> addBookRank(@PathVariable("id")Integer userID, @RequestBody() BookForRankDTO bookForRankDTO) {
-        try {
-            return bookRankingService.addBookToBookRank(userID, bookForRankDTO.getMyBookID(), bookForRankDTO.getRank());
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
-    @DeleteMapping("/utenti/{id}/bookRank/{rankID}")
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<BookRankingDTO> removeBookRank(@PathVariable("id")Integer userID, @PathVariable("rankID")Integer rankID) {
-        try {
-            return bookRankingService.removeBookFromBookRank(userID, rankID);
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
 }

@@ -1,7 +1,7 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.entities.Genre;
-import com.student.book_advisor.entityRepositories.GenreRepository;
+import com.student.book_advisor.db_access.entities.Genre;
+import com.student.book_advisor.db_access.entityRepositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

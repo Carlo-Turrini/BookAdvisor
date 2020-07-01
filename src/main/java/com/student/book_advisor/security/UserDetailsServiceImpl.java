@@ -1,8 +1,8 @@
 package com.student.book_advisor.security;
 
-import com.student.book_advisor.entities.UsersInfo;
-import com.student.book_advisor.entityRepositories.AuthoritiesRepository;
-import com.student.book_advisor.entityRepositories.UsersInfoRepository;
+import com.student.book_advisor.db_access.entities.UsersInfo;
+import com.student.book_advisor.db_access.entityRepositories.AuthoritiesRepository;
+import com.student.book_advisor.db_access.entityRepositories.UsersInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

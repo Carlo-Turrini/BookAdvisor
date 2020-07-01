@@ -1,15 +1,13 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.constants.Constants;
-import com.student.book_advisor.dto.*;
-import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
-import com.student.book_advisor.dto.formDTOS.UtenteFormDTO;
-import com.student.book_advisor.dto.formDTOS.UtenteUpdateFormDTO;
-import com.student.book_advisor.entities.*;
-import com.student.book_advisor.entityRepositories.*;
-import com.student.book_advisor.enums.BookShelf;
-import com.student.book_advisor.enums.Credenziali;
-import com.student.book_advisor.enums.FileUploadDir;
+import com.student.book_advisor.storage.Constants;
+import com.student.book_advisor.db_access.dto.*;
+import com.student.book_advisor.db_access.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.db_access.dto.formDTOS.UtenteUpdateFormDTO;
+import com.student.book_advisor.db_access.entities.*;
+import com.student.book_advisor.db_access.entityRepositories.*;
+import com.student.book_advisor.storage.FileUploadDir;
+import com.student.book_advisor.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class UtenteServiceImpl implements UtenteService {

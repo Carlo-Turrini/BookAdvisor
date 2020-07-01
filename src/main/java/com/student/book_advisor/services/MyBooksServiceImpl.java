@@ -1,14 +1,15 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.constants.Constants;
+import com.student.book_advisor.storage.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.dto.MyBooksDTO;
-import com.student.book_advisor.dto.auxiliaryDTOs.MyBooksReadDTO;
-import com.student.book_advisor.entities.BookRanking;
-import com.student.book_advisor.entities.MyBooks;
-import com.student.book_advisor.entityRepositories.*;
+import com.student.book_advisor.db_access.dto.MyBooksDTO;
+import com.student.book_advisor.db_access.dto.auxiliaryDTOs.MyBooksReadDTO;
+import com.student.book_advisor.db_access.entities.BookRanking;
+import com.student.book_advisor.db_access.entities.MyBooks;
+import com.student.book_advisor.db_access.entityRepositories.*;
+import com.student.book_advisor.storage.StorageService;
 import com.student.book_advisor.enums.BookShelf;
-import com.student.book_advisor.enums.FileUploadDir;
+import com.student.book_advisor.storage.FileUploadDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

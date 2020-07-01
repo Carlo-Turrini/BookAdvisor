@@ -1,13 +1,11 @@
 package com.student.book_advisor.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.student.book_advisor.dto.LoginDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.student.book_advisor.db_access.dto.LoginDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
