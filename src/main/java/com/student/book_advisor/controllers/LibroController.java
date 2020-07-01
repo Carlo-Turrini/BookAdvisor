@@ -77,9 +77,6 @@ public class LibroController {
                 if(code.equals("NotNull") || code.equals("NotBlank") || code.equals("NotEmpty")) {
                     errors.computeIfAbsent(field, key -> new HashSet<>()).add("required");
                 }
-                else if(field.equals("annoPubblicazione") && code.equals("Pattern")) {
-                    errors.computeIfAbsent(field, key -> new HashSet<>()).add("pattern");
-                }
                 else if(field.equals("pagine") && code.equals("Min")) {
                     errors.computeIfAbsent(field, key -> new HashSet<>()).add("min");
                 }
@@ -104,6 +101,13 @@ public class LibroController {
                 else if(field.equals("titoloSaga") && code.equals("Size")) {
                     errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
                 }
+                else if(field.equals("annoPubblicazione") && code.equals("Min")) {
+                    errors.computeIfAbsent(field, key -> new HashSet<>()).add("min");
+                }
+            }
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            if(bookForm.getAnnoPubblicazione()>year) {
+                errors.computeIfAbsent("annoPubblicazione", key -> new HashSet<>()).add("max");
             }
             if(errors.isEmpty()) {
                 libroService.newBook(bookForm);
@@ -153,8 +157,6 @@ public class LibroController {
                     String field = fieldError.getField();
                     if (code.equals("NotNull") || code.equals("NotBlank") || code.equals("NotEmpty")) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("required");
-                    } else if (field.equals("annoPubblicazione") && code.equals("Pattern")) {
-                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("pattern");
                     } else if (field.equals("pagine") && code.equals("Min")) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("min");
                     } else if (field.equals("pagine") && code.equals("Max")) {
@@ -172,6 +174,13 @@ public class LibroController {
                     } else if (field.equals("titoloSaga") && code.equals("Size")) {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("maxlength");
                     }
+                    else if(field.equals("annoPubblicazione") && code.equals("Min")) {
+                        errors.computeIfAbsent(field, key -> new HashSet<>()).add("min");
+                    }
+                }
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                if(bookForm.getAnnoPubblicazione()>year) {
+                    errors.computeIfAbsent("annoPubblicazione", key -> new HashSet<>()).add("max");
                 }
                 if (errors.isEmpty()) {
                     libroService.updateBook(bookForm, bookId);

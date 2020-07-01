@@ -4,11 +4,13 @@ package com.student.book_advisor.dto.formDTOS;
 import com.student.book_advisor.dto.auxiliaryDTOs.AuthorOfBook;
 
 import javax.validation.constraints.*;
+import java.util.Calendar;
 import java.util.List;
 
 public class LibroFormDTO {
 
     @NotNull
+    @Min(0)
     private Integer annoPubblicazione;
 
     @NotNull
