@@ -1,20 +1,20 @@
 package com.student.book_advisor.services;
 
 
-import com.student.book_advisor.storage.Constants;
+import com.student.book_advisor.data_persistency.repositories.*;
+import com.student.book_advisor.services.storage.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.db_access.dto.LibroCardDTO;
-import com.student.book_advisor.db_access.dto.LibroDTO;
-import com.student.book_advisor.db_access.dto.PrizeDTO;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.AuthorOfBook;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.BookRankRemovalInfoDTO;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.OverallRatingsForBook;
-import com.student.book_advisor.db_access.dto.formDTOS.LibroFormDTO;
-import com.student.book_advisor.db_access.entities.*;
-import com.student.book_advisor.db_access.entityRepositories.*;
-import com.student.book_advisor.storage.FileUploadDir;
+import com.student.book_advisor.data_persistency.model.dto.LibroCardDTO;
+import com.student.book_advisor.data_persistency.model.dto.LibroDTO;
+import com.student.book_advisor.data_persistency.model.dto.PrizeDTO;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.AuthorOfBook;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.BookRankRemovalInfoDTO;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.OverallRatingsForBook;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.LibroFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.*;
+import com.student.book_advisor.services.storage.FileUploadDir;
 import com.student.book_advisor.security.AuthUserPrincipal;
-import com.student.book_advisor.storage.StorageService;
+import com.student.book_advisor.services.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -293,6 +293,10 @@ public class LibroServiceImpl implements LibroService {
             List<BookRankRemovalInfoDTO> bookRankingInfoList = bookRankingRepository.getAllBookRanksByBookID(id);
             for(BookRankRemovalInfoDTO bookRankInfo : bookRankingInfoList) {
                 bookRankingService.removeBookFromBookRank(bookRankInfo.getUserID(), bookRankInfo.getBookRankID());
+            }
+            String photoPath = delBook.getBookCoverPath();
+            if(photoPath != Constants.DEF_BOOK_COVER) {
+                storageService.delete(photoPath, FileUploadDir.coverImage);
             }
             libroRepo.delete(delBook);
         }

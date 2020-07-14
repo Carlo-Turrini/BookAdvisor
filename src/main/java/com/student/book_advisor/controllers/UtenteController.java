@@ -1,11 +1,11 @@
 package com.student.book_advisor.controllers;
 
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.db_access.dto.*;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.LoggedUserDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.UtenteFormDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.UtenteUpdateFormDTO;
-import com.student.book_advisor.db_access.entities.UsersInfo;
+import com.student.book_advisor.data_persistency.model.dto.*;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.LoggedUserDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.UtenteUpdateFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.UsersInfo;
 import com.student.book_advisor.security.AuthUserPrincipal;
 import com.student.book_advisor.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;

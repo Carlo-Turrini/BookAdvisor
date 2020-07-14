@@ -1,6 +1,6 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.db_access.dto.BookRankingDTO;
+import com.student.book_advisor.data_persistency.model.dto.BookRankingDTO;
 
 import java.util.List;
 

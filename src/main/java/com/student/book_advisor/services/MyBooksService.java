@@ -1,7 +1,7 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.db_access.dto.MyBooksDTO;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.MyBooksReadDTO;
+import com.student.book_advisor.data_persistency.model.dto.MyBooksDTO;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.MyBooksReadDTO;
 import com.student.book_advisor.enums.BookShelf;
 
 import java.util.List;

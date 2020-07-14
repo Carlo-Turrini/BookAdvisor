@@ -1,6 +1,6 @@
 package com.student.book_advisor.security;
 
-import com.student.book_advisor.db_access.entities.UsersInfo;
+import com.student.book_advisor.data_persistency.model.entities.UsersInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,7 @@
 package com.student.book_advisor.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.student.book_advisor.db_access.dto.LoginDTO;
+import com.student.book_advisor.data_persistency.model.dto.LoginDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

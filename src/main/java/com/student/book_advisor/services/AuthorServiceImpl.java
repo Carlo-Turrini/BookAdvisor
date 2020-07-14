@@ -1,15 +1,15 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.storage.Constants;
+import com.student.book_advisor.services.storage.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.db_access.dto.AuthorCardDTO;
-import com.student.book_advisor.db_access.dto.AuthorDTO;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.AuthorOfBook;
-import com.student.book_advisor.db_access.dto.formDTOS.AuthorFormDTO;
-import com.student.book_advisor.db_access.entities.Author;
-import com.student.book_advisor.db_access.entityRepositories.AuthorRepository;
-import com.student.book_advisor.storage.FileUploadDir;
-import com.student.book_advisor.storage.StorageService;
+import com.student.book_advisor.data_persistency.model.dto.AuthorCardDTO;
+import com.student.book_advisor.data_persistency.model.dto.AuthorDTO;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.AuthorOfBook;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.AuthorFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.Author;
+import com.student.book_advisor.data_persistency.repositories.AuthorRepository;
+import com.student.book_advisor.services.storage.FileUploadDir;
+import com.student.book_advisor.services.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,24 +43,28 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Author getAuthor(Integer id) {
         return authorRepository.getOne(id);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public AuthorDTO getAuthorsDTO(Integer id) {
         AuthorDTO author = authorRepository.getAuthorsDTOById(id);
-        String authorsPhotoPath = authorRepository.getAuthorsPhotoPath(id);
-        if(authorsPhotoPath.equals(Constants.DEF_PROFILE_PIC)) {
-            author.setAuthorsPhoto(authorsPhotoPath);
-        }
-        else {
-            author.setAuthorsPhoto(storageService.serve(authorsPhotoPath, FileUploadDir.authorImage));
+        if(author != null) {
+            String authorsPhotoPath = authorRepository.getAuthorsPhotoPath(id);
+            if (authorsPhotoPath.equals(Constants.DEF_PROFILE_PIC)) {
+                author.setAuthorsPhoto(authorsPhotoPath);
+            } else {
+                author.setAuthorsPhoto(storageService.serve(authorsPhotoPath, FileUploadDir.authorImage));
+            }
         }
         return author;
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<AuthorCardDTO> getAllAuthors() {
         List<AuthorCardDTO> authorCardDTOList = authorRepository.findAllToDTO();
         for(AuthorCardDTO author : authorCardDTOList) {
@@ -76,11 +80,17 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteAuthor(Integer id) {
+        String photoPath = authorRepository.getAuthorsPhotoPath(id);
+        if(photoPath != Constants.DEF_PROFILE_PIC) {
+            storageService.delete(photoPath, FileUploadDir.authorImage);
+        }
         authorRepository.deleteById(id);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateAuthor(Author author, AuthorFormDTO updateAuthorInfo) {
         author.setBiography(updateAuthorInfo.getBiography());
         author.setDeathYear(updateAuthorInfo.getDeathYear());
@@ -90,11 +100,13 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<AuthorOfBook> getAuthorsOfBook(Integer bookID) {
         return authorRepository.findAuthorsOfBook(bookID);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public String updateAuthorsPhoto(MultipartFile authorsPhoto, Integer authorsID) {
         try {
             Author author = authorRepository.getOne(authorsID);
@@ -108,7 +120,7 @@ public class AuthorServiceImpl implements AuthorService {
                 authorRepository.save(author);
                 String src = "{ \"img\":\""+storageService.serve(filePath, FileUploadDir.authorImage) + "\"}";
                 return src;
-            } else throw new ApplicationException("This author doesn't exist!");
+                } else throw new ApplicationException("This author doesn't exist!");
         }
         catch(Exception e) {
             throw new RuntimeException(e);

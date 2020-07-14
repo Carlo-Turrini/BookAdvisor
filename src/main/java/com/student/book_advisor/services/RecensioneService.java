@@ -1,8 +1,8 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.db_access.dto.RecensioneDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.RecensioneFormDTO;
-import com.student.book_advisor.db_access.entities.Recensione;
+import com.student.book_advisor.data_persistency.model.dto.RecensioneDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.RecensioneFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.Recensione;
 
 import java.util.List;
 

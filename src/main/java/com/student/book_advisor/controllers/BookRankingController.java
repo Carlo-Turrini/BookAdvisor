@@ -1,7 +1,7 @@
 package com.student.book_advisor.controllers;
 
-import com.student.book_advisor.db_access.dto.BookRankingDTO;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.BookForRankDTO;
+import com.student.book_advisor.data_persistency.model.dto.BookRankingDTO;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.BookForRankDTO;
 import com.student.book_advisor.services.BookRankingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

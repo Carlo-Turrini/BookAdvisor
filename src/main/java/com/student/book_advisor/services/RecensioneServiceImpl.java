@@ -1,17 +1,17 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.storage.Constants;
+import com.student.book_advisor.data_persistency.repositories.*;
+import com.student.book_advisor.services.storage.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.db_access.dto.RecensioneDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.RecensioneFormDTO;
-import com.student.book_advisor.db_access.entities.Libro;
-import com.student.book_advisor.db_access.entities.Recensione;
-import com.student.book_advisor.db_access.entities.UsefulReview;
-import com.student.book_advisor.db_access.entities.UsersInfo;
-import com.student.book_advisor.db_access.entityRepositories.*;
-import com.student.book_advisor.storage.FileUploadDir;
+import com.student.book_advisor.data_persistency.model.dto.RecensioneDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.RecensioneFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.Libro;
+import com.student.book_advisor.data_persistency.model.entities.Recensione;
+import com.student.book_advisor.data_persistency.model.entities.UsefulReview;
+import com.student.book_advisor.data_persistency.model.entities.UsersInfo;
+import com.student.book_advisor.services.storage.FileUploadDir;
 import com.student.book_advisor.security.AuthUserPrincipal;
-import com.student.book_advisor.storage.StorageService;
+import com.student.book_advisor.services.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;

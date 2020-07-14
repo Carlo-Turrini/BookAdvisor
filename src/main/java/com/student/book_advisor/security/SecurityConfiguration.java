@@ -33,12 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    LoginSuccessHandler loginSuccessHandler;
-
-    @Autowired
-    LoginFailureHandler loginFailureHandler;
-
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {

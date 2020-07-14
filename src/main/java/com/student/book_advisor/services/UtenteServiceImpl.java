@@ -1,13 +1,16 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.storage.Constants;
-import com.student.book_advisor.db_access.dto.*;
-import com.student.book_advisor.db_access.dto.formDTOS.UtenteFormDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.UtenteUpdateFormDTO;
-import com.student.book_advisor.db_access.entities.*;
-import com.student.book_advisor.db_access.entityRepositories.*;
-import com.student.book_advisor.storage.FileUploadDir;
-import com.student.book_advisor.storage.StorageService;
+import com.student.book_advisor.data_persistency.repositories.AuthoritiesRepository;
+import com.student.book_advisor.data_persistency.repositories.BookRankingRepository;
+import com.student.book_advisor.data_persistency.repositories.UsefulReviewRepository;
+import com.student.book_advisor.data_persistency.repositories.UsersInfoRepository;
+import com.student.book_advisor.services.storage.Constants;
+import com.student.book_advisor.data_persistency.model.dto.*;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.UtenteFormDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.UtenteUpdateFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.*;
+import com.student.book_advisor.services.storage.FileUploadDir;
+import com.student.book_advisor.services.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -108,6 +111,10 @@ public class UtenteServiceImpl implements UtenteService {
             bookRankingRepository.deleteInBatch(bookRankingList);
             List<UsefulReview> usefulReviewList = usefulReviewRepository.findAllUsefulReviewsByUserID(id);
             usefulReviewRepository.deleteInBatch(usefulReviewList);
+            String photoPath = user.getProfilePhotoPath();
+            if(photoPath != Constants.DEF_PROFILE_PIC) {
+                storageService.delete(photoPath, FileUploadDir.profileImage);
+            }
             //user.setDelToken(UUID.randomUUID().toString());
             usersInfoRepository.delete(user);
         }

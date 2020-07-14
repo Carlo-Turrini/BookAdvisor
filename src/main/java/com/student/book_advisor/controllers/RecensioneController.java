@@ -1,8 +1,8 @@
 package com.student.book_advisor.controllers;
 
 
-import com.student.book_advisor.db_access.dto.RecensioneDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.RecensioneFormDTO;
+import com.student.book_advisor.data_persistency.model.dto.RecensioneDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.RecensioneFormDTO;
 import com.student.book_advisor.services.RecensioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,9 +1,9 @@
 package com.student.book_advisor.controllers;
 
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.db_access.dto.PrizeDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.PrizeFormDTO;
-import com.student.book_advisor.db_access.entities.Libro;
+import com.student.book_advisor.data_persistency.model.dto.PrizeDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.PrizeFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.Libro;
 import com.student.book_advisor.services.LibroService;
 import com.student.book_advisor.services.PrizeService;
 import org.springframework.beans.factory.annotation.Autowired;

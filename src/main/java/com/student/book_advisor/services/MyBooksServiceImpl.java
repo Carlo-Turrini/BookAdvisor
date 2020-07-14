@@ -1,15 +1,17 @@
 package com.student.book_advisor.services;
 
-import com.student.book_advisor.storage.Constants;
+import com.student.book_advisor.data_persistency.model.entities.Libro;
+import com.student.book_advisor.data_persistency.model.entities.UsersInfo;
+import com.student.book_advisor.data_persistency.repositories.*;
+import com.student.book_advisor.services.storage.Constants;
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.db_access.dto.MyBooksDTO;
-import com.student.book_advisor.db_access.dto.auxiliaryDTOs.MyBooksReadDTO;
-import com.student.book_advisor.db_access.entities.BookRanking;
-import com.student.book_advisor.db_access.entities.MyBooks;
-import com.student.book_advisor.db_access.entityRepositories.*;
-import com.student.book_advisor.storage.StorageService;
+import com.student.book_advisor.data_persistency.model.dto.MyBooksDTO;
+import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.MyBooksReadDTO;
+import com.student.book_advisor.data_persistency.model.entities.BookRanking;
+import com.student.book_advisor.data_persistency.model.entities.MyBooks;
+import com.student.book_advisor.services.storage.StorageService;
 import com.student.book_advisor.enums.BookShelf;
-import com.student.book_advisor.storage.FileUploadDir;
+import com.student.book_advisor.services.storage.FileUploadDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -61,9 +63,17 @@ public class MyBooksServiceImpl implements MyBooksService {
         if(myBook == null) {
             MyBooks newMyBook = new MyBooks();
             newMyBook.setShelfType(shelf);
-            newMyBook.setUsersInfo(usersInfoRepository.getOne(userID));
-            newMyBook.setBook(libroRepository.getOne(bookID));
-            myBooksRepository.save(newMyBook);
+            UsersInfo usersInfo = usersInfoRepository.getOne(userID);
+            if(usersInfo != null) {
+                newMyBook.setUsersInfo(usersInfo);
+                Libro book = libroRepository.getOne(bookID);
+                if(book != null) {
+                    newMyBook.setBook(book);
+                    myBooksRepository.save(newMyBook);
+                }
+                else throw new ApplicationException("Book doesn't exist!");
+            }
+            else throw new ApplicationException("User doesn't exist!");
             return newMyBook.getShelfType().toString();
         }
         else throw new ApplicationException("Book already part of MyBooks");

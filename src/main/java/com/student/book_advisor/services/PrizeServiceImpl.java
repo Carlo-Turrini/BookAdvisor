@@ -1,12 +1,12 @@
 package com.student.book_advisor.services;
 
 import com.student.book_advisor.customExceptions.ApplicationException;
-import com.student.book_advisor.db_access.dto.PrizeDTO;
-import com.student.book_advisor.db_access.dto.formDTOS.PrizeFormDTO;
-import com.student.book_advisor.db_access.entities.Libro;
-import com.student.book_advisor.db_access.entities.Prize;
-import com.student.book_advisor.db_access.entityRepositories.LibroRepository;
-import com.student.book_advisor.db_access.entityRepositories.PrizeRepository;
+import com.student.book_advisor.data_persistency.model.dto.PrizeDTO;
+import com.student.book_advisor.data_persistency.model.dto.formDTOS.PrizeFormDTO;
+import com.student.book_advisor.data_persistency.model.entities.Libro;
+import com.student.book_advisor.data_persistency.model.entities.Prize;
+import com.student.book_advisor.data_persistency.repositories.LibroRepository;
+import com.student.book_advisor.data_persistency.repositories.PrizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
