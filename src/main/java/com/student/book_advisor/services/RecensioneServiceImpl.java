@@ -42,7 +42,6 @@ public class RecensioneServiceImpl implements RecensioneService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-
     public List<RecensioneDTO> getAllReviewsByBook(Integer id) {
         List<RecensioneDTO> recensioni = recensioneRepo.findAllByBook(id);
         for(RecensioneDTO recensione: recensioni) {
@@ -115,9 +114,8 @@ public class RecensioneServiceImpl implements RecensioneService {
             newReview.setOriginalityRating(reviewForm.getOriginalityRating());
             newReview.setContainsSpoiler(reviewForm.getContainsSpoilers());
             newReview.setTesto(reviewForm.getTesto());
-            recensioneRepo.save(newReview);
+            return recensioneRepo.save(newReview);
         } else throw new ApplicationException("Libro inesistente!");
-        return recensioneRepo.save(newReview);
     }
 
     @Override

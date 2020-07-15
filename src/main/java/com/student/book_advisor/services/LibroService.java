@@ -38,10 +38,6 @@ public interface LibroService {
 
     public Double getBookOverallRating(Integer id);
 
-    public List<PrizeDTO> addPrize(PrizeDTO prize, Integer bookID);
-
-    public List<PrizeDTO> removePrize(Integer prizeID, Integer bookID);
-
     public OverallRatingsForBook getBookOverallRatings(Integer bookID);
 
     public List<LibroCardDTO> findAllBooksByAuthor(String authorsFullname);

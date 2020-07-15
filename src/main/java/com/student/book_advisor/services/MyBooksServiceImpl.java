@@ -90,25 +90,13 @@ public class MyBooksServiceImpl implements MyBooksService {
             myBooksRepository.save(myBook);
             if(isOldShelfRead) {
                 System.out.println("OldShelf was READ");
+                System.out.println(myBook.getShelfType().toString());
                 BookRanking bookRank = bookRankingRepository.getBookRankingByMyBooksID(myBook.getId());
                 if(bookRank != null && myBook.getShelfType().compareTo(BookShelf.read)!=0) {
-                    //TROVA IL MODO DI AGGIORNARE IL BOOKRANK QUANDO MODIFICHI LA SHELF -> ad ora la funzione arriva fino al comando di delete
-                    // ma poi non lo esegue non capisco perché!
-                    //Togliendo il cascade e l'orphan removal sia qua che nel DB funziona
-                    //bisogna updatare i meccanismi di delete per l'utente e i libri di modo che facciano l'update dei ranking
                     modifiedRank = true;
                     bookRankingService.removeBookFromBookRank(userID, bookRank.getId());
                 }
             }
-
-            /*if(myBook.getShelfType().compareTo(BookShelf.read)==0) {
-                BookRanking bookRank = bookRankingRepository.getBookRankingByMyBooks(myBook);
-                if(bookRank != null && myBook.getShelfType().compareTo(shelf)!=0) {
-                    bookRankingRepository.delete(bookRank);
-                }
-            }*/
-            //myBook.setShelfType(shelf);
-            //myBooksRepository.save(myBook);
             return modifiedRank;
         }
         else throw new ApplicationException("Book isn't part of user's mybooks");

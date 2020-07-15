@@ -26,6 +26,10 @@ public class MyBooks {
     @OneToOne(mappedBy = "myBooks", fetch = FetchType.LAZY)
     private BookRanking bookRanking;
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

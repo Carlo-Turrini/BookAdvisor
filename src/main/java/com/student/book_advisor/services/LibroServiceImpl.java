@@ -58,14 +58,8 @@ public class LibroServiceImpl implements LibroService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<LibroCardDTO> findAllBooks() {
-        List<LibroCardDTO> allBooks = new ArrayList<LibroCardDTO>();
-        allBooks = libroRepo.findAllBooks();
+        List<LibroCardDTO> allBooks = libroRepo.findAllBooks();
         for(LibroCardDTO book: allBooks) {
-            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
-            if(rating == null) {
-                book.setOverallRating(new Double(0));
-            }
-            else book.setOverallRating(rating);*/
             book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
             book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
@@ -76,21 +70,14 @@ public class LibroServiceImpl implements LibroService {
                 book.setCoverImage(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
             }
         }
-        //allBooks.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
         return allBooks;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<LibroCardDTO> findAllBooksByGenre(String genere) {
-        List<LibroCardDTO> allBooksByGenre = new ArrayList<LibroCardDTO>();
-        allBooksByGenre = libroRepo.findLibriByGenere(genere);
+        List<LibroCardDTO>  allBooksByGenre = libroRepo.findLibriByGenere(genere);
         for(LibroCardDTO book: allBooksByGenre) {
-            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
-            if(rating == null) {
-                book.setOverallRating(new Double(0));
-            }
-            else book.setOverallRating(rating);*/
             book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
             book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
@@ -101,7 +88,6 @@ public class LibroServiceImpl implements LibroService {
                 book.setCoverImage(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
             }
         }
-        //allBooksByGenre.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
         return allBooksByGenre;
     }
 
@@ -150,7 +136,6 @@ public class LibroServiceImpl implements LibroService {
         if(book.getTitoloSaga() != null && book.getTitoloSaga() != "") {
             book.setSaga(true);
         }
-        //book.setOverallRating(recensioneRepo.getAverageRatingOfBook(id));
         return book;
     }
 
@@ -326,14 +311,8 @@ public class LibroServiceImpl implements LibroService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<LibroCardDTO> findBooksContainingTitolo(String titolo) {
-        List<LibroCardDTO> allBooksContainingTitolo = new ArrayList<LibroCardDTO>();
-        allBooksContainingTitolo = libroRepo.findAllBooksContainingTitolo(titolo);
+        List<LibroCardDTO> allBooksContainingTitolo = libroRepo.findAllBooksContainingTitolo(titolo);
         for(LibroCardDTO book: allBooksContainingTitolo) {
-            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
-            if(rating == null) {
-                book.setOverallRating(new Double(0));
-            }
-            else book.setOverallRating(rating);*/
             book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
             book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
@@ -344,21 +323,14 @@ public class LibroServiceImpl implements LibroService {
                 book.setCoverImage(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
             }
         }
-        //allBooksContainingTitolo.sort(Comparator.comparingDouble(LibroCardDTO::getOverallRating).reversed());
         return allBooksContainingTitolo;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(String titoloSaga, Integer bookId) {
-        List<LibroCardDTO> sagaBooks = new ArrayList<LibroCardDTO>();
-        sagaBooks = this.libroRepo.findAllBooksByTitoloSagaExcludingCurrent(titoloSaga, bookId);
+        List<LibroCardDTO> sagaBooks = this.libroRepo.findAllBooksByTitoloSagaExcludingCurrent(titoloSaga, bookId);
         for(LibroCardDTO book: sagaBooks) {
-            /*Double rating = recensioneRepo.getAverageRatingOfBook(book.getId());
-            if(rating == null) {
-                book.setOverallRating(new Double(0));
-            }
-            else book.setOverallRating(rating);*/
             book.setGeneri(genreRepository.findGenresOfBook(book.getId()));
             book.setAutori(authorRepository.findAuthorsOfBook(book.getId()));
             String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
@@ -372,6 +344,7 @@ public class LibroServiceImpl implements LibroService {
         return sagaBooks;
     }
 
+    //TOGLIERE!
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Double getBookOverallRating(Integer id) {
@@ -381,40 +354,6 @@ public class LibroServiceImpl implements LibroService {
     @Override
     public OverallRatingsForBook getBookOverallRatings(Integer bookID) {
         return recensioneRepo.getAverageRatingsOfBook(bookID);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<PrizeDTO> addPrize(PrizeDTO prize, Integer bookID) {
-        Libro book = libroRepo.getOne(bookID);
-        if(book != null) {
-            Prize p = prizeRepository.findByBookIDAndPrizeName(bookID, prize.getPrizeName());
-            if(p == null) {
-                Prize addPrize = new Prize();
-                addPrize.setBook(book);
-                addPrize.setYearAwarded(prize.getYearAwarded());
-                addPrize.setPrizeName(prize.getPrizeName());
-                prizeRepository.save(addPrize);
-                return prizeRepository.findAllPrizesForBook(bookID);
-            }
-            else return null;
-        }
-        else return null;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<PrizeDTO> removePrize(Integer prizeID, Integer bookID) {
-        Libro book = libroRepo.getOne(bookID);
-        if(book != null) {
-            Prize p = prizeRepository.findByIdAndBookID(prizeID, bookID);
-            if(p != null) {
-                prizeRepository.delete(p);
-                return prizeRepository.findAllPrizesForBook(bookID);
-            }
-            else return null;
-        }
-        else return null;
     }
 
     @Override

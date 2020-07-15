@@ -16,6 +16,9 @@ public class BookRanking {
     @JoinColumn(name = "MyBooksID")
     private MyBooks myBooks;
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;
