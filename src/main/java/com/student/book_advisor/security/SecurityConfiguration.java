@@ -38,6 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -48,6 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().addFilterBefore(new StatelessCsrfFilter(), CsrfFilter.class)
                 .headers(headers -> headers.disable())
                 .authorizeRequests()
+                .mvcMatchers(HttpMethod.GET, "/genres").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/authors").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/utenti").permitAll()
@@ -63,7 +65,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/libri/{id}/recensioni").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/utenti/{id}/recensioni").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/authors/{id}").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/genres").permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and()//.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtTokenProvider))

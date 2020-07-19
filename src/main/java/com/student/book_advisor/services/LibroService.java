@@ -36,8 +36,6 @@ public interface LibroService {
 
     public List<LibroCardDTO> findAllBooksByTitoloSagaExcludingCurrent(String titoloSaga, Integer bookId);
 
-    public Double getBookOverallRating(Integer id);
-
     public OverallRatingsForBook getBookOverallRatings(Integer bookID);
 
     public List<LibroCardDTO> findAllBooksByAuthor(String authorsFullname);

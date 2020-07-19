@@ -15,11 +15,9 @@ public class CookieUtil {
         cookie.setPath("/");
         response.addCookie(cookie);
     }
-    public static void clear(HttpServletResponse response, String name) {
-        Cookie cookie = new Cookie(name, "");
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+    public static void clear(HttpServletRequest request, String name) {
+        Cookie found = WebUtils.getCookie(request, name);
+        found.setMaxAge(0);
     }
     public static String getValue(HttpServletRequest request, String name) {
         Cookie cookie = WebUtils.getCookie(request, name);

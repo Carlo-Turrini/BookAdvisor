@@ -7,6 +7,7 @@ import com.student.book_advisor.data_persistency.model.dto.formDTOS.UtenteFormDT
 import com.student.book_advisor.data_persistency.model.dto.formDTOS.UtenteUpdateFormDTO;
 import com.student.book_advisor.data_persistency.model.entities.UsersInfo;
 import com.student.book_advisor.security.AuthUserPrincipal;
+import com.student.book_advisor.security.JwtTokenProvider;
 import com.student.book_advisor.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,23 +33,15 @@ public class UtenteController {
     @Autowired
     private UtenteService utenteService;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('USER')")
     @GetMapping("/utenti/loggedUserInfo")
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public LoggedUserDTO getLoggedUserInfo() {
         AuthUserPrincipal authUserPrincipal = (AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return new LoggedUserDTO(authUserPrincipal.getId(), authUserPrincipal.getAuthoritiesToString().contains("ROLE_ADMIN"));
-    }
-    //Rimuovibile
-    @GetMapping("/utenti/id")
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Integer getUserID(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Integer id = ((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-            return id;
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @PostMapping("/utenti/isUsernameUnique")
@@ -91,7 +84,7 @@ public class UtenteController {
                 errors.computeIfAbsent("username", key -> new HashSet<>()).add("usernameTaken");
             }
             if(!this.utenteService.isEmailUnique(userForm.getEmail())) {
-                errors.computeIfAbsent("username", key -> new HashSet<>()).add("emailTaken");
+                errors.computeIfAbsent("email", key -> new HashSet<>()).add("emailTaken");
             }
             for(FieldError fieldError: result.getFieldErrors()) {
                 String code = fieldError.getCode();
@@ -143,11 +136,11 @@ public class UtenteController {
     }
 
     @PreAuthorize("hasRole('ADMIN') OR (#userId == authentication.principal.usersInfo.id)")
-    @PutMapping("/utenti/{id}/foto_profilo")
+    @PostMapping("/utenti/{id}/foto_profilo")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateUsersProfilePhoto(@RequestParam("fotoProfilo") MultipartFile profilePhoto, @PathVariable("id")Integer userId, HttpServletRequest request, HttpServletResponse response) {
+    public String updateUsersProfilePhoto(@RequestPart("fotoProfilo") MultipartFile profilePhoto, @PathVariable("id")Integer userId, HttpServletRequest request, HttpServletResponse response) {
         try {
-            return utenteService.updateUsersProfilePhoto(profilePhoto, utenteService.getUser(userId));
+            return utenteService.updateUsersProfilePhoto(profilePhoto, userId);
         }
         catch(Exception e) {
             throw new RuntimeException(e);
@@ -163,7 +156,7 @@ public class UtenteController {
             UsersInfo updatedUser = utenteService.getUser(userId);
             if(updatedUser != null) {
                 if (!userForm.getEmail().equals(updatedUser.getEmail()) && !this.utenteService.isEmailUnique(userForm.getEmail())) {
-                    errors.computeIfAbsent("username", key -> new HashSet<>()).add("emailTaken");
+                    errors.computeIfAbsent("email", key -> new HashSet<>()).add("emailTaken");
                 }
                 for (FieldError fieldError : result.getFieldErrors()) {
                     String code = fieldError.getCode();
@@ -184,7 +177,7 @@ public class UtenteController {
                         errors.computeIfAbsent(field, key -> new HashSet<>()).add("email");
                     }
                 }
-                if(userForm.getPassword()!="") {
+                if(userForm.getPassword()!="" && userForm.getPassword()!=null) {
                     if(userForm.getPassword().length()<8) {
                         errors.computeIfAbsent("password", key -> new HashSet<>()).add("minlength");
                     }
@@ -211,6 +204,10 @@ public class UtenteController {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteUser(@PathVariable("id") @Min(1) @Max(1) Integer id, HttpServletRequest request, HttpServletResponse response) {
         try {
+            if(id == ((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()) {
+                SecurityContextHolder.getContext().setAuthentication(null);
+                jwtTokenProvider.invalidateJwtToken(request, response);
+            }
             utenteService.deleteUser(id);
         }
         catch(Exception e) {

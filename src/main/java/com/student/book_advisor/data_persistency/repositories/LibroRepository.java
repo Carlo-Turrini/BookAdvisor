@@ -13,7 +13,6 @@ import java.util.List;
 
 @Repository
 @CrossOrigin(origins = "http://localhost:4200")
-//DA AGGIORNARE
 public interface LibroRepository extends JpaRepository<Libro, Integer> {
     @Query("SELECT new com.student.book_advisor.data_persistency.model.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating) ) FROM Libro l JOIN l.genreJoinBookList genres LEFT JOIN Recensione r ON (r.libro.id = l.id)  WHERE genres.genre.genre = :genere GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC ")
     public List<LibroCardDTO> findLibriByGenere(@Param("genere")String genere);

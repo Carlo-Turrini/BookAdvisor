@@ -22,13 +22,11 @@ public interface UtenteService {
 
     public void deleteUser(Integer id);
 
-    //public UsersInfo findUserToLogin(String username, String password);
-
     public boolean isUsernameUnique(String username);
 
     public boolean isEmailUnique(String email);
 
-    public String updateUsersProfilePhoto(MultipartFile profilePhoto, UsersInfo user);
+    public String updateUsersProfilePhoto(MultipartFile profilePhoto, Integer userID);
 
 
 

@@ -28,7 +28,7 @@ public class BookRankingController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.prinicpal.usersInfo.id)")
+    @PreAuthorize("hasRole('ADMIN') OR (#userID == authentication.principal.usersInfo.id)")
     @PostMapping("/utenti/{id}/bookRank")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<BookRankingDTO> addBookRank(@PathVariable("id")Integer userID, @RequestBody() BookForRankDTO bookForRankDTO) {

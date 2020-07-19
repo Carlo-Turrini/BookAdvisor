@@ -1,11 +1,7 @@
 package com.student.book_advisor.data_persistency.model.dto.formDTOS;
 
-import com.sun.istack.NotNull;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class RecensioneFormDTO {
 

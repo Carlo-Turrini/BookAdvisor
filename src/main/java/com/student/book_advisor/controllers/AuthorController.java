@@ -153,9 +153,9 @@ public class AuthorController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/authors/{id}/authors_photo")
+    @PostMapping("/authors/{id}/authors_photo")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateAuthorsPhoto(@RequestParam("authorsPhoto")MultipartFile authorsPhoto, @PathVariable("id")Integer authorID) {
+    public String updateAuthorsPhoto(@RequestPart("authorsPhoto") MultipartFile authorsPhoto, @PathVariable("id")Integer authorID) {
         try {
             return authorService.updateAuthorsPhoto(authorsPhoto, authorID);
         }

@@ -344,13 +344,6 @@ public class LibroServiceImpl implements LibroService {
         return sagaBooks;
     }
 
-    //TOGLIERE!
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public Double getBookOverallRating(Integer id) {
-        return this.recensioneRepo.getAverageRatingOfBook(id);
-    }
-
     @Override
     public OverallRatingsForBook getBookOverallRatings(Integer bookID) {
         return recensioneRepo.getAverageRatingsOfBook(bookID);

@@ -121,9 +121,9 @@ public class LibroController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/libri/{id}/foto_copertina")
+    @PostMapping("/libri/{id}/foto_copertina")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String updateBooksCoverPhoto(@RequestParam("copertina") MultipartFile coverPhoto, @PathVariable("id")Integer bookId, HttpServletRequest request, HttpServletResponse response) {
+    public String updateBooksCoverPhoto(@RequestPart("copertina") MultipartFile coverPhoto, @PathVariable("id")Integer bookId, HttpServletRequest request, HttpServletResponse response) {
         try {
             Libro book = libroService.findBookById(bookId);
             if(book != null) {
@@ -199,12 +199,6 @@ public class LibroController {
         catch(Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @GetMapping("/libri/{id}/overallRating")
-    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
-    public Double getBookOverallRating(@PathVariable("id")Integer bookId) {
-        return libroService.getBookOverallRating(bookId);
     }
 
     @GetMapping("/libri/{id}/overallRatings")

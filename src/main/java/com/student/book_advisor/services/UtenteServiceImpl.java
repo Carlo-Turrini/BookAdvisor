@@ -1,5 +1,6 @@
 package com.student.book_advisor.services;
 
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.data_persistency.repositories.AuthoritiesRepository;
 import com.student.book_advisor.data_persistency.repositories.BookRankingRepository;
 import com.student.book_advisor.data_persistency.repositories.UsefulReviewRepository;
@@ -149,15 +150,20 @@ public class UtenteServiceImpl implements UtenteService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public String updateUsersProfilePhoto(MultipartFile profilePhoto, UsersInfo user) {
-        String profilePath = null;
-        if(!user.getProfilePhotoPath().equals(Constants.DEF_PROFILE_PIC)) {
-            profilePath = user.getProfilePhotoPath();
+    public String updateUsersProfilePhoto(MultipartFile profilePhoto, Integer userID) {
+        UsersInfo user = usersInfoRepository.getOne(userID);
+        if(user != null) {
+            String profilePath = null;
+            if(!user.getProfilePhotoPath().equals(Constants.DEF_PROFILE_PIC)) {
+                profilePath = user.getProfilePhotoPath();
+            }
+            String filePath = storageService.store(profilePhoto, FileUploadDir.profileImage, profilePath);
+            user.setProfilePhotoPath(filePath);
+            usersInfoRepository.save(user);
+            String src = "{ \"img\":\""+storageService.serve(filePath, FileUploadDir.profileImage) + "\"}";
+            return src;
         }
-        String filePath = storageService.store(profilePhoto, FileUploadDir.profileImage, profilePath);
-        user.setProfilePhotoPath(filePath);
-        usersInfoRepository.save(user);
-        String src = "{ \"img\":\""+storageService.serve(filePath, FileUploadDir.profileImage) + "\"}";
-        return src;
+        else throw new ApplicationException("User not found!");
+
     }
 }

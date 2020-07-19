@@ -89,14 +89,14 @@ public class JwtTokenProvider {
             }
         }
         catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Expired or invalid JWT token");
+            throw new JwtAuthenticationException("Expired or invalid JWT token: " + e.getMessage());
         }
     }
 
     public void invalidateJwtToken(HttpServletRequest request, HttpServletResponse response) {
         String token = resolveToken(request);
         if(token != null) {
-            CookieUtil.clear(response, JwtProperties.JWT_TOKEN_COOKIE);
+            CookieUtil.clear(request, JwtProperties.JWT_TOKEN_COOKIE);
             if(validateToken(token)) {
                 Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
                 String jwtTokenID = claims.getBody().getId();

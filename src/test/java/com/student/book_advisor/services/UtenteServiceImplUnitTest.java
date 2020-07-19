@@ -1,5 +1,6 @@
 package com.student.book_advisor.services;
 
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.data_persistency.model.dto.UsersInfoDTO;
 import com.student.book_advisor.data_persistency.model.dto.UtenteCardDTO;
 import com.student.book_advisor.data_persistency.model.dto.formDTOS.UtenteFormDTO;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(SpringRunner.class)
 public class UtenteServiceImplUnitTest {
@@ -263,15 +265,32 @@ public class UtenteServiceImplUnitTest {
         Mockito.when(storageService.store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class))).thenReturn("test");
         MultipartFile mf = new MockMultipartFile("test", "test".getBytes());
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.save(Mockito.any(UsersInfo.class))).thenReturn(usersInfo);
-        String src = utenteService.updateUsersProfilePhoto(mf, usersInfo);
+        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.save(Mockito.any(UsersInfo.class))).thenAnswer(i -> i.getArguments()[0]);
+        String src = utenteService.updateUsersProfilePhoto(mf, 1);
         assertThat(src).isNotNull();
         assertThat(src).isEqualTo("{ \"img\":\"test\"}");
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
         Mockito.verify(storageService, Mockito.times(1)).store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class));
         Mockito.verify(usersInfoRepository, Mockito.times(1)).save(Mockito.any(UsersInfo.class));
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(storageService, Mockito.times(1)).serve(Mockito.nullable(String.class), Mockito.any(FileUploadDir.class));
         Mockito.verifyNoMoreInteractions(storageService);
+    }
+
+    @Test
+    public void testUpdateUsersProfilePhoto_userNotFound() {
+        Mockito.when(storageService.serve(Mockito.nullable(String.class), Mockito.any(FileUploadDir.class))).thenReturn("test");
+        Mockito.when(storageService.store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class))).thenReturn("test");
+        MultipartFile mf = new MockMultipartFile("test", "test".getBytes());
+        UsersInfo usersInfo = new UsersInfo();
+        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
+        assertThatThrownBy(() -> utenteService.updateUsersProfilePhoto(mf, 1))
+                .isInstanceOf(ApplicationException.class)
+                .hasMessageContaining("User not found!");
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verifyNoMoreInteractions(usersInfoRepository);
+        Mockito.verifyNoInteractions(storageService);
     }
 
 }
