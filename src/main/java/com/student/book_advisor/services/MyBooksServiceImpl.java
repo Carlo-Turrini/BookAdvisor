@@ -63,10 +63,10 @@ public class MyBooksServiceImpl implements MyBooksService {
         if(myBook == null) {
             MyBooks newMyBook = new MyBooks();
             newMyBook.setShelfType(shelf);
-            UsersInfo usersInfo = usersInfoRepository.getOne(userID);
+            UsersInfo usersInfo = usersInfoRepository.findById(userID).orElse(null);
             if(usersInfo != null) {
                 newMyBook.setUsersInfo(usersInfo);
-                Libro book = libroRepository.getOne(bookID);
+                Libro book = libroRepository.findById(bookID).orElse(null);
                 if(book != null) {
                     newMyBook.setBook(book);
                     myBooksRepository.save(newMyBook);

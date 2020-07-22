@@ -50,8 +50,8 @@ public class UsersInfoRepositoryIntegrationTest {
     public void testFindAllUsers() {
         List<UtenteCardDTO> utenteCardDTOList = usersInfoRepository.findAllUsers();
         assertThat(utenteCardDTOList).isNotEmpty();
-        assertThat(utenteCardDTOList.size()).isEqualTo(1);
-        assertThat(utenteCardDTOList.get(0).getId()).isEqualTo(usersInfo.getId());
+        assertThat(utenteCardDTOList.size()).isGreaterThanOrEqualTo(1);
+        assertThat(utenteCardDTOList.get(utenteCardDTOList.size()-1).getId()).isEqualTo(usersInfo.getId());
     }
 
     @Test

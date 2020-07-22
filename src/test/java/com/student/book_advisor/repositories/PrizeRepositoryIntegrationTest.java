@@ -31,7 +31,7 @@ public class PrizeRepositoryIntegrationTest {
     @Before
     public void setup() {
         book = new Libro();
-        book.setTitolo("Titolo");
+        book.setTitolo("Title");
         book.setSinossi("sinossi");
         book.setPagine(123);
         book.setAnnoPubblicazione(1234);

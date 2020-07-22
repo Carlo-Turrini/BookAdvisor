@@ -106,7 +106,7 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteUser(Integer id) {
-        UsersInfo user = usersInfoRepository.getOne(id);
+        UsersInfo user = usersInfoRepository.findById(id).orElse(null);
         if(user != null) {
             List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(id);
             bookRankingRepository.deleteInBatch(bookRankingList);
@@ -151,7 +151,7 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public String updateUsersProfilePhoto(MultipartFile profilePhoto, Integer userID) {
-        UsersInfo user = usersInfoRepository.getOne(userID);
+        UsersInfo user = usersInfoRepository.findById(userID).orElse(null);
         if(user != null) {
             String profilePath = null;
             if(!user.getProfilePhotoPath().equals(Constants.DEF_PROFILE_PIC)) {

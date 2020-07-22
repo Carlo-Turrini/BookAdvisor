@@ -104,7 +104,7 @@ public class RecensioneServiceImpl implements RecensioneService {
     @Transactional(propagation = Propagation.REQUIRED)
     public Recensione addNewReview(RecensioneFormDTO reviewForm, Integer bookID) {
         Recensione newReview = new Recensione();
-        Libro bookToReview = libroRepo.getOne(bookID);
+        Libro bookToReview = libroRepo.findById(bookID).orElse(null);
         if (bookToReview != null) {
             newReview.setLibro(bookToReview);
             newReview.setUsersInfo(((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsersInfo());
@@ -121,7 +121,7 @@ public class RecensioneServiceImpl implements RecensioneService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteReview(Integer reviewId) {
-        Recensione delReview = recensioneRepo.getOne(reviewId);
+        Recensione delReview = recensioneRepo.findById(reviewId).orElse(null);
         if(delReview != null) {
             recensioneRepo.delete(delReview);
         }
@@ -136,9 +136,9 @@ public class RecensioneServiceImpl implements RecensioneService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void addUsefulReview(Integer reviewID, Integer userID) {
-        UsersInfo user = usersInfoRepository.getOne(userID);
+        UsersInfo user = usersInfoRepository.findById(userID).orElse(null);
         if(user != null) {
-            Recensione review = recensioneRepo.getOne(reviewID);
+            Recensione review = recensioneRepo.findById(reviewID).orElse(null);
             if(review != null) {
                 UsefulReview ur = usefulReviewRepository.findByUserIDAndReviewID(userID, reviewID);
                 if(ur == null) {
@@ -155,9 +155,9 @@ public class RecensioneServiceImpl implements RecensioneService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void removeUsefulReview(Integer reviewID, Integer userID) {
-        UsersInfo user = usersInfoRepository.getOne(userID);
+        UsersInfo user = usersInfoRepository.findById(userID).orElse(null);
         if(user != null) {
-            Recensione review = recensioneRepo.getOne(reviewID);
+            Recensione review = recensioneRepo.findById(reviewID).orElse(null);
             if(review != null) {
                 UsefulReview ur = usefulReviewRepository.findByUserIDAndReviewID(userID, reviewID);
                 if(ur != null) {

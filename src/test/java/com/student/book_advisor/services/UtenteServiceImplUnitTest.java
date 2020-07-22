@@ -28,9 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 public class UtenteServiceImplUnitTest {
@@ -195,11 +195,11 @@ public class UtenteServiceImplUnitTest {
     public void testDeleteUser_userPresent() {
         UsersInfo usersInfo = new UsersInfo();
         usersInfo.setProfilePhotoPath("/notDefault");
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(new ArrayList<>());
         Mockito.when(usefulReviewRepository.findAllUsefulReviewsByUserID(Mockito.anyInt())).thenReturn(new ArrayList<>());
         utenteService.deleteUser(1);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).deleteInBatch(Mockito.anyIterable());
         Mockito.verifyNoMoreInteractions(bookRankingRepository);
@@ -214,9 +214,8 @@ public class UtenteServiceImplUnitTest {
 
     @Test
     public void testDeleteUser_userNotPresent() {
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
         utenteService.deleteUser(1);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verifyNoInteractions(bookRankingRepository);
         Mockito.verifyNoInteractions(usefulReviewRepository);
@@ -265,12 +264,12 @@ public class UtenteServiceImplUnitTest {
         Mockito.when(storageService.store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class))).thenReturn("test");
         MultipartFile mf = new MockMultipartFile("test", "test".getBytes());
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Mockito.when(usersInfoRepository.save(Mockito.any(UsersInfo.class))).thenAnswer(i -> i.getArguments()[0]);
         String src = utenteService.updateUsersProfilePhoto(mf, 1);
         assertThat(src).isNotNull();
         assertThat(src).isEqualTo("{ \"img\":\"test\"}");
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verify(storageService, Mockito.times(1)).store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class));
         Mockito.verify(usersInfoRepository, Mockito.times(1)).save(Mockito.any(UsersInfo.class));
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
@@ -284,11 +283,10 @@ public class UtenteServiceImplUnitTest {
         Mockito.when(storageService.store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class))).thenReturn("test");
         MultipartFile mf = new MockMultipartFile("test", "test".getBytes());
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
         assertThatThrownBy(() -> utenteService.updateUsersProfilePhoto(mf, 1))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("User not found!");
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verifyNoInteractions(storageService);
     }

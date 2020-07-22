@@ -29,6 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -206,12 +207,12 @@ public class RecensioneServiceImplUnitTest {
         RecensioneFormDTO recensioneFormDTO = new RecensioneFormDTO();
         Recensione recensione = new Recensione();
         Libro book = new Libro();
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(book);
+        Mockito.when(libroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(book));
         Mockito.when(recensioneRepository.save(Mockito.any(Recensione.class))).thenReturn(recensione);
         Recensione addedReview = recensioneService.addNewReview(recensioneFormDTO, 1);
         assertThat(addedReview).isNotNull();
         assertThat(addedReview).isEqualTo(recensione);
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verify(securityContext, Mockito.times(2)).getAuthentication();
         Mockito.verifyNoMoreInteractions(securityContext);
@@ -224,11 +225,10 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testAddNewReview_bookNotPresent() {
         RecensioneFormDTO recensioneFormDTO = new RecensioneFormDTO();
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(null);
         assertThatThrownBy(() -> recensioneService.addNewReview(recensioneFormDTO, 1))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("Libro inesistente!");
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verifyNoInteractions(recensioneRepository);
         Mockito.verifyNoInteractions(authentication);
@@ -237,9 +237,9 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testDeleteReview() {
         Recensione recensione = new Recensione();
-        Mockito.when(recensioneRepository.getOne(Mockito.anyInt())).thenReturn(recensione);
+        Mockito.when(recensioneRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(recensione));
         recensioneService.deleteReview(1);
-        Mockito.verify(recensioneRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(recensioneRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verify(recensioneRepository, Mockito.times(1)).delete(Mockito.any(Recensione.class));
         Mockito.verifyNoMoreInteractions(recensioneRepository);
     }
@@ -256,9 +256,8 @@ public class RecensioneServiceImplUnitTest {
 
     @Test
     public void testAddUsefulReview_userNull() {
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
         recensioneService.addUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verifyNoInteractions(recensioneRepository);
         Mockito.verifyNoInteractions(usefulReviewRepository);
@@ -267,12 +266,11 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testAddUsefulReview_reviewNull() {
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
-        Mockito.when(recensioneRepository.getOne(Mockito.anyInt())).thenReturn(null);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         recensioneService.addUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(recensioneRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(recensioneRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(recensioneRepository);
         Mockito.verifyNoInteractions(usefulReviewRepository);
     }
@@ -280,15 +278,15 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testAddUsefulReview_usefulReviewNotNull() {
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Recensione recensione = new Recensione();
-        Mockito.when(recensioneRepository.getOne(Mockito.anyInt())).thenReturn(recensione);
+        Mockito.when(recensioneRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(recensione));
         UsefulReview ur = new UsefulReview();
         Mockito.when(usefulReviewRepository.findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt())).thenReturn(ur);
         recensioneService.addUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(recensioneRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(recensioneRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(recensioneRepository);
         Mockito.verify(usefulReviewRepository, Mockito.times(1)).findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usefulReviewRepository);
@@ -297,14 +295,14 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testAddUsefulReview() {
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Recensione recensione = new Recensione();
-        Mockito.when(recensioneRepository.getOne(Mockito.anyInt())).thenReturn(recensione);
+        Mockito.when(recensioneRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(recensione));
         Mockito.when(usefulReviewRepository.findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt())).thenReturn(null);
         recensioneService.addUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(recensioneRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(recensioneRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(recensioneRepository);
         Mockito.verify(usefulReviewRepository, Mockito.times(1)).findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt());
         Mockito.verify(usefulReviewRepository, Mockito.times(1)).save(Mockito.any(UsefulReview.class));
@@ -313,9 +311,8 @@ public class RecensioneServiceImplUnitTest {
 
     @Test
     public void testRemoveUsefulReview_userNull() {
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
         recensioneService.removeUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verifyNoInteractions(recensioneRepository);
         Mockito.verifyNoInteractions(usefulReviewRepository);
@@ -324,12 +321,11 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testRemoveUsefulReview_ReviewNull() {
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
-        Mockito.when(recensioneRepository.getOne(Mockito.anyInt())).thenReturn(null);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         recensioneService.removeUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(recensioneRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(recensioneRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(recensioneRepository);
         Mockito.verifyNoInteractions(usefulReviewRepository);
     }
@@ -337,14 +333,14 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testRemoveUsefulReview_UsefulReviewNull() {
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Recensione recensione = new Recensione();
-        Mockito.when(recensioneRepository.getOne(Mockito.anyInt())).thenReturn(recensione);
+        Mockito.when(recensioneRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(recensione));
         Mockito.when(usefulReviewRepository.findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt())).thenReturn(null);
         recensioneService.removeUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(recensioneRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(recensioneRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(recensioneRepository);
         Mockito.verify(usefulReviewRepository, Mockito.times(1)).findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usefulReviewRepository);
@@ -353,15 +349,15 @@ public class RecensioneServiceImplUnitTest {
     @Test
     public void testRemoveUsefulReview() {
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Recensione recensione = new Recensione();
-        Mockito.when(recensioneRepository.getOne(Mockito.anyInt())).thenReturn(recensione);
+        Mockito.when(recensioneRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(recensione));
         UsefulReview usefulReview = new UsefulReview();
         Mockito.when(usefulReviewRepository.findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt())).thenReturn(usefulReview);
         recensioneService.removeUsefulReview(1, 2);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(recensioneRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(recensioneRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(recensioneRepository);
         Mockito.verify(usefulReviewRepository, Mockito.times(1)).findByUserIDAndReviewID(Mockito.anyInt(), Mockito.anyInt());
         Mockito.verify(usefulReviewRepository, Mockito.times(1)).delete(Mockito.any(UsefulReview.class));

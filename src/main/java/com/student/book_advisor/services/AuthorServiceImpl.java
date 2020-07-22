@@ -39,7 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean isAuthorsFullnameUnique(String authorsFullname) {
-        return authorRepository.countAllAuthorsWithName(authorsFullname) > 0 ? false : true;
+        return authorRepository.countAllAuthorsWithName(authorsFullname) == 0;
     }
 
     @Override
@@ -109,7 +109,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(propagation = Propagation.REQUIRED)
     public String updateAuthorsPhoto(MultipartFile authorsPhoto, Integer authorsID) {
         try {
-            Author author = authorRepository.getOne(authorsID);
+            Author author = authorRepository.findById(authorsID).orElse(null);
             if (author != null) {
                 String photoPath = null;
                 if(!author.getAuthorsPhotoPath().equals(Constants.DEF_PROFILE_PIC)) {

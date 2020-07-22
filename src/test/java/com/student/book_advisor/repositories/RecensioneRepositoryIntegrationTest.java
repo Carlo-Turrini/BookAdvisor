@@ -42,7 +42,7 @@ public class RecensioneRepositoryIntegrationTest {
         usersInfo.setDescription("Test");
         usersInfo = testEntityManager.persist(usersInfo);
         book = new Libro();
-        book.setTitolo("Titolo");
+        book.setTitolo("Title");
         book.setSinossi("sinossi");
         book.setPagine(123);
         book.setAnnoPubblicazione(1234);

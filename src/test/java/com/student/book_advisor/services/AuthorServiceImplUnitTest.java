@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -230,11 +231,13 @@ public class AuthorServiceImplUnitTest {
     public void testUpdateAuthorsPhoto() {
         Mockito.when(storageService.serve(Mockito.nullable(String.class), Mockito.any(FileUploadDir.class))).thenReturn("test");
         Mockito.when(storageService.store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class))).thenReturn("test");
+        Author author = new Author();
+        Mockito.when(authorRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(author));
         MultipartFile mf = new MockMultipartFile("test", "test".getBytes());
         String found = authorService.updateAuthorsPhoto(mf, 1);
         assertThat(found).isNotNull();
         assertThat(found).isEqualTo("{ \"img\":\"test\"}");
-        Mockito.verify(authorRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verify(storageService, Mockito.times(1)).store(Mockito.any(MultipartFile.class), Mockito.any(FileUploadDir.class), Mockito.nullable(String.class));
         Mockito.verify(authorRepository, Mockito.times(1)).save(Mockito.any(Author.class));
         Mockito.verifyNoMoreInteractions(authorRepository);
@@ -249,7 +252,7 @@ public class AuthorServiceImplUnitTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("This author doesn't exist!")
                 .hasCauseInstanceOf(ApplicationException.class);
-        Mockito.verify(authorRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
     }
 

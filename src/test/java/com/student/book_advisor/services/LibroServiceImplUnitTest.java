@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -229,7 +230,7 @@ public class LibroServiceImplUnitTest {
         Mockito.when(genreRepository.findByGenre(Mockito.anyString())).thenReturn(new Genre());
         Mockito.when(genreJoinBookRepository.save(Mockito.any(GenreJoinBook.class))).thenAnswer(i -> i.getArguments()[0]);
         Mockito.when(sagaRepository.save(Mockito.any(Saga.class))).thenAnswer(i -> i.getArguments()[0]);
-        Mockito.when(authorRepository.getOne(Mockito.anyInt())).thenReturn(new Author());
+        Mockito.when(authorRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(new Author()));
         Mockito.when(authorJoinBookRepository.save(Mockito.any(AuthorJoinBook.class))).thenAnswer(i -> i.getArguments()[0]);
         Libro added = libroService.newBook(libroFormDTO);
         assertThat(added).isNotNull();
@@ -242,7 +243,7 @@ public class LibroServiceImplUnitTest {
         Mockito.verifyNoMoreInteractions(genreJoinBookRepository);
         Mockito.verify(sagaRepository, Mockito.times(1)).save(Mockito.any(Saga.class));
         Mockito.verifyNoMoreInteractions(sagaRepository);
-        Mockito.verify(authorRepository, Mockito.times(authorOfBookList.size())).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(authorOfBookList.size())).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
         Mockito.verify(authorJoinBookRepository, Mockito.times(authorOfBookList.size())).save(Mockito.any(AuthorJoinBook.class));
         Mockito.verifyNoMoreInteractions(authorJoinBookRepository);
@@ -268,7 +269,6 @@ public class LibroServiceImplUnitTest {
         Mockito.when(libroRepository.save(Mockito.any(Libro.class))).thenAnswer(i -> i.getArguments()[0]);
         Mockito.when(genreRepository.findByGenre(Mockito.anyString())).thenReturn(new Genre());
         Mockito.when(genreJoinBookRepository.save(Mockito.any(GenreJoinBook.class))).thenAnswer(i -> i.getArguments()[0]);
-        Mockito.when(authorRepository.getOne(Mockito.anyInt())).thenReturn(null);
         Mockito.when(authorJoinBookRepository.save(Mockito.any(AuthorJoinBook.class))).thenAnswer(i -> i.getArguments()[0]);
         assertThatThrownBy(() -> libroService.newBook(libroFormDTO))
                 .isInstanceOf(ApplicationException.class)
@@ -280,7 +280,7 @@ public class LibroServiceImplUnitTest {
         Mockito.verify(genreJoinBookRepository, Mockito.times(genres.size())).save(Mockito.any(GenreJoinBook.class));
         Mockito.verifyNoMoreInteractions(genreJoinBookRepository);
         Mockito.verifyNoInteractions(sagaRepository);
-        Mockito.verify(authorRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
         Mockito.verifyNoInteractions(authorJoinBookRepository);
     }
@@ -288,10 +288,9 @@ public class LibroServiceImplUnitTest {
     //Presentiamo solo alcuni dei test case di copertura per questo metodo
     @Test
     public void testUpdateBook_bookNull() {
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(null);
         Libro updated = libroService.updateBook(new LibroFormDTO(), 1);
         assertThat(updated).isNull();
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verifyNoInteractions(genreRepository);
         Mockito.verifyNoInteractions(authorRepository);
@@ -342,7 +341,7 @@ public class LibroServiceImplUnitTest {
         authorToRemove.setAuthorsFullname(oldAuthor.getAuthorsFullname());
         Author authorToAdd = new Author();
         authorToAdd.setAuthorsFullname(newAuthor.getAuthorsFullname());
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(book);
+        Mockito.when(libroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(book));
         Mockito.when(libroRepository.save(Mockito.any(Libro.class))).thenAnswer(i -> i.getArguments()[0]);
         Mockito.when(genreRepository.findGenresOfBook(bookId)).thenReturn(oldGenres);
         Mockito.when(genreRepository.findByGenre(genreToRemove.getGenre())).thenReturn(genreToRemove);
@@ -352,15 +351,15 @@ public class LibroServiceImplUnitTest {
         Mockito.when(genreJoinBookRepository.save(Mockito.any(GenreJoinBook.class))).thenAnswer(i -> i.getArguments()[0]);
         Mockito.when(sagaRepository.findByBook(Mockito.any(Libro.class))).thenReturn(new Saga());
         Mockito.when(authorRepository.findAuthorsOfBook(Mockito.anyInt())).thenReturn(oldAuthors);
-        Mockito.when(authorRepository.getOne(oldAuthor.getId())).thenReturn(authorToRemove);
-        Mockito.when(authorRepository.getOne(newAuthor.getId())).thenReturn(authorToAdd);
+        Mockito.when(authorRepository.findById(oldAuthor.getId())).thenReturn(Optional.of(authorToRemove));
+        Mockito.when(authorRepository.findById(newAuthor.getId())).thenReturn(Optional.of(authorToAdd));
         Mockito.when(authorJoinBookRepository.findByAuthorAndBook(authorToRemove, book)).thenReturn(new AuthorJoinBook());
         Mockito.when(authorJoinBookRepository.findByAuthorAndBook(authorToAdd, book)).thenReturn(null);
         Mockito.when(authorJoinBookRepository.save(Mockito.any(AuthorJoinBook.class))).thenAnswer(i -> i.getArguments()[0]);
         Libro updated = libroService.updateBook(libroFormDTO, bookId);
         assertThat(updated).isNotNull();
         assertThat(updated.getTitolo()).isEqualTo(libroFormDTO.getTitolo());
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verify(libroRepository, Mockito.times(1)).save(Mockito.any(Libro.class));
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verify(genreRepository, Mockito.times(1)).findGenresOfBook(Mockito.anyInt());
@@ -374,7 +373,7 @@ public class LibroServiceImplUnitTest {
         Mockito.verify(sagaRepository, Mockito.times(1)).delete(Mockito.any(Saga.class));
         Mockito.verifyNoMoreInteractions(sagaRepository);
         Mockito.verify(authorRepository, Mockito.times(1)).findAuthorsOfBook(Mockito.anyInt());
-        Mockito.verify(authorRepository, Mockito.times(2)).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(2)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
         Mockito.verify(authorJoinBookRepository, Mockito.times(2)).findByAuthorAndBook(Mockito.any(Author.class), Mockito.any(Libro.class));
         Mockito.verify(authorJoinBookRepository, Mockito.times(1)).delete(Mockito.any(AuthorJoinBook.class));
@@ -426,7 +425,7 @@ public class LibroServiceImplUnitTest {
         authorToRemove.setAuthorsFullname(oldAuthor.getAuthorsFullname());
         Author authorToAdd = new Author();
         authorToAdd.setAuthorsFullname(newAuthor.getAuthorsFullname());
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(book);
+        Mockito.when(libroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(book));
         Mockito.when(libroRepository.save(Mockito.any(Libro.class))).thenAnswer(i -> i.getArguments()[0]);
         Mockito.when(genreRepository.findGenresOfBook(bookId)).thenReturn(oldGenres);
         Mockito.when(genreRepository.findByGenre(genreToRemove.getGenre())).thenReturn(genreToRemove);
@@ -437,15 +436,15 @@ public class LibroServiceImplUnitTest {
         Mockito.when(sagaRepository.findByBook(Mockito.any(Libro.class))).thenReturn(null);
         Mockito.when(sagaRepository.save(Mockito.any(Saga.class))).thenAnswer(i -> i.getArguments()[0]);
         Mockito.when(authorRepository.findAuthorsOfBook(Mockito.anyInt())).thenReturn(oldAuthors);
-        Mockito.when(authorRepository.getOne(oldAuthor.getId())).thenReturn(authorToRemove);
-        Mockito.when(authorRepository.getOne(newAuthor.getId())).thenReturn(authorToAdd);
+        Mockito.when(authorRepository.findById(oldAuthor.getId())).thenReturn(Optional.of(authorToRemove));
+        Mockito.when(authorRepository.findById(newAuthor.getId())).thenReturn(Optional.of(authorToAdd));
         Mockito.when(authorJoinBookRepository.findByAuthorAndBook(authorToRemove, book)).thenReturn(new AuthorJoinBook());
         Mockito.when(authorJoinBookRepository.findByAuthorAndBook(authorToAdd, book)).thenReturn(null);
         Mockito.when(authorJoinBookRepository.save(Mockito.any(AuthorJoinBook.class))).thenAnswer(i -> i.getArguments()[0]);
         Libro updated = libroService.updateBook(libroFormDTO, bookId);
         assertThat(updated).isNotNull();
         assertThat(updated.getTitolo()).isEqualTo(libroFormDTO.getTitolo());
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verify(libroRepository, Mockito.times(1)).save(Mockito.any(Libro.class));
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verify(genreRepository, Mockito.times(1)).findGenresOfBook(Mockito.anyInt());
@@ -459,7 +458,7 @@ public class LibroServiceImplUnitTest {
         Mockito.verify(sagaRepository, Mockito.times(1)).save(Mockito.any(Saga.class));
         Mockito.verifyNoMoreInteractions(sagaRepository);
         Mockito.verify(authorRepository, Mockito.times(1)).findAuthorsOfBook(Mockito.anyInt());
-        Mockito.verify(authorRepository, Mockito.times(2)).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(2)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
         Mockito.verify(authorJoinBookRepository, Mockito.times(2)).findByAuthorAndBook(Mockito.any(Author.class), Mockito.any(Libro.class));
         Mockito.verify(authorJoinBookRepository, Mockito.times(1)).delete(Mockito.any(AuthorJoinBook.class));
@@ -469,9 +468,8 @@ public class LibroServiceImplUnitTest {
 
     @Test
     public void testDeleteBook_bookNull() {
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(null);
         libroService.deleteBook(1);
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verifyNoInteractions(bookRankingRepository);
     }
@@ -480,14 +478,14 @@ public class LibroServiceImplUnitTest {
     public void testDeleteBook_bookNotNull() {
         Libro book = new Libro();
         book.setBookCoverPath("/notDefaultImage");
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(book);
+        Mockito.when(libroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(book));
         List<BookRankRemovalInfoDTO> bookRankRemovalInfoDTOList = new ArrayList<>();
         BookRankRemovalInfoDTO bookRankRemovalInfoDTO = new BookRankRemovalInfoDTO(1, 2);
         bookRankRemovalInfoDTOList.add(bookRankRemovalInfoDTO);
         Mockito.when(bookRankingRepository.getAllBookRanksByBookID(Mockito.anyInt())).thenReturn(bookRankRemovalInfoDTOList);
         Mockito.when(bookRankingService.removeBookFromBookRank(Mockito.anyInt(), Mockito.anyInt())).thenReturn(new ArrayList<>());
         libroService.deleteBook(1);
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).getAllBookRanksByBookID(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(bookRankingRepository);
         Mockito.verify(bookRankingService, Mockito.times(bookRankRemovalInfoDTOList.size())).removeBookFromBookRank(Mockito.anyInt(), Mockito.anyInt());

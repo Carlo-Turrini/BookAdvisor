@@ -163,7 +163,7 @@ public class LibroServiceImpl implements LibroService {
             sagaRepository.save(saga);
         }
         for(AuthorOfBook author : libroForm.getAutori()) {
-            Author auth = authorRepository.getOne(author.getId());
+            Author auth = authorRepository.findById(author.getId()).orElse(null);
             if(auth != null) {
                 AuthorJoinBook ajb = new AuthorJoinBook();
                 ajb.setAuthor(auth);
@@ -179,7 +179,7 @@ public class LibroServiceImpl implements LibroService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Libro updateBook(LibroFormDTO libroForm, Integer bookID) {
-        Libro book = libroRepo.getOne(bookID);
+        Libro book = libroRepo.findById(bookID).orElse(null);
         if(book != null) {
             book.setTitolo(libroForm.getTitolo());
             book.setSinossi(libroForm.getSinossi());
@@ -243,7 +243,7 @@ public class LibroServiceImpl implements LibroService {
                 }
             }
             for(AuthorOfBook author: authorList) {
-                Author auth = authorRepository.getOne(author.getId());
+                Author auth = authorRepository.findById(author.getId()).orElse(null);
                 if(auth!=null) {
                     AuthorJoinBook ajb = authorJoinBookRepository.findByAuthorAndBook(auth, book);
                     if(ajb != null) {
@@ -252,7 +252,7 @@ public class LibroServiceImpl implements LibroService {
                 }
             }
             for(AuthorOfBook authUpdated: authorUpdatedList) {
-                Author auth = authorRepository.getOne(authUpdated.getId());
+                Author auth = authorRepository.findById(authUpdated.getId()).orElse(null);
                 if(auth!=null) {
                     AuthorJoinBook ajb = authorJoinBookRepository.findByAuthorAndBook(auth, book);
                     if(ajb == null) {
@@ -271,7 +271,7 @@ public class LibroServiceImpl implements LibroService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteBook(Integer id) {
-        Libro delBook = libroRepo.getOne(id);
+        Libro delBook = libroRepo.findById(id).orElse(null);
         if(delBook != null) {
             /*delBook.setDelToken(UUID.randomUUID().toString());
             libroRepo.save(delBook);*/

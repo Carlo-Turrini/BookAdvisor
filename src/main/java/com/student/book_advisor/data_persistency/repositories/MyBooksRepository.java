@@ -30,7 +30,7 @@ public interface MyBooksRepository extends JpaRepository<MyBooks, Integer> {
     @Query("SELECT mb.ShelfType FROM MyBooks mb WHERE mb.usersInfo.id = :userID AND mb.book.id = :bookID")
     public BookShelf getBookShelfByBookIDAndUserID(@Param("bookID")Integer bookID, @Param("userID")Integer userID);
 
-    @Query("SELECT new com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.MyBooksReadDTO(mb.id, b.titolo) FROM MyBooks mb JOIN Libro b ON (mb.book.id = b.id) WHERE mb.ShelfType = 'read' AND mb.id NOT IN (SELECT br.myBooks.id FROM BookRanking br) ")
+    @Query("SELECT new com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.MyBooksReadDTO(mb.id, b.titolo) FROM MyBooks mb JOIN Libro b ON (mb.book.id = b.id) WHERE mb.ShelfType = 'read' AND mb.usersInfo.id = :userID AND mb.id NOT IN (SELECT br.myBooks.id FROM BookRanking br) ")
     public List<MyBooksReadDTO> getAllMyBooksReadButNotInRank(@Param("userID")Integer userID);
 
 }

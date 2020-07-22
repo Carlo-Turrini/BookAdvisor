@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -67,9 +68,9 @@ public class MyBooksServiceImplUnitTest {
     public void testAddToShelf_MyBookNotPresent() {
         Mockito.when(myBooksRepository.getByBookIDAndUserID(Mockito.anyInt(), Mockito.anyInt())).thenReturn(null);
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Libro book = new Libro();
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(book);
+        Mockito.when(libroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(book));
         MyBooks myBooks = new MyBooks();
         myBooks.setShelfType(BookShelf.read);
         Mockito.when(myBooksRepository.save(Mockito.any(MyBooks.class))).thenReturn(myBooks);
@@ -77,9 +78,9 @@ public class MyBooksServiceImplUnitTest {
         assertThat(shelf).isNotNull();
         assertThat(shelf).isEqualTo(myBooks.getShelfType().toString());
         Mockito.verify(myBooksRepository, Mockito.times(1)).getByBookIDAndUserID(Mockito.anyInt(), Mockito.anyInt());
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verify(myBooksRepository, Mockito.times(1)).save(Mockito.any(MyBooks.class));
         Mockito.verifyNoMoreInteractions(myBooksRepository);
@@ -88,12 +89,11 @@ public class MyBooksServiceImplUnitTest {
     @Test
     public void testAddToShelf_MyBookNotPresent_UserNotPresent() {
         Mockito.when(myBooksRepository.getByBookIDAndUserID(Mockito.anyInt(), Mockito.anyInt())).thenReturn(null);
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
         assertThatThrownBy(() -> myBooksService.addToShelf(1, 2, BookShelf.read))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("User doesn't exist!");
         Mockito.verify(myBooksRepository, Mockito.times(1)).getByBookIDAndUserID(Mockito.anyInt(), Mockito.anyInt());
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verifyNoMoreInteractions(myBooksRepository);
         Mockito.verifyNoInteractions(libroRepository);
@@ -103,15 +103,14 @@ public class MyBooksServiceImplUnitTest {
     public void testAddToShelf_MyBookNotPresent_BookNotPresent() {
         Mockito.when(myBooksRepository.getByBookIDAndUserID(Mockito.anyInt(), Mockito.anyInt())).thenReturn(null);
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(null);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         assertThatThrownBy(() -> myBooksService.addToShelf(1, 2, BookShelf.read))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("Book doesn't exist!");
         Mockito.verify(myBooksRepository, Mockito.times(1)).getByBookIDAndUserID(Mockito.anyInt(), Mockito.anyInt());
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verifyNoMoreInteractions(myBooksRepository);
     }

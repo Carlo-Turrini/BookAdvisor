@@ -56,7 +56,7 @@ public class AuthoritiesRepositoryIntegrationTest {
 
     @Test
     public void testNotFoundAuthoritiesByUserId() {
-        List<Authorities> authorities = authoritiesRepository.findAllByUserID(2);
+        List<Authorities> authorities = authoritiesRepository.findAllByUserID(4);
         assertThat(authorities).isEmpty();
     }
 }

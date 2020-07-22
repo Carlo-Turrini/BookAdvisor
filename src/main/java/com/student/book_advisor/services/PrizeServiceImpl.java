@@ -34,7 +34,7 @@ public class PrizeServiceImpl implements PrizeService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void addPrize(PrizeFormDTO prizeForm, Integer bookID) {
-        Libro book = libroRepository.getOne(bookID);
+        Libro book = libroRepository.findById(bookID).orElse(null);
         if(book != null) {
             Prize prize = new Prize();
             prize.setPrizeName(prizeForm.getPrizeName());

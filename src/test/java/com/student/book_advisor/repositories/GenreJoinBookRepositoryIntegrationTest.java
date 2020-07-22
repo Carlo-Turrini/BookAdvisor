@@ -32,10 +32,10 @@ public class GenreJoinBookRepositoryIntegrationTest {
     @Before
     public void setup() {
         genre = new Genre();
-        genre.setGenre("Romanzo");
+        genre.setGenre("Fantasy");
         genre = testEntityManager.persist(genre);
         book = new Libro();
-        book.setTitolo("Titolo");
+        book.setTitolo("Title");
         book.setAnnoPubblicazione(1234);
         book.setPagine(123);
         book.setSinossi("sinossi");

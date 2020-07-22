@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,13 +57,13 @@ public class PrizeServiceImplUnitTest {
     @Test
     public void testAddPrize_bookPresent() {
         Prize prize = new Prize();
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(book);
+        Mockito.when(libroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(book));
         Mockito.when(prizeRepository.save(Mockito.any(Prize.class))).thenReturn(prize);
         PrizeFormDTO prizeFormDTO = new PrizeFormDTO();
         prizeFormDTO.setPrizeName("Premio");
         prizeFormDTO.setYearAwarded(2003);
         prizeService.addPrize(prizeFormDTO,1);
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verify(prizeRepository, Mockito.times(1)).save(Mockito.any(Prize.class));
         Mockito.verifyNoMoreInteractions(prizeRepository);
@@ -70,14 +71,13 @@ public class PrizeServiceImplUnitTest {
 
     @Test
     public void testAddPrize_bookNotPresent() {
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(null);
         PrizeFormDTO prizeFormDTO = new PrizeFormDTO();
         prizeFormDTO.setPrizeName("Premio");
         prizeFormDTO.setYearAwarded(2003);
         assertThatThrownBy(() -> prizeService.addPrize(prizeFormDTO,1))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("This book doesn't exist!");
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verifyNoInteractions(prizeRepository);
     }

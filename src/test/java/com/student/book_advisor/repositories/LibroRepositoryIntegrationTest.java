@@ -50,7 +50,7 @@ public class LibroRepositoryIntegrationTest {
         ajb.setBook(book);
         testEntityManager.persist(ajb);
         genre = new Genre();
-        genre.setGenre("Romanzo");
+        genre.setGenre("Fantasy");
         testEntityManager.persist(genre);
         GenreJoinBook gjb = new GenreJoinBook();
         gjb.setGenre(genre);
@@ -98,8 +98,8 @@ public class LibroRepositoryIntegrationTest {
     public void testFindAllBooks() {
         List<LibroCardDTO> libroCardDTOList = libroRepository.findAllBooks();
         assertThat(libroCardDTOList).isNotEmpty();
-        assertThat(libroCardDTOList.size()).isEqualTo(1);
-        assertThat(libroCardDTOList.get(0).getId()).isEqualTo(book.getId());
+        assertThat(libroCardDTOList.size()).isGreaterThanOrEqualTo(1);
+        assertThat(libroCardDTOList.get(libroCardDTOList.size()-1).getId()).isEqualTo(book.getId());
     }
 
     @Test

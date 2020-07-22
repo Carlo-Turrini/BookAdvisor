@@ -52,8 +52,8 @@ public class AuthorRepositoryIntegrationTest {
     public void testFindAllToDTO() {
         List<AuthorCardDTO> authorCardDTOList = authorRepository.findAllToDTO();
         assertThat(authorCardDTOList).isNotEmpty();
-        assertThat(authorCardDTOList.size()).isEqualTo(1);
-        assertThat(authorCardDTOList.get(0).getAuthorsFullname()).isEqualTo(author.getAuthorsFullname());
+        assertThat(authorCardDTOList.size()).isGreaterThanOrEqualTo(3);
+        assertThat(authorCardDTOList.get(authorCardDTOList.size()-1).getAuthorsFullname()).isEqualTo(author.getAuthorsFullname());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class AuthorRepositoryIntegrationTest {
     @Test
     public void testFindAllAuthorsOfBook() {
         List<AuthorOfBook> authorOfBookList = authorRepository.findAllAuthorsOfBook();
-        assertThat(authorOfBookList.size()).isEqualTo(1);
+        assertThat(authorOfBookList.size()).isGreaterThanOrEqualTo(1);
     }
 
     @Test

@@ -52,8 +52,9 @@ public class BookRankingServiceImpl implements BookRankingService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<BookRankingDTO> addBookToBookRank(Integer userID, Integer myBookID, Integer bookRank) {
-        UsersInfo user = usersInfoRepository.getOne(userID);
+        UsersInfo user = usersInfoRepository.findById(userID).orElse(null);
         if(user != null) {
+            System.out.println("ENTRO USER != NULL");
             List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
             List<Integer> myBookIDsInRanking = bookRankingRepository.findAllMyBookIDsInRank(userID);
             Integer numOfBooksInRank = bookRankingList.size();
@@ -103,7 +104,7 @@ public class BookRankingServiceImpl implements BookRankingService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public List<BookRankingDTO> removeBookFromBookRank(Integer userID, Integer bookRankID) {
-        UsersInfo user = usersInfoRepository.getOne(userID);
+        UsersInfo user = usersInfoRepository.findById(userID).orElse(null);
         if(user != null) {
             List<BookRanking> bookRankingList = bookRankingRepository.findAllByUserID(userID);
             BookRanking bookRankingToDelete = bookRankingRepository.getOne(bookRankID);
@@ -132,7 +133,7 @@ public class BookRankingServiceImpl implements BookRankingService{
                 }
                 return bookRankingDTOList;
             }
-            else throw new ApplicationException("This book rank doesn't beInteger to user");
+            else throw new ApplicationException("This book rank doesn't belong to user");
         }
         else throw new ApplicationException("This user doesn't exist");
     }

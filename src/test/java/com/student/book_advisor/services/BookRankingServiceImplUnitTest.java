@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -94,11 +95,10 @@ public class BookRankingServiceImplUnitTest {
 
     @Test
     public void testAddBookToBookRank_userNull() {
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
         assertThatThrownBy(() -> bookRankingService.addBookToBookRank(1, 1, 1))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("User doesn't exist");
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verifyNoInteractions(bookRankingRepository);
         Mockito.verifyNoInteractions(myBooksRepository);
@@ -112,7 +112,7 @@ public class BookRankingServiceImplUnitTest {
         Integer userId = 1;
         Integer myBooksId = 11;
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         List<BookRanking> bookRankingList = getBookRankingListFull();
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(bookRankingList);
         List<Integer> allMyBooksInRankIDs = getAllMyBooksInRankListFull();
@@ -139,7 +139,7 @@ public class BookRankingServiceImplUnitTest {
         assertThat(found.size()).isEqualTo(bookRankingDTOList.size());
         assertThat(found.contains(bookRankingDTO)).isTrue();
         assertThat(found.contains(bookRankingDTO1)).isTrue();
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllMyBookIDsInRank(Mockito.anyInt());
@@ -163,7 +163,7 @@ public class BookRankingServiceImplUnitTest {
         Integer userId = 1;
         Integer myBooksId = 11;
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         List<BookRanking> bookRankingList = getBookRankingListFull();
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(bookRankingList);
         List<Integer> allMyBooksInRankIDs = getAllMyBooksInRankListFull();
@@ -191,7 +191,7 @@ public class BookRankingServiceImplUnitTest {
         assertThat(found.size()).isEqualTo(bookRankingDTOList.size());
         assertThat(found.contains(bookRankingDTO)).isTrue();
         assertThat(found.contains(bookRankingDTO1)).isTrue();
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllMyBookIDsInRank(Mockito.anyInt());
@@ -215,7 +215,7 @@ public class BookRankingServiceImplUnitTest {
         Integer userId = 1;
         Integer myBooksId = 11;
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         List<BookRanking> bookRankingList = getBookRankingListPartiallyFull();
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(bookRankingList);
         List<Integer> allMyBooksInRankIDs = getAllMyBooksInRankListPartiallyFull();
@@ -242,7 +242,7 @@ public class BookRankingServiceImplUnitTest {
         assertThat(found.size()).isEqualTo(bookRankingDTOList.size());
         assertThat(found.contains(bookRankingDTO)).isTrue();
         assertThat(found.contains(bookRankingDTO1)).isTrue();
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllMyBookIDsInRank(Mockito.anyInt());
@@ -266,7 +266,7 @@ public class BookRankingServiceImplUnitTest {
         Integer userId = 1;
         Integer myBooksId = 11;
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         List<BookRanking> bookRankingList = getBookRankingListPartiallyFull();
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(bookRankingList);
         List<Integer> allMyBooksInRankIDs = getAllMyBooksInRankListPartiallyFull();
@@ -293,7 +293,7 @@ public class BookRankingServiceImplUnitTest {
         assertThat(found.size()).isEqualTo(bookRankingDTOList.size());
         assertThat(found.contains(bookRankingDTO)).isTrue();
         assertThat(found.contains(bookRankingDTO1)).isTrue();
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllMyBookIDsInRank(Mockito.anyInt());
@@ -314,11 +314,10 @@ public class BookRankingServiceImplUnitTest {
 
     @Test
     public void testRemoveBookFromBookRank_userNull() {
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(null);
         assertThatThrownBy(() -> bookRankingService.removeBookFromBookRank(1, 1))
                 .isInstanceOf(ApplicationException.class)
                 .hasMessageContaining("This user doesn't exist");
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verifyNoInteractions(bookRankingRepository);
         Mockito.verifyNoInteractions(myBooksRepository);
@@ -331,14 +330,14 @@ public class BookRankingServiceImplUnitTest {
     public void testRemoveBookFromBookRank_bookRankDoesNotBelongToUser() {
         Integer usersId = 3;
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(new ArrayList<>());
         Mockito.when(bookRankingRepository.getOne(Mockito.anyInt())).thenReturn(new BookRanking());
         Mockito.when(bookRankingRepository.getUsersIDFromBookRanking(Mockito.anyInt())).thenReturn(usersId + 1);
         assertThatThrownBy(() -> bookRankingService.removeBookFromBookRank(usersId, 1))
                 .isInstanceOf(ApplicationException.class)
-                .hasMessageContaining("This book rank doesn't beInteger to user");
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+                .hasMessageContaining("This book rank doesn't belong to user");
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).getOne(Mockito.anyInt());
@@ -355,7 +354,7 @@ public class BookRankingServiceImplUnitTest {
         Integer usersId = 3;
         Integer bookRankId = 1;
         UsersInfo usersInfo = new UsersInfo();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         List<BookRanking> bookRankingList = getBookRankingListPartiallyFull();
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(bookRankingList);
         Mockito.when(bookRankingRepository.getOne(bookRankId)).thenReturn(bookRankingList.get(bookRankId-1));
@@ -377,7 +376,7 @@ public class BookRankingServiceImplUnitTest {
         assertThat(found.size()).isEqualTo(bookRankingDTOList.size());
         assertThat(found.contains(bookRankingDTO)).isTrue();
         assertThat(found.contains(bookRankingDTO1)).isTrue();
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).getOne(Mockito.anyInt());
@@ -400,7 +399,7 @@ public class BookRankingServiceImplUnitTest {
         Integer bookRankId = 5;
         UsersInfo usersInfo = new UsersInfo();
         List<BookRanking> bookRankingList = getBookRankingListPartiallyFull();
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         Mockito.when(bookRankingRepository.findAllByUserID(Mockito.anyInt())).thenReturn(bookRankingList);
         Mockito.when(bookRankingRepository.getOne(bookRankId)).thenReturn(bookRankingList.get(bookRankId-1));
         Mockito.when(bookRankingRepository.getUsersIDFromBookRanking(bookRankId)).thenReturn(usersId);
@@ -421,7 +420,7 @@ public class BookRankingServiceImplUnitTest {
         assertThat(found.size()).isEqualTo(bookRankingDTOList.size());
         assertThat(found.contains(bookRankingDTO)).isTrue();
         assertThat(found.contains(bookRankingDTO1)).isTrue();
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
         Mockito.verify(bookRankingRepository, Mockito.times(1)).findAllByUserID(Mockito.anyInt());
         Mockito.verify(bookRankingRepository, Mockito.times(1)).getOne(Mockito.anyInt());
