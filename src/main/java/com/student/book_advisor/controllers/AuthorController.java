@@ -8,6 +8,7 @@ import com.student.book_advisor.data_persistency.model.dto.formDTOS.AuthorFormDT
 import com.student.book_advisor.data_persistency.model.entities.Author;
 import com.student.book_advisor.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -76,7 +78,7 @@ public class AuthorController {
             return errors;
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiunta autore", e);
         }
     }
 
@@ -121,8 +123,11 @@ public class AuthorController {
             else throw new ApplicationException("This author doesn't exist");
             return errors;
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiornamento autore", e);
         }
     }
 
@@ -159,8 +164,11 @@ public class AuthorController {
         try {
             return authorService.updateAuthorsPhoto(authorsPhoto, authorID);
         }
-        catch (Exception e) {
-            throw new RuntimeException(e);
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+        catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiornamento foto autore", e);
         }
     }
 

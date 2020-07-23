@@ -1,16 +1,19 @@
 package com.student.book_advisor.controllers;
 
 
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.data_persistency.model.dto.RecensioneDTO;
 import com.student.book_advisor.data_persistency.model.dto.formDTOS.RecensioneFormDTO;
 import com.student.book_advisor.services.RecensioneService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,8 +71,11 @@ public class RecensioneController {
             }
             return errors;
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiunta recensione", e);
         }
     }
 
@@ -81,7 +87,7 @@ public class RecensioneController {
             recensioneService.deleteReview(delReviewId);
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore cancellazione recensione", e);
         }
     }
 
@@ -91,8 +97,11 @@ public class RecensioneController {
         try {
             recensioneService.addUsefulReview(reviewID, userID);
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiunta mi piace", e);
         }
     }
 
@@ -103,7 +112,7 @@ public class RecensioneController {
             recensioneService.removeUsefulReview(reviewID, userID);
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore cancellazione mi piace", e);
         }
     }
 

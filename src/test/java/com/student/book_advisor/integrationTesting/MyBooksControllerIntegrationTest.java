@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -194,14 +196,14 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         BookShelf shelf = BookShelf.reading;
-        assertThatThrownBy(() -> mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test
@@ -212,14 +214,14 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         BookShelf shelf = BookShelf.reading;
-        assertThatThrownBy(() -> mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test
@@ -230,14 +232,14 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         BookShelf shelf = BookShelf.reading;
-        assertThatThrownBy(() -> mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test
@@ -281,14 +283,14 @@ public class MyBooksControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        assertThatThrownBy(() -> mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(BookShelf.reading.toString())
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test

@@ -7,12 +7,14 @@ import com.student.book_advisor.data_persistency.model.entities.Libro;
 import com.student.book_advisor.services.LibroService;
 import com.student.book_advisor.services.PrizeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -64,8 +66,11 @@ public class PrizeController {
             }
             else throw new ApplicationException("Book not found");
         }
+        catch (ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore nuovo premio", e);
         }
     }
 
@@ -77,7 +82,7 @@ public class PrizeController {
             prizeService.deletePrize(prizeID, bookID);
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore cancellazione premio", e);
         }
     }
 

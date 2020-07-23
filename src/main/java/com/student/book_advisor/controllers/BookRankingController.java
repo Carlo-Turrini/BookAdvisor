@@ -1,13 +1,16 @@
 package com.student.book_advisor.controllers;
 
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.data_persistency.model.dto.BookRankingDTO;
 import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.BookForRankDTO;
 import com.student.book_advisor.services.BookRankingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,8 +26,11 @@ public class BookRankingController {
         try {
             return bookRankingService.findUsersBookRank(userID);
         }
+        catch (ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore nel caricamento del ranking", e);
         }
     }
 
@@ -35,8 +41,11 @@ public class BookRankingController {
         try {
             return bookRankingService.addBookToBookRank(userID, bookForRankDTO.getMyBookID(), bookForRankDTO.getRank());
         }
+        catch (ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore nell'aggiunta al ranking", e);
         }
     }
 
@@ -47,8 +56,11 @@ public class BookRankingController {
         try {
             return bookRankingService.removeBookFromBookRank(userID, rankID);
         }
+        catch (ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore nella rimozione dal ranking", e);
         }
     }
 }

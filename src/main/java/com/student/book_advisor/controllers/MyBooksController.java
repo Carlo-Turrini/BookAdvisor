@@ -1,14 +1,17 @@
 package com.student.book_advisor.controllers;
 
+import com.student.book_advisor.customExceptions.ApplicationException;
 import com.student.book_advisor.data_persistency.model.dto.MyBooksDTO;
 import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.MyBooksReadDTO;
 import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.services.MyBooksService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +34,7 @@ public class MyBooksController {
             return myBooksService.deleteFromShelf(userID, myBookID);
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore cancellazione libro da MyBooks", e);
         }
     }
 
@@ -42,8 +45,11 @@ public class MyBooksController {
         try {
             return myBooksService.updateShelf(userID, bookID, BookShelf.valueOf(shelf));
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiornamento MyBooks", e);
         }
     }
 
@@ -55,7 +61,7 @@ public class MyBooksController {
             return myBooksService.findAllMyBooksRead(userID);
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore caricamento MyBooks letti non presenti nel ranking", e);
         }
     }
 
@@ -65,8 +71,8 @@ public class MyBooksController {
         try {
             return myBooksService.findAllMyBooks(userID);
         }
-        catch(Exception e) {
-            throw new RuntimeException(e);
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore caricamento MyBooks", e);
         }
     }
 
@@ -79,8 +85,11 @@ public class MyBooksController {
         try {
             return myBooksService.addToShelf(userID, bookID, BookShelf.valueOf(shelf));
         }
-        catch(Exception e) {
-            throw new RuntimeException(e);
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiunta a MyBooks", e);
         }
     }
 }

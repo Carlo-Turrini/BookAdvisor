@@ -29,6 +29,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -382,14 +384,14 @@ public class UtenteControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
         Mockito.when(utenteService.getUser(userID)).thenReturn(null);
-        assertThatThrownBy(() -> mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
         Mockito.verify(utenteService, Mockito.times(1)).getUser(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(utenteService);
     }

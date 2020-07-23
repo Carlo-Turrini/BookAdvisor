@@ -41,6 +41,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BookAdvisorApplication.class)
 @AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:integrationtest.properties")
+@Transactional
+@Rollback
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class GenreControllerIntegrationTest {
     @Autowired

@@ -21,9 +21,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
+import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -96,15 +98,14 @@ public class PrizeControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(prizeFormDTO);
-        assertThatThrownBy(() -> mockMvc.perform(post("/libri/{id}/prizes", bookId)
+        mockMvc.perform(post("/libri/{id}/prizes", bookId)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result -> assertThat(result.getResolvedException() instanceof NestedServletException).isTrue()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test

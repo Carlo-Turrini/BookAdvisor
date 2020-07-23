@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +64,7 @@ public class AuthorServiceImplUnitTest {
         Mockito.when(authorRepository.countAllAuthorsWithName("Pablo")).thenReturn(1);
         Mockito.when(authorRepository.countAllAuthorsWithName("Mario")).thenReturn(0);
         Mockito.when(authorRepository.save(Mockito.any(Author.class))).thenAnswer(i -> i.getArguments()[0]);
-        Mockito.when(authorRepository.getOne(1)).thenReturn(author);
-        Mockito.when(authorRepository.getOne(2)).thenReturn(null);
+        Mockito.when(authorRepository.findById(1)).thenReturn(Optional.of(author));
         authorDTO = new AuthorDTO(1, "Pablo Picasso", "Autore 1", 1920, 1985);
         Mockito.when(authorRepository.getAuthorsDTOById(1)).thenReturn(authorDTO);
         Mockito.when(authorRepository.getAuthorsDTOById(2)).thenReturn(authorDTO);
@@ -113,7 +113,7 @@ public class AuthorServiceImplUnitTest {
         Author found = authorService.getAuthor(1);
         assertThat(found).isNotNull();
         assertThat(found).isEqualTo(author);
-        Mockito.verify(authorRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
     }
 
@@ -121,7 +121,7 @@ public class AuthorServiceImplUnitTest {
     public void testGetAuthorNotPresent() {
         Author found = authorService.getAuthor(2);
         assertThat(found).isNull();
-        Mockito.verify(authorRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(authorRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
     }
 
@@ -249,9 +249,8 @@ public class AuthorServiceImplUnitTest {
     public void testUpdateAuthorsPhoto_authorNotPresent() {
         MultipartFile mf = new MockMultipartFile("test", "test".getBytes());
         assertThatThrownBy(() -> authorService.updateAuthorsPhoto(mf, 2))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("This author doesn't exist!")
-                .hasCauseInstanceOf(ApplicationException.class);
+                .isInstanceOf(ApplicationException.class)
+                .hasMessageContaining("This author doesn't exist!");
         Mockito.verify(authorRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
     }

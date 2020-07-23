@@ -119,11 +119,11 @@ public class UtenteServiceImplUnitTest {
     public void testGetUser() {
         UsersInfo usersInfo = new UsersInfo();
         usersInfo.setUsername("Prova");
-        Mockito.when(usersInfoRepository.getOne(Mockito.anyInt())).thenReturn(usersInfo);
+        Mockito.when(usersInfoRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(usersInfo));
         UsersInfo found = utenteService.getUser(1);
         assertThat(found).isNotNull();
         assertThat(found).isEqualTo(usersInfo);
-        Mockito.verify(usersInfoRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(usersInfoRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(usersInfoRepository);
     }
 

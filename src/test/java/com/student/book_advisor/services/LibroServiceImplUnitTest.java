@@ -163,10 +163,10 @@ public class LibroServiceImplUnitTest {
     public void testFindBookById() {
         Libro book = new Libro();
         book.setTitolo("Prova");
-        Mockito.when(libroRepository.getOne(Mockito.anyInt())).thenReturn(book);
+        Mockito.when(libroRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(book));
         Libro found = libroService.findBookById(1);
         assertThat(found).isEqualTo(book);
-        Mockito.verify(libroRepository, Mockito.times(1)).getOne(Mockito.anyInt());
+        Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
     }
 
@@ -288,8 +288,9 @@ public class LibroServiceImplUnitTest {
     //Presentiamo solo alcuni dei test case di copertura per questo metodo
     @Test
     public void testUpdateBook_bookNull() {
-        Libro updated = libroService.updateBook(new LibroFormDTO(), 1);
-        assertThat(updated).isNull();
+        assertThatThrownBy(() -> libroService.updateBook(new LibroFormDTO(), 1))
+                .isInstanceOf(ApplicationException.class)
+                .hasMessageContaining("Libro non esistente");
         Mockito.verify(libroRepository, Mockito.times(1)).findById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroRepository);
         Mockito.verifyNoInteractions(genreRepository);

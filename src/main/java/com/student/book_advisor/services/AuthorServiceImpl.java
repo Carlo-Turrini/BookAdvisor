@@ -9,6 +9,7 @@ import com.student.book_advisor.data_persistency.model.dto.formDTOS.AuthorFormDT
 import com.student.book_advisor.data_persistency.model.entities.Author;
 import com.student.book_advisor.data_persistency.repositories.AuthorRepository;
 import com.student.book_advisor.services.storage.FileUploadDir;
+import com.student.book_advisor.services.storage.StorageException;
 import com.student.book_advisor.services.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +46,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Author getAuthor(Integer id) {
-        return authorRepository.getOne(id);
+        return authorRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -122,8 +123,8 @@ public class AuthorServiceImpl implements AuthorService {
                 return src;
                 } else throw new ApplicationException("This author doesn't exist!");
         }
-        catch(Exception e) {
-            throw new RuntimeException(e);
+        catch(StorageException e) {
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 

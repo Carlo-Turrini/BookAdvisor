@@ -10,6 +10,7 @@ import com.student.book_advisor.security.AuthUserPrincipal;
 import com.student.book_advisor.security.JwtTokenProvider;
 import com.student.book_advisor.services.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
@@ -18,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,10 +63,10 @@ public class UtenteController {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public List<UtenteCardDTO> getAllUsers(HttpServletRequest request, HttpServletResponse response) {
         try {
-            return (List<UtenteCardDTO>) utenteService.findAllUsers();
+            return utenteService.findAllUsers();
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore caricamento utenti", e);
         }
 
     }
@@ -130,7 +132,7 @@ public class UtenteController {
             return errors;
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiunta utente", e);
         }
 
     }
@@ -142,8 +144,11 @@ public class UtenteController {
         try {
             return utenteService.updateUsersProfilePhoto(profilePhoto, userId);
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiornamento foto utente", e);
         }
     }
 
@@ -193,8 +198,11 @@ public class UtenteController {
             else throw new ApplicationException("User doesn't exist!");
 
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiornamento utente", e);
         }
 
     }
@@ -211,8 +219,7 @@ public class UtenteController {
             utenteService.deleteUser(id);
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore cancellazione utente", e);
         }
-
     }
 }

@@ -147,8 +147,11 @@ public class RecensioneServiceImpl implements RecensioneService {
                     newUR.setUsersInfo(user);
                     usefulReviewRepository.save(newUR);
                 }
+                else throw new ApplicationException("Mi piace già messo");
             }
+            else throw new ApplicationException("Recensione non esistente");
         }
+        else throw new ApplicationException("User non esistente");
 
     }
 
@@ -165,5 +168,5 @@ public class RecensioneServiceImpl implements RecensioneService {
                 }
             }
         }
-  }
+    }
 }

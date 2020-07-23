@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
@@ -137,15 +138,14 @@ public class AuthorControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
-        assertThatThrownBy(() -> mockMvc.perform(put("/authors/{id}", authorID)
+        mockMvc.perform(put("/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result -> assertThat(result.getResolvedException() instanceof NestedServletException).isTrue()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test
@@ -269,7 +269,7 @@ public class AuthorControllerIntegrationTest {
     }
 
     @Test
-    public void test90UpdateAuthorsPhoto() throws Exception {
+    public void test900UpdateAuthorsPhoto() throws Exception {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
@@ -282,6 +282,20 @@ public class AuthorControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
                 .andExpect(jsonPath("$.img", notNullValue()));
+    }
+    @Test
+    public void test901UpdateAuthorsPhoto_authorNotFound() throws Exception {
+        UUID csrf = UUID.randomUUID();
+        Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
+        Cookie authCookie = new Cookie("access_token", adminToken);
+        MockMultipartFile mf = new MockMultipartFile("authorsPhoto", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
+        Integer authorID = 3;
+        mockMvc.perform(multipart("/authors/{id}/authors_photo", authorID)
+                .file(mf)
+                .header("X-XSRF-TOKEN", csrf.toString())
+                .cookie(csrfCookie, authCookie))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test

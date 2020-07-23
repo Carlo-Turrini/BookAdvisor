@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -130,14 +132,14 @@ public class BookRankingIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(bookForRankDTO);
-        assertThatThrownBy(() -> mockMvc.perform(post("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(post("/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test
@@ -167,13 +169,13 @@ public class BookRankingIntegrationTest {
         Cookie authCookie = new Cookie("access_token", userToken);
         Integer userID = 2;
         Integer bookRankID = 2;
-        assertThatThrownBy(() -> mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
     @Test
     public void testFRemoveBookRank_userNonExistent() throws Exception {
@@ -182,13 +184,13 @@ public class BookRankingIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         Integer userID = 3;
         Integer bookRankID = 2;
-        assertThatThrownBy(() -> mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test

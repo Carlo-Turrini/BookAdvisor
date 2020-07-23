@@ -9,6 +9,7 @@ import com.student.book_advisor.data_persistency.model.dto.formDTOS.LibroFormDTO
 import com.student.book_advisor.data_persistency.model.entities.Libro;
 import com.student.book_advisor.services.LibroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -109,8 +111,11 @@ public class LibroController {
             }
             return errors;
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiunta nuovo libro", e);
         }
     }
 
@@ -131,8 +136,11 @@ public class LibroController {
             }
             else throw new ApplicationException("Libro inesistente!");
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiornamento copertina libro", e);
         }
     }
 
@@ -184,8 +192,11 @@ public class LibroController {
             }
             else throw new ApplicationException("Libro inesistente!");
         }
+        catch(ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiornamento libro", e);
         }
     }
 

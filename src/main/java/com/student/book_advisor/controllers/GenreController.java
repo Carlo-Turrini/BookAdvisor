@@ -4,12 +4,14 @@ package com.student.book_advisor.controllers;
 import com.student.book_advisor.data_persistency.model.dto.formDTOS.GenreFormDTO;
 import com.student.book_advisor.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -48,7 +50,7 @@ public class GenreController {
             return errors;
         }
         catch(Exception e) {
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore aggiunta nuovo genere", e);
         }
     }
 
@@ -58,8 +60,8 @@ public class GenreController {
         try {
             return genreService.getAllGenres();
         }
-        catch (Exception e) {
-            throw new RuntimeException(e);
+        catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore caricamento generi", e);
         }
     }
 

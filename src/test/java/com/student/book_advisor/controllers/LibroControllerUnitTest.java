@@ -32,6 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -441,12 +443,12 @@ public class LibroControllerUnitTest {
         MockMultipartFile mf = new MockMultipartFile("copertina", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer bookID = 1;
         Mockito.when(libroService.findBookById(bookID)).thenReturn(null);
-        assertThatThrownBy(() -> mockMvc.perform(multipart("/libri/{id}/foto_copertina", bookID)
+        mockMvc.perform(multipart("/libri/{id}/foto_copertina", bookID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
         Mockito.verify(libroService, Mockito.times(1)).findBookById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroService);
     }
@@ -518,14 +520,14 @@ public class LibroControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(libroFormDTO);
         Mockito.when(libroService.findBookById(bookID)).thenReturn(null);
-        assertThatThrownBy(() -> mockMvc.perform(put("/libri/{id}", bookID)
+        mockMvc.perform(put("/libri/{id}", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError()))
-                .isInstanceOf(NestedServletException.class);
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
         Mockito.verify(libroService, Mockito.times(1)).findBookById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(libroService);
     }

@@ -94,7 +94,7 @@ public class LibroServiceImpl implements LibroService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Libro findBookById(Integer id) {
-        return libroRepo.getOne(id);
+        return libroRepo.findById(id).orElse(null);
     }
 
     //Toglibile
@@ -150,10 +150,13 @@ public class LibroServiceImpl implements LibroService {
         book = libroRepo.save(book);
         for(String gen : libroForm.getGeneri()) {
             Genre genre = genreRepository.findByGenre(gen);
-            GenreJoinBook gjb = new GenreJoinBook();
-            gjb.setBook(book);
-            gjb.setGenre(genre);
-            genreJoinBookRepository.save(gjb);
+            if(genre != null) {
+                GenreJoinBook gjb = new GenreJoinBook();
+                gjb.setBook(book);
+                gjb.setGenre(genre);
+                genreJoinBookRepository.save(gjb);
+            }
+            else throw new ApplicationException("Genere non esistente");
         }
         if(libroForm.getSaga()) {
             Saga saga = new Saga();
@@ -216,6 +219,7 @@ public class LibroServiceImpl implements LibroService {
                         genreJoinBookRepository.save(gjb);
                     }
                 }
+                else throw new ApplicationException("Genere non esistente");
             }
             if (libroForm.getSaga()) {
                 Saga saga = sagaRepository.findByBook(book);
@@ -262,10 +266,11 @@ public class LibroServiceImpl implements LibroService {
                         authorJoinBookRepository.save(ajb);
                     }
                 }
+                else throw new ApplicationException("Autore non esistente");
             }
             return book;
         }
-        else return null;
+        else throw new ApplicationException("Libro non esistente");
     }
 
     @Override

@@ -68,7 +68,7 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public UsersInfo getUser(Integer userId) {
-        return usersInfoRepository.getOne(userId);
+        return usersInfoRepository.findById(userId).orElse(null);
     }
 
     @Override
@@ -130,22 +130,13 @@ public class UtenteServiceImpl implements UtenteService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean isUsernameUnique(String username) {
-        Integer count = usersInfoRepository.countAllByUsername(username);
-        if(count == null || count == 0) {
-            return true;
-        }
-        else return false;
-
+        return usersInfoRepository.countAllByUsername(username) == 0;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean isEmailUnique(String email) {
-        Integer count = usersInfoRepository.countAllByEmail(email);
-        if(count == null || count == 0) {
-            return true;
-        }
-        else return false;
+        return usersInfoRepository.countAllByEmail(email) == 0;
     }
 
     @Override

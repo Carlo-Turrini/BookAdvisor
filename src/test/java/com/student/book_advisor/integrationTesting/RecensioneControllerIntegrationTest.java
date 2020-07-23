@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.anEmptyMap;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -155,6 +157,32 @@ public class RecensioneControllerIntegrationTest {
     }
 
     @Test
+    public void testD0AddNewReview_bookNonExistent() throws Exception {
+        Integer bookID = 6;
+        UUID csrf = UUID.randomUUID();
+        Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
+        Cookie authCookie = new Cookie("access_token", userToken);
+        RecensioneFormDTO recensioneFormDTO = new RecensioneFormDTO();
+        recensioneFormDTO.setContainsSpoilers(false);
+        recensioneFormDTO.setWritingQualityRating(4);
+        recensioneFormDTO.setOriginalityRating(5);
+        recensioneFormDTO.setPageTurnerRating(3);
+        recensioneFormDTO.setRating(5);
+        recensioneFormDTO.setTesto("prova");
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = objectWriter.writeValueAsString(recensioneFormDTO);
+        mockMvc.perform(post("/libri/{id}/recensioni", bookID)
+                .header("X-XSRF-TOKEN", csrf.toString())
+                .cookie(csrfCookie, authCookie)
+                .content(requestJson)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
+    }
+
+    @Test
     public void testDAddNewReview() throws Exception {
         Integer bookID = 1;
         UUID csrf = UUID.randomUUID();
@@ -202,6 +230,57 @@ public class RecensioneControllerIntegrationTest {
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testF0AddUsefulReview_userNonExistent() throws Exception {
+        Integer userID = 3;
+        Integer recensioneID = 1;
+        UUID csrf = UUID.randomUUID();
+        Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
+        Cookie authCookie = new Cookie("access_token", adminToken);
+        mockMvc.perform(post("/recensioni/{id}/isReviewUseful", recensioneID)
+                .header("X-XSRF-TOKEN", csrf.toString())
+                .cookie(csrfCookie, authCookie)
+                .content(userID.toString())
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
+    }
+
+    @Test
+    public void testF1AddUsefulReview_recensioneNonExistent() throws Exception {
+        Integer userID = 1;
+        Integer recensioneID = 4;
+        UUID csrf = UUID.randomUUID();
+        Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
+        Cookie authCookie = new Cookie("access_token", adminToken);
+        mockMvc.perform(post("/recensioni/{id}/isReviewUseful", recensioneID)
+                .header("X-XSRF-TOKEN", csrf.toString())
+                .cookie(csrfCookie, authCookie)
+                .content(userID.toString())
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
+    }
+
+    @Test
+    public void testF2AddUsefulReview_usefulReviewAlreadyPresent() throws Exception {
+        Integer userID = 2;
+        Integer recensioneID = 1;
+        UUID csrf = UUID.randomUUID();
+        Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
+        Cookie authCookie = new Cookie("access_token", userToken);
+        mockMvc.perform(post("/recensioni/{id}/isReviewUseful", recensioneID)
+                .header("X-XSRF-TOKEN", csrf.toString())
+                .cookie(csrfCookie, authCookie)
+                .content(userID.toString())
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test
