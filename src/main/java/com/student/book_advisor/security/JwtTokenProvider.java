@@ -96,7 +96,7 @@ public class JwtTokenProvider {
     public void invalidateJwtToken(HttpServletRequest request, HttpServletResponse response) {
         String token = resolveToken(request);
         if(token != null) {
-            CookieUtil.clear(request, JwtProperties.JWT_TOKEN_COOKIE);
+            CookieUtil.clear(request, response, JwtProperties.JWT_TOKEN_COOKIE);
             if(validateToken(token)) {
                 Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
                 String jwtTokenID = claims.getBody().getId();

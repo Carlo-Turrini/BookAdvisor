@@ -113,7 +113,7 @@ public class UtenteServiceImpl implements UtenteService {
             List<UsefulReview> usefulReviewList = usefulReviewRepository.findAllUsefulReviewsByUserID(id);
             usefulReviewRepository.deleteInBatch(usefulReviewList);
             String photoPath = user.getProfilePhotoPath();
-            if(photoPath != Constants.DEF_PROFILE_PIC) {
+            if(!photoPath.equals(Constants.DEF_PROFILE_PIC)) {
                 storageService.delete(photoPath, FileUploadDir.profileImage);
             }
             //user.setDelToken(UUID.randomUUID().toString());

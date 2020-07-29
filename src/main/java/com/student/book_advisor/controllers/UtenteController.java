@@ -215,6 +215,7 @@ public class UtenteController {
             if(id == ((AuthUserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()) {
                 SecurityContextHolder.getContext().setAuthentication(null);
                 jwtTokenProvider.invalidateJwtToken(request, response);
+                response.setStatus(HttpServletResponse.SC_OK);
             }
             utenteService.deleteUser(id);
         }
