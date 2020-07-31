@@ -5,6 +5,7 @@ import com.student.book_advisor.data_persistency.model.dto.MyBooksDTO;
 import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.MyBooksReadDTO;
 import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.services.MyBooksService;
+import com.student.book_advisor.services.storage.FileUploadDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -83,7 +84,7 @@ public class MyBooksController {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String addBookToShelf(@PathVariable("id")Integer userID, @PathVariable("bookID")Integer bookID, @RequestBody() String shelf) {
         try {
-            return myBooksService.addToShelf(userID, bookID, BookShelf.valueOf(shelf));
+            return "{ \"shelf\":\"" + myBooksService.addToShelf(userID, bookID, BookShelf.valueOf(shelf))+ "\"}";
         }
         catch(ApplicationException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
