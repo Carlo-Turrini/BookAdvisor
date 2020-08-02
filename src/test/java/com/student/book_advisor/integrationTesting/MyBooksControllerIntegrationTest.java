@@ -185,7 +185,7 @@ public class MyBooksControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
-                .andExpect(jsonPath("$", is(shelf.toString())));
+                .andExpect(jsonPath("$.shelf", is(shelf.toString())));
     }
 
     @Test
