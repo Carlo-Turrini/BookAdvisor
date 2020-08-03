@@ -52,7 +52,7 @@ public class AuthorRepositoryIntegrationTest {
     public void testFindAllToDTO() {
         List<AuthorCardDTO> authorCardDTOList = authorRepository.findAllToDTO();
         assertThat(authorCardDTOList).isNotEmpty();
-        assertThat(authorCardDTOList.size()).isGreaterThanOrEqualTo(3);
+        assertThat(authorCardDTOList.size()).isGreaterThanOrEqualTo(4);
         assertThat(authorCardDTOList.get(authorCardDTOList.size()-1).getAuthorsFullname()).isEqualTo(author.getAuthorsFullname());
     }
 
@@ -93,5 +93,12 @@ public class AuthorRepositoryIntegrationTest {
         assertThat(authorOfBook).isNotNull();
         assertThat(authorOfBook.getAuthorsFullname()).isEqualTo(author.getAuthorsFullname());
         assertThat(authorOfBook.getId()).isEqualTo(author.getId());
+    }
+
+    @Test
+    public void testCountAllBooksByAuthor() {
+        Integer count = authorRepository.countAllBooksByAuthor(author.getId());
+        assertThat(count).isNotNull();
+        assertThat(count).isEqualTo(0);
     }
 }

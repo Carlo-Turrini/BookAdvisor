@@ -83,11 +83,14 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void deleteAuthor(Integer id) {
-        String photoPath = authorRepository.getAuthorsPhotoPath(id);
-        if(photoPath != Constants.DEF_PROFILE_PIC) {
-            storageService.delete(photoPath, FileUploadDir.authorImage);
+        if(authorRepository.countAllBooksByAuthor(id)==0) {
+            String photoPath = authorRepository.getAuthorsPhotoPath(id);
+            if (photoPath != Constants.DEF_PROFILE_PIC) {
+                storageService.delete(photoPath, FileUploadDir.authorImage);
+            }
+            authorRepository.deleteById(id);
         }
-        authorRepository.deleteById(id);
+        else throw new ApplicationException("Non cancellabile: l'autore possiede dei libri!");
     }
 
     @Override

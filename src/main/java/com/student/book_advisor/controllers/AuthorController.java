@@ -135,7 +135,16 @@ public class AuthorController {
     @DeleteMapping("/authors/{id}")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAuthor(@PathVariable("id")Integer id){
-        authorService.deleteAuthor(id);
+        try {
+            authorService.deleteAuthor(id);
+
+        }
+        catch (ApplicationException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore cancellazione autore", e);
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")

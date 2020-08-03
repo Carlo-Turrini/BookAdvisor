@@ -130,7 +130,7 @@ public class AuthorControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        Integer authorID = 3;
+        Integer authorID = 4;
         AuthorFormDTO authorFormDTO = new AuthorFormDTO();
         authorFormDTO.setAuthorsFullname("Brandon Sanderson");
         authorFormDTO.setBirthYear(1975);
@@ -202,13 +202,28 @@ public class AuthorControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        Integer authorID = 1;
+        Integer authorID = 3;
         mockMvc.perform(delete("/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void test94DeleteAuthor_HasBooks() throws Exception {
+        UUID csrf = UUID.randomUUID();
+        Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
+        Cookie authCookie = new Cookie("access_token", adminToken);
+        Integer authorID = 1;
+        mockMvc.perform(delete("/authors/{id}", authorID)
+                .header("X-XSRF-TOKEN", csrf.toString())
+                .cookie(csrfCookie, authCookie)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(result -> assertThat(result.getResolvedException() instanceof ResponseStatusException).isTrue());
     }
 
     @Test
@@ -223,11 +238,13 @@ public class AuthorControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].authorsFullname", is("Pablo Neruda")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].authorsFullname", is("Robert Jordan")));
+                .andExpect(jsonPath("$[1].authorsFullname", is("Robert Jordan")))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[2].authorsFullname", is("Patrick Rothfuss")));
     }
 
     @Test
@@ -259,13 +276,16 @@ public class AuthorControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].authorsFullname", is("Pablo Neruda")))
                 .andExpect(jsonPath("$[0].birthYear", is(1900)))
                 .andExpect(jsonPath("$[1].id", is(2)))
                 .andExpect(jsonPath("$[1].authorsFullname", is("Robert Jordan")))
-                .andExpect(jsonPath("$[1].birthYear", is(1900)));
+                .andExpect(jsonPath("$[1].birthYear", is(1900)))
+                .andExpect(jsonPath("$[2].id", is(3)))
+                .andExpect(jsonPath("$[2].authorsFullname", is("Patrick Rothfuss")))
+                .andExpect(jsonPath("$[2].birthYear", is(1980)));
     }
 
     @Test
@@ -289,7 +309,7 @@ public class AuthorControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         MockMultipartFile mf = new MockMultipartFile("authorsPhoto", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
-        Integer authorID = 3;
+        Integer authorID = 4;
         mockMvc.perform(multipart("/authors/{id}/authors_photo", authorID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())

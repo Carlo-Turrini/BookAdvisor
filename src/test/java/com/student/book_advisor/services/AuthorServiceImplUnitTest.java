@@ -183,7 +183,9 @@ public class AuthorServiceImplUnitTest {
 
     @Test
     public void testDeleteAuthor_PhotoPathDefault() {
+        Mockito.when(authorRepository.countAllBooksByAuthor(Mockito.anyInt())).thenReturn(0);
         authorService.deleteAuthor(1);
+        Mockito.verify(authorRepository, Mockito.times(1)).countAllBooksByAuthor(Mockito.anyInt());
         Mockito.verify(authorRepository, Mockito.times(1)).getAuthorsPhotoPath(Mockito.anyInt());
         Mockito.verifyNoInteractions(storageService);
         Mockito.verify(authorRepository, Mockito.times(1)).deleteById(Mockito.anyInt());
@@ -192,12 +194,25 @@ public class AuthorServiceImplUnitTest {
 
     @Test
     public void testDeleteAuthor_PhotoPathNotDefault() {
+        Mockito.when(authorRepository.countAllBooksByAuthor(Mockito.anyInt())).thenReturn(0);
         authorService.deleteAuthor(2);
+        Mockito.verify(authorRepository, Mockito.times(1)).countAllBooksByAuthor(Mockito.anyInt());
         Mockito.verify(authorRepository, Mockito.times(1)).getAuthorsPhotoPath(Mockito.anyInt());
         Mockito.verify(storageService, Mockito.times(1)).delete(Mockito.anyString(), Mockito.any(FileUploadDir.class));
         Mockito.verifyNoMoreInteractions(storageService);
         Mockito.verify(authorRepository, Mockito.times(1)).deleteById(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(authorRepository);
+    }
+
+    @Test
+    public void testDeleteAuthor_HasBooks() {
+        Mockito.when(authorRepository.countAllBooksByAuthor(Mockito.anyInt())).thenReturn(1);
+        assertThatThrownBy(() -> authorService.deleteAuthor(1))
+                .isInstanceOf(ApplicationException.class)
+                .hasMessageContaining("Non cancellabile: l'autore possiede dei libri!");
+        Mockito.verify(authorRepository, Mockito.times(1)).countAllBooksByAuthor(Mockito.anyInt());
+        Mockito.verifyNoMoreInteractions(authorRepository);
+        Mockito.verifyNoInteractions(storageService);
     }
 
     @Test

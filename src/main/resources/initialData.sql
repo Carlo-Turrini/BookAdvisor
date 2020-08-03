@@ -7,10 +7,11 @@ INSERT INTO Book (PubblicationYear, NumberOfPages, Synopsis, Title) VALUES (1923
 INSERT INTO Prize (PrizeName, YearAwarded, BookID) VALUES ('Premio Strega', 2002, 1);
 INSERT INTO Genre (Genre) VALUES ('Romanzo');
 INSERT INTO Genre (Genre) VALUES ('Fantascienza');
+INSERT INTO Genre (Genre) VALUES ('Fantasy');
+INSERT INTO Genre (Genre) VALUES ('Biografia');
 INSERT INTO Author (AuthorsFullname, Biography, BirthYear) VALUES ('Pablo Neruda', 'prova', 1900);
 INSERT INTO AuthorJoinBook (AuthorID, BookID) VALUES (1, 1);
 INSERT INTO Author (AuthorsFullname, Biography, BirthYear) VALUES ('Robert Jordan', 'prova', 1900);
-INSERT INTO Author (AuthorsFullname, Biography, BirthYear) VALUES ('Patrick Rothfuss', 'prova', 1980);
 INSERT INTO Book (PubblicationYear, NumberOfPages, Synopsis, Title) VALUES (1923, 123, 'sinossi', 'La ruota del tempo');
 INSERT INTO AuthorJoinBook (AuthorID, BookID) VALUES (2, 2);
 INSERT INTO Book (PubblicationYear, NumberOfPages, Synopsis, Title) VALUES (1923, 123, 'sinossi', 'Titolo 2');

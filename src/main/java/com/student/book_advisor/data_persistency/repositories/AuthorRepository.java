@@ -37,5 +37,8 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
     @Query("SELECT new com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.AuthorOfBook(a.id, a.authorsFullname) FROM Author a WHERE a.authorsFullname = :fullname")
     public AuthorOfBook getAuthorOfBookByFullname(@Param("fullname")String authorsFullname);
 
+    @Query("SELECT COUNT(ajb) FROM Author a JOIN AuthorJoinBook ajb ON ajb.author.id = :id WHERE a.id = :id")
+    public Integer countAllBooksByAuthor(@Param("id") Integer id);
+
 
 }
