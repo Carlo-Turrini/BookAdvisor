@@ -458,7 +458,7 @@ public class UtenteControllerIntegrationTest {
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(cookie().doesNotExist("access_token"));
+                .andExpect(cookie().maxAge("access_token", 0));
     }
 
     @Test

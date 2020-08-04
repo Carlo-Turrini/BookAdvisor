@@ -18,8 +18,6 @@ public interface LibroService {
 
     public Libro findBookById(Integer id);
 
-    public LibroDTO findBookByTitolo(String titolo);
-
     public LibroDTO findBookDTOById(Integer id);
 
     public Libro newBook(LibroFormDTO libroForm);

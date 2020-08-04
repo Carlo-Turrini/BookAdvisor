@@ -26,10 +26,6 @@ public interface LibroRepository extends JpaRepository<Libro, Integer> {
     @Query("SELECT count(l) FROM Libro l WHERE l.titolo = :titolo")
     public Integer countAllByTitolo(@Param("titolo")String titolo);
 
-    //Togli
-    @Query("SELECT new com.student.book_advisor.data_persistency.model.dto.LibroDTO(l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga, AVG(r.rating), AVG(r.writingQualityRating), AVG(r.pageTurnerRating), AVG(r.pageTurnerRating)) FROM Libro l LEFT JOIN Saga s ON (s.book.id = l.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE l.titolo = :titolo GROUP BY l.id, l.titolo, l.annoPubblicazione, l.pagine, l.sinossi, s.sagaTitle, s.numberInSaga")
-    public LibroDTO findByTitolo(@Param("titolo") String titolo);
-
     @Query("SELECT new com.student.book_advisor.data_persistency.model.dto.LibroCardDTO(l.id, l.titolo, AVG(r.rating)) FROM Libro l LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE l.titolo LIKE CONCAT('%',:titolo,'%') GROUP BY l.id, l.titolo ORDER BY AVG(r.rating) DESC")
     public List<LibroCardDTO> findAllBooksContainingTitolo(@Param("titolo")String titolo);
 

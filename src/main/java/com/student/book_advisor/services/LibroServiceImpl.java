@@ -97,21 +97,6 @@ public class LibroServiceImpl implements LibroService {
         return libroRepo.findById(id).orElse(null);
     }
 
-    //Toglibile
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public LibroDTO findBookByTitolo(String titolo) {
-        LibroDTO book = libroRepo.findByTitolo(titolo);
-        String bookCoverPath = libroRepo.findBookCoverPath(book.getId());
-        if(bookCoverPath.equals(Constants.DEF_BOOK_COVER)) {
-            book.setCopertina(bookCoverPath);
-        }
-        else {
-            book.setCopertina(storageService.serve(bookCoverPath, FileUploadDir.coverImage));
-        }
-        return book;
-    }
-
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public LibroDTO findBookDTOById(Integer id) {

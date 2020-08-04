@@ -14,16 +14,12 @@ import java.util.List;
 @Repository
 public interface MyBooksRepository extends JpaRepository<MyBooks, Integer> {
 
-    @Query("DELETE FROM MyBooks mb WHERE mb.id = :id AND mb.usersInfo.id = :userID")
-    public void deleteMyBookByUserIDAndId(@Param("id")Integer id, @Param("userID") Integer userID);
-
     @Query("SELECT new com.student.book_advisor.data_persistency.model.dto.MyBooksDTO(mb.id, l.id, l.titolo, mb.ShelfType, mb.usersInfo.id, AVG(r.rating)) FROM MyBooks mb JOIN Libro l ON (mb.book.id = l.id) LEFT JOIN Recensione r ON (r.libro.id = l.id) WHERE mb.usersInfo.id = :userID GROUP BY mb.id, l.id, l.titolo, mb.ShelfType, mb.usersInfo.id")
     public List<MyBooksDTO> getMyBooksByUserID(@Param("userID")Integer userID);
 
     @Query("SELECT mb FROM MyBooks mb WHERE mb.id = :id AND mb.usersInfo.id = :userID")
     public MyBooks getByIdAndUserId(@Param("id")Integer id, @Param("userID")Integer userID);
 
-    //Toglibile
     @Query("SELECT mb FROM MyBooks mb WHERE mb.usersInfo.id = :userID AND mb.book.id = :bookID")
     public MyBooks getByBookIDAndUserID(@Param("bookID")Integer bookID, @Param("userID")Integer userID);
 

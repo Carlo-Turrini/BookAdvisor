@@ -10,17 +10,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "Book", uniqueConstraints = {@UniqueConstraint(columnNames = {"Title"})})
-//@Where(clause = "del_token = 00000000-0000-0000-0000-000000000000")
 public class Libro implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Integer id;
-
-    /*@Column(name = "del_token", nullable = false)
-    @ColumnDefault("0")
-    private String delToken = Constants.nilUUID;*/
 
     @Column(name = "PubblicationYear", precision = 4, nullable = false)
     private Integer annoPubblicazione;
@@ -62,14 +57,6 @@ public class Libro implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    /*public String getDelToken() {
-        return delToken;
-    }
-
-    public void setDelToken(String delToken) {
-        this.delToken = delToken;
-    }*/
 
     public Integer getAnnoPubblicazione() {
         return annoPubblicazione;

@@ -13,8 +13,6 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "Review")
-//@SQLDelete(sql = "UPDATE RECENSIONE SET deleted = true WHERE id = ?")
-//@Where(clause = "deleted = false")
 public class Recensione implements Serializable {
 
     @Id
@@ -49,11 +47,6 @@ public class Recensione implements Serializable {
     @CreatedDate
     private Timestamp timestamp;
 
-    /*@Column(name = "deleted", nullable = false)
-    @ColumnDefault("false")
-    private Boolean deleted = false;*/
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BookID")
     private Libro libro;
@@ -84,14 +77,6 @@ public class Recensione implements Serializable {
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
-
-    /*public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }*/
 
     public Integer getRating() {
         return rating;
