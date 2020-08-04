@@ -6,7 +6,6 @@ import com.student.book_advisor.data_persistency.model.dto.AuthorCardDTO;
 import com.student.book_advisor.data_persistency.model.dto.AuthorDTO;
 import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.AuthorOfBook;
 import com.student.book_advisor.data_persistency.model.dto.formDTOS.AuthorFormDTO;
-import com.student.book_advisor.data_persistency.model.dto.formDTOS.PrizeFormDTO;
 import com.student.book_advisor.data_persistency.model.entities.Author;
 import com.student.book_advisor.data_persistency.model.entities.Authorities;
 import com.student.book_advisor.data_persistency.model.entities.UsersInfo;
@@ -32,7 +31,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
@@ -40,7 +38,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

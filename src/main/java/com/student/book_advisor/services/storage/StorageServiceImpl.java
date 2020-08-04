@@ -20,12 +20,6 @@ import java.util.UUID;
 @Service
 @CrossOrigin(origins = "http://localhost:4200")
 public class StorageServiceImpl implements StorageService {
-    @Autowired
-    private FolderService folderService;
-
-    public StorageServiceImpl() {
-        folderService.init();
-    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)

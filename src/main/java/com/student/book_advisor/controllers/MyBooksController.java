@@ -5,7 +5,6 @@ import com.student.book_advisor.data_persistency.model.dto.MyBooksDTO;
 import com.student.book_advisor.data_persistency.model.dto.auxiliaryDTOs.MyBooksReadDTO;
 import com.student.book_advisor.enums.BookShelf;
 import com.student.book_advisor.services.MyBooksService;
-import com.student.book_advisor.services.storage.FileUploadDir;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

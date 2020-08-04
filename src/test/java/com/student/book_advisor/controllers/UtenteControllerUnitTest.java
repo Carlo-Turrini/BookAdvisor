@@ -30,7 +30,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.Cookie;
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -534,7 +532,7 @@ public class UtenteControllerUnitTest {
                 .characterEncoding("utf-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(cookie().doesNotExist("access_token"));
+                .andExpect(cookie().maxAge("access_token", 0));
         Mockito.verify(utenteService, Mockito.times(1)).deleteUser(Mockito.anyInt());
         Mockito.verifyNoMoreInteractions(utenteService);
     }

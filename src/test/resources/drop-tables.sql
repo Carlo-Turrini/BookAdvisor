@@ -1,0 +1,13 @@
+DROP TABLE BookRanking if exists;
+DROP TABLE UsefulReview if exists;
+DROP TABLE AuthorJoinBook if exists;
+DROP TABLE GenreJoinBook if exists;
+DROP TABLE Prize if exists;
+DROP TABLE Saga if exists;
+DROP TABLE Genre if exists;
+DROP TABLE Review if exists;
+DROP TABLE MyBooks if exists;
+DROP TABLE Authorities if exists;
+DROP TABLE Book if exists;
+DROP TABLE Author if exists;
+DROP TABLE UsersInfo if exists;

@@ -304,7 +304,7 @@ public class MyBooksControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=UTF-8"))
-                .andExpect(jsonPath("$", is(shelf.toString())));
+                .andExpect(jsonPath("$.shelf", is(shelf.toString())));
         Mockito.verify(myBooksService, Mockito.times(1)).addToShelf(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(BookShelf.class));
         Mockito.verifyNoMoreInteractions(myBooksService);
     }
@@ -325,7 +325,7 @@ public class MyBooksControllerUnitTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=UTF-8"))
-                .andExpect(jsonPath("$", is(shelf.toString())));
+                .andExpect(jsonPath("$.shelf", is(shelf.toString())));
         Mockito.verify(myBooksService, Mockito.times(1)).addToShelf(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(BookShelf.class));
         Mockito.verifyNoMoreInteractions(myBooksService);
     }
