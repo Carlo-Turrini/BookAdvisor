@@ -21,7 +21,7 @@ export class UtenteComponent implements OnInit, OnDestroy {
   navigationSubscription;
   reinit: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private userService : UtenteService, public authenticationService: AuthenticationService) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private userService : UtenteService, private authenticationService: AuthenticationService) {
     this.utente = new Utente();
     this.navigationSubscription = this.router.events.subscribe((e:any) => {
       if( e instanceof NavigationEnd) {

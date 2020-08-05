@@ -13,7 +13,7 @@ import {UtenteUpdateForm} from "../../core/model/utente-update-form";
   styleUrls: ['./utente-update.component.css']
 })
 export class UtenteUpdateComponent implements OnInit {
-  @Input() utente: Utente;
+  @Input() private utente: Utente;
   @Output() private updated: EventEmitter<UtenteUpdateForm> = new EventEmitter<UtenteUpdateForm>();
   submitted: boolean = false;
   utenteUpdateForm = new FormGroup( {

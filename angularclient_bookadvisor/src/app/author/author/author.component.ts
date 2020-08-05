@@ -19,7 +19,7 @@ export class AuthorComponent implements OnInit, OnDestroy {
   update: boolean = false;
   upload: boolean = false;
   navigationSubscription
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authorService : AuthorService, private bookService: LibroService,  public authenticationService: AuthenticationService) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authorService : AuthorService, private bookService: LibroService, private authenticationService: AuthenticationService) {
     this.author = new Author();
     this.navigationSubscription = this.router.events.subscribe((e:any) => {
       if( e instanceof NavigationEnd) {

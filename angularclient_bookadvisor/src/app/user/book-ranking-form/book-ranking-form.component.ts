@@ -15,11 +15,11 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 export class BookRankingFormComponent implements OnInit {
   @Input() private userID: number;
   @Output() private  added: EventEmitter<BookRanking[]> = new EventEmitter<BookRanking[]>();
-  @Output() goBack: EventEmitter<void> = new EventEmitter<void>();
-  myBooksRead: MyBooksRead[] = [];
+  @Output() private goBack: EventEmitter<void> = new EventEmitter<void>();
+  private myBooksRead: MyBooksRead[] = [];
   private bookRank: BookRanking[] = [];
-  ranks: number[] = [1,2,3,4,5,6,7,8,9,10];
-  bookRankForm = new FormGroup({
+  private ranks: number[] = [1,2,3,4,5,6,7,8,9,10];
+  private bookRankForm = new FormGroup({
     myBookID: new FormControl('', [Validators.required]),
     rank: new FormControl('', [Validators.required, Validators.min(1), Validators.max(10)])
   })

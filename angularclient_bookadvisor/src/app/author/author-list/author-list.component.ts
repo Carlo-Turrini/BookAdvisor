@@ -11,10 +11,10 @@ import {AuthorService} from "../../core/services/author.service";
   styleUrls: ['./author-list.component.css']
 })
 export class AuthorListComponent implements OnInit {
-  authors: AuthorCard[] = [];
-  addAuthor: boolean = false;
-  authorFilterString: string = '';
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authorService: AuthorService, public authenticationService: AuthenticationService) { }
+  private authors: AuthorCard[] = [];
+  private  addAuthor: boolean = false;
+  private authorFilterString: string = '';
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authorService: AuthorService, private authenticationService: AuthenticationService) { }
 
   //aggiungi bottone form per new Author poi aggiungi un emitter che fornisca il nuovo autore aggiunto sottoforma di card!
   async ngOnInit() {
@@ -40,7 +40,7 @@ export class AuthorListComponent implements OnInit {
           if(statusCode == 401) {
             this.router.navigate(['/login']);
           }
-          else if(statusCode != 403) this.router.navigate(['/']);
+          else if(statusCode != 403) this.router.navigate(['/']);        
         });
       if(success) {
         this.authors.forEach(author => {

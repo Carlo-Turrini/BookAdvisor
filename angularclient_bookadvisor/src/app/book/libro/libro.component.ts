@@ -24,7 +24,7 @@ export class LibroComponent implements OnInit, OnDestroy {
   navigationSubscription;
   reinit: boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private libroService: LibroService, public authenticationService: AuthenticationService, private myBooksService: MyBooksService) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private libroService: LibroService, private authenticationService: AuthenticationService, private myBooksService: MyBooksService) {
     this.libro = new Libro();
     this.navigationSubscription = this.router.events.subscribe((e:any) => {
       if( e instanceof NavigationEnd) {

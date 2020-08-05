@@ -10,14 +10,14 @@ import {MyBooks} from "../../core/model/my-books";
   styleUrls: ['./my-books-list.component.css']
 })
 export class MyBooksListComponent implements OnInit {
-  myBooksRead: MyBooks[] = [];
-  myBooksReading: MyBooks[] = [];
-  myBooksToRead: MyBooks[] = [];
-  shelves: string[] = ["read", "reading", "toRead"];
-  @Input() userID: number;
+  private myBooksRead: MyBooks[] = [];
+  private myBooksReading: MyBooks[] = [];
+  private myBooksToRead: MyBooks[] = [];
+  private shelves: string[] = ["read", "reading", "toRead"];
+  @Input() private userID: number;
   @Output() private rankModified: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private route: ActivatedRoute, private router: Router, private myBooksService: MyBooksService, public authenticationService: AuthenticationService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private myBooksService: MyBooksService, private authenticationService: AuthenticationService) { }
 
   async ngOnInit() {
     await this.myBooksService.getAllUsersMyBooks(this.userID).then(books => {books.forEach(book => {

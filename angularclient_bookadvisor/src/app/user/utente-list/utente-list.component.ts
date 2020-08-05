@@ -12,7 +12,7 @@ import {AuthenticationService} from "../../core/services/authentication.service"
 })
 export class UtenteListComponent implements OnInit {
   utenti: UtenteCard[] = [];
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private utenteService: UtenteService, public authenticationService: AuthenticationService) { }
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private utenteService: UtenteService, private authenticationService: AuthenticationService) { }
 
   async ngOnInit() {
     if(this.authenticationService.adminAuth()) {

@@ -28,10 +28,10 @@ export class BookFormComponent implements OnInit {
     sinossi: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(2048)]),
     generi: new FormControl('', [Validators.required])
   });
-  genres: string[] = [];
-  authors: AuthorOfBook[] = [];
-  addAuthor: boolean = false;
-  addGenre: boolean = false;
+  private genres: string[] = [];
+  private authors: AuthorOfBook[] = [];
+  private addAuthor: boolean = false;
+  private addGenre: boolean = false;
   //Aggiungi metodo per new Author e metodo per new Genre
 
   constructor(private route: ActivatedRoute, private router: Router, private bookService: LibroService, private bookValidatorService: BookValidatorService, private authenticationService: AuthenticationService, private genreService: GenreService, private authorService: AuthorService) { }
