@@ -12,11 +12,11 @@ import {LibroCard} from "../../core/model/libro-card";
 })
 export class LibriListComponent implements OnInit, OnDestroy {
   libri: LibroCard[] = [];
-  private titoloPagina: string;
+  titoloPagina: string;
   navigationSubscription;
 
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private authenticationService: AuthenticationService, private libroService: LibroService) {
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, public authenticationService: AuthenticationService, private libroService: LibroService) {
     this.titoloPagina = '';
     this.navigationSubscription = this.router.events.subscribe((e:any) => {
       if( e instanceof NavigationEnd) {

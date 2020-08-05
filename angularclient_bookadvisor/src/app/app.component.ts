@@ -17,13 +17,13 @@ import {BookFormComponent} from "./book/book-form/book-form.component";
 export class AppComponent {
   title = 'BookAdvisor';
   private submitted: boolean = false;
-  private generi : string[] = [];
+  generi : string[] = [];
   updateGenresSubscription = null;
   titleSearchForm = new FormGroup({
       titolo: new FormControl('', [Validators.required])
     });
 
-  constructor(private cookieService: CookieService, private http: HttpClient, private authenticationService: AuthenticationService, private router: Router, private genreService: GenreService) {
+  constructor(private cookieService: CookieService, private http: HttpClient, public authenticationService: AuthenticationService, private router: Router, private genreService: GenreService) {
     this.initialise();
   }
   async initialise() {

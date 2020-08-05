@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,6 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().addFilterBefore(new StatelessCsrfFilter(), CsrfFilter.class)
                 .headers(headers -> headers.disable())
                 .authorizeRequests()
+                .mvcMatchers(HttpMethod.GET, "/").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/new-user").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/genres").permitAll()
                 .mvcMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/authors").permitAll()
@@ -63,6 +66,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .and().addFilter(new JwtTokenFilter(authenticationManager(), jwtTokenProvider))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/ui/**","/index.html", "/assets/images/**", "/favicon.ico");
     }
 
     @Bean

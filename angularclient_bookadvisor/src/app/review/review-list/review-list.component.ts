@@ -15,9 +15,9 @@ export class ReviewListComponent implements OnInit {
   @Input() type: string;
   @Output() changeToReviewList: EventEmitter<void> = new EventEmitter<void>();
   @Output() newReview: EventEmitter<void> = new EventEmitter<void>();
-  private recensioni: Recensione[];
-  private add: boolean = false;
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private reviewService: RecensioneService, private authenticationService: AuthenticationService) { }
+  recensioni: Recensione[];
+  add: boolean = false;
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private reviewService: RecensioneService, public authenticationService: AuthenticationService) { }
 
   async ngOnInit() {
     this.recensioni = [];

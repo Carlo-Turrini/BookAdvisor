@@ -15,15 +15,15 @@ import {AuthorService} from "../core/services/author.service";
 })
 export class PhotoUploadComponent implements OnInit {
 
-  @Input() private tipo: string;
+  @Input() tipo: string;
   @Input() private id: number;
   private submitted = true;
-  @Input() private photoUrl: any;
+  @Input() photoUrl: any;
   private photo$: Observable<any>;
-  private message: string;
-  private messageChanged: boolean = false;
+  message: string;
+  messageChanged: boolean = false;
   private selectedFile: any;
-  private photoChanged: boolean = false;
+  photoChanged: boolean = false;
   @Output() private uploaded: EventEmitter<any> = new EventEmitter<any>();
   private photoForm  = new FormGroup( {
     photo: new FormControl('', Validators.required)

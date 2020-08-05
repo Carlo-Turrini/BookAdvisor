@@ -20,10 +20,10 @@ export class UpdateLibroComponent implements OnInit {
   @Output() updated: EventEmitter<LibroForm> = new EventEmitter<LibroForm>();
   @Input() libro: Libro;
   book$: Observable<Libro>;
-  private authors: AuthorOfBook[] = [];
-  private genres: string[] = [];
-  private addAuthor: boolean = false;
-  private addGenre: boolean = false;
+  authors: AuthorOfBook[] = [];
+  genres: string[] = [];
+  addAuthor: boolean = false;
+  addGenre: boolean = false;
   submitted:boolean = false;
   bookForm = new FormGroup({
     titolo: new FormControl('',[Validators.required, Validators.minLength(1), Validators.maxLength(128)]),
