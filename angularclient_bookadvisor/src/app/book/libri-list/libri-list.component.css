@@ -1,0 +1,16 @@
+.container {
+  background-color: rgba(255, 255, 255, 0.85);
+}
+.card {
+  background-color: rgba(255,255,255,0.6);
+}
+
+.card-img-top {
+  display: block;
+  position:center;
+  max-height: 180px;
+  object-fit: cover;
+}
+
+
+

@@ -1,0 +1,63 @@
+<div *ngIf="!add">
+  <div class="row">
+    <div class="col-9">
+      <h1 class="h1 pt-3">Classifica</h1>
+    </div>
+    <div class="col-3" *ngIf="authenticationService.sameUserOrAdminAuth(userID)">
+      <button type="button" class="btn btn-info btn-block mt-3" (click)="addRank()" data-cy="newRankButton"><i class="fa fa-plus"></i> Aggiungi</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row p-3" *ngFor="let bookRank of bookRanking" data-cy="bookInRank">
+    <div class="modal fade" id="deleteBookRankModal{{bookRank.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteBookRankModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteBookRankModalLabel">Eliminazione</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="lead">Confermi di voler eliminare il libro dalla classifica?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-cy="annulla">Annulla</button>
+            <a class="btn btn-danger" (click)="deleteBookFromRank(bookRank.id)" data-dismiss="modal" data-cy="conferma">Conferma</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="width:100%">
+      <div class="row no-gutters">
+        <div class="col-1">
+          <p class="h4 p-3" data-cy="rank">{{bookRank.bookRank}}. </p>
+        </div>
+        <div class="col-2 p-3">
+          <img [src]="bookRank.bookCoverPhoto" class="card-img recensione-image" style="max-width: 100px">
+        </div>
+        <div class="col-9">
+          <div class="card-body">
+            <div class="row mb-4">
+              <div class="col-1" *ngIf="authenticationService.sameUserOrAdminAuth(userID)">
+                <button type="button" class="btn btn-light" data-toggle="modal" [attr.data-target]="'#deleteBookRankModal'+bookRank.id" title="elimina" data-cy="eliminaRank">
+                  <i class="fa fa-trash fa-lg"></i>
+                </button>
+              </div>
+              <div class="col-6">
+                <h5 class="card-title mb-0" data-cy="title">
+                  {{bookRank.bookTitle}}
+                </h5>
+                <p class="card-text"><small class="text-muted">di <span *ngFor="let author of bookRank.bookAuthors"><a [routerLink]="['/authors/' + author.id]">{{author.authorsFullname}}</a>  </span></small></p>
+              </div>
+            </div>
+            <div class="col-3 offset-9">
+              <button type="button" class="btn btn-info btn-block" [routerLink]="['/libro/' + bookRank.bookID]">Scopri</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-book-ranking-form [userID] = "userID" (added) = "addedHandler($event)" (goBack)="add=false" *ngIf="add"></app-book-ranking-form>

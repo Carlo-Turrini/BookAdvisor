@@ -1,0 +1,97 @@
+<div class="container" *ngIf="!addGenre && !addAuthor">
+  <h1 class="display-4 pt-3">Modifica le informazioni</h1>
+  <hr>
+  <form [formGroup]="bookForm" (ngSubmit)="onSubmit()" data-cy="updateBookForm">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-9">
+          <label for="autori">Autori*:</label>
+        </div>
+        <div class="col-3">
+          <button class="btn btn-info btn-block mb-3" (click)="newAuthor()"><i class="fa fa-plus fa-lg"></i> Autore</button>
+        </div>
+      </div>
+      <select multiple size="4" id="autori" class="custom-select" [class.is-invalid]="isInvalidAndDirty('autori')" formControlName="autori" data-cy="autori">
+        <option [disabled]="true">Scegli autori</option>
+        <option *ngFor="let author of authors" [ngValue]="author">
+          {{author.authorsFullname}}
+        </option>
+      </select>
+      <div class="invalid-feedback" *ngIf="hasError('autori', 'required')">Inserire almeno un autore!</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-6 mb-3">
+        <label for="titolo">
+          Titolo*:
+        </label>
+        <input type="text" id="titolo" formControlName="titolo" class="form-control" [class.is-invalid]="isInvalidAndDirty('titolo')" data-cy="titolo">
+        <div class="invalid-feedback" *ngIf="hasError('titolo', 'required')">Inserire un titolo!</div>
+        <div class="invalid-feedback" *ngIf="hasError('titolo', 'minlength')">Il titolo deve avere almeno 1 carattere!</div>
+        <div class="invalid-feedback" *ngIf="hasError('titolo', 'maxlength')">Il titolo deve avere al massimo 128 caratteri!</div>
+        <div class="invalid-feedback" *ngIf="hasError('titolo', 'titoloTaken')">Titolo già in uso!</div>
+      </div>
+      <div class="custom-control custom-switch col-6 mb-3">
+        <input type="checkbox" class="custom-control-input" id="sagaSwitch" formControlName="saga" [defaultChecked]="false" [class.is-invalid]="isInvalidAndDirty('saga')" (change)="this.clearSagaFields($event)">
+        <label for="sagaSwitch" class="custom-control-label">Appartiene a una saga?</label>
+      </div>
+    </div>
+    <div class="form-row" *ngIf="bookForm.value.saga" >
+      <div class="form-group col-6 mb-3">
+        <label for="titoloSaga">Titolo della saga:</label>
+        <input type="text" class="form-control" id="titoloSaga" formControlName="titoloSaga" [class.is-invalid]="isInvalidAndDirty('titoloSaga')">
+        <div class="invalid-feedback" *ngIf="hasError('titoloSaga', 'maxlength')">Il titolo della saga non può contenere più di 64 caratteri!</div>
+      </div>
+      <div class="form-group col-6 mb-3">
+        <label for="numInSaga">N. nella serie:</label>
+        <input type="number" class="form-control" id="numInSaga" formControlName="numInSaga" [class.is-invalid]="isInvalidAndDirty('numInSaga')">
+        <div class="invalid-feedback" *ngIf="hasError('numInSaga', 'max')">La saga non può avere più di 99 volumi!</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-3 mb-3">
+        <label for="pagine">N. pagine*:</label>
+        <input id="pagine" formControlName="pagine" type="number" class="form-control" [class.is-invalid]="isInvalidAndDirty('pagine')">
+        <div class="invalid-feedback" *ngIf="hasError('pagine', 'required')">Inserire un numero di pagine!</div>
+        <div class="invalid-feedback" *ngIf="hasError('pagine', 'min')">Il libro deve avere almeno 1 pagina!</div>
+        <div class="invalid-feedback" *ngIf="hasError('pagine', 'max')">Il libro non può avere più di 9999 pagine!</div>
+      </div>
+      <div class="form-group col-3 mb-3">
+        <label for="annoPubblicazione">Anno di pubblicazione*:</label>
+        <input id="annoPubblicazione" formControlName="annoPubblicazione" type="number" class="form-control" [class.is-invalid]="isInvalidAndDirty('annoPubblicazione')">
+        <div class="invalid-feedback" *ngIf="hasError('annoPubblicazione', 'required')">Inserire l'anno di prima pubblicazione!</div>
+        <div class="invalid-feedback" *ngIf="hasError('annoPubblicazione', 'min')">Il libro non può essere scritto prima dell'anno 0</div>
+        <div class="invalid-feedback" *ngIf="hasError('annoPubblicazione', 'max')">Il libro non può essere scritto dopo l'anno corrente</div>
+      </div>
+      <div class="form-group col-6 mb-3">
+        <div class="row">
+          <div class="col-8">
+            <label for="generi">Generi*:</label>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-info btn-block mb-3" (click)="newGenre()"><i class="fa fa-plus fa-lg"></i> Genere</button>
+          </div>
+        </div>
+        <select multiple size="4" id="generi" class="custom-select" [class.is-invalid]="isInvalidAndDirty('generi')" formControlName="generi" data-cy="generi">
+          <option [disabled]="true">Scegli genere</option>
+          <option *ngFor="let genere of genres" [value]="genere">
+            {{genere}}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="hasError('generi', 'required')">Seleziona almeno un genere!</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="sinossi">Sinossi*:</label>
+      <textarea id="sinossi" class="form-control" formControlName="sinossi" rows="10" [class.is-invalid]="isInvalidAndDirty('sinossi')"></textarea>
+      <div class="invalid-feedback" *ngIf="hasError('sinossi', 'required')">Inserire la sinossi!</div>
+      <div class="invalid-feedback" *ngIf="hasError('sinossi', 'minlength')">La sinossi deve avere almeno 1 carattere!</div>
+      <div class="invalid-feedback" *ngIf="hasError('sinossi', 'maxlength')">La sinossi deve avere al massimo 2048 caratteri!</div>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3" [disabled]="!bookForm.valid">Submit</button>
+  </form>
+</div>
+<div class="container" *ngIf="addAuthor || addGenre">
+  <app-author-form [from]="'bookForm'" (goBack)="backToBookForm()" (authorSubmitted)="authorAdded($event)" *ngIf="addAuthor"></app-author-form>
+  <app-genre-form (genreSubmitted)="genreAdded($event)" (backToBookForm)="backToBookForm()" *ngIf="addGenre"></app-genre-form>
+</div>
+

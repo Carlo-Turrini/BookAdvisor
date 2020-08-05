@@ -37,18 +37,18 @@ build/
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
-/out-tsc
+/angularclient_bookadvisor/dist
+/angularclient_bookadvisor/tmp
+/angularclient_bookadvisor/out-tsc
 # Only exists if Bazel was run
-/bazel-out
+/angularclient_bookadvisor/bazel-out
 
 # dependencies
-/node_modules
+/angularclient_bookadvisor/node_modules
 
 # profiling files
-chrome-profiler-events*.json
-speed-measure-plugin*.json
+/angularclient_bookadvisor/chrome-profiler-events*.json
+/angularclient_bookadvisor/speed-measure-plugin*.json
 
 # IDEs and editors
 /.idea
@@ -66,15 +66,15 @@ speed-measure-plugin*.json
 .history/*
 
 # misc
-/.nyc_output
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
+/angularclient_bookadvisor/.nyc_output
+/angularclient_bookadvisor/.sass-cache
+/angularclient_bookadvisor/connect.lock
+/angularclient_bookadvisor/coverage
+/angularclient_bookadvisor/libpeerconnection.log
+/angularclient_bookadvisor/npm-debug.log
+/angularclient_bookadvisor/yarn-error.log
+/angularclient_bookadvisor/testem.log
+/angularclient_bookadvisor/typings
 
 # System Files
 .DS_Store

@@ -1,0 +1,118 @@
+<style>
+  .rounded-circle.profilePhoto {
+    width:230px;
+    height:230px;
+    object-fit: cover;
+  }
+</style>
+
+<div class="modal fade" id="deleteAuthorModal" tabindex="-1" role="dialog" aria-labelledby="deleteAuthorModalLabel" aria-hidden="true" data-cy="deleteAuthorModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteAuthorModalLabel">Eliminazione</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Confermi di voler eliminare l'autore?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-cy="annulla">Annulla</button>
+        <a class="btn btn-danger" (click)="deleteAuthor()" data-dismiss="modal" data-cy="conferma">Conferma</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="!update && !upload">
+  <div class="row p-3">
+    <div class="col-3" *ngIf="author.authorsPhoto!=null">
+      <img [src]="this.author.authorsPhoto" class="rounded-circle profilePhoto" alt="Foto profilo">
+    </div>
+    <div class="col-9">
+      <div class="row">
+        <div class="col-10 pl-0">
+          <h1 class="display-4" data-cy="fullname">{{author.authorsFullname}}</h1>
+          <p class="lead text-muted">{{author.birthYear}}</p>
+          <p class="lead text-muted" *ngIf="author.deathYear != null"> - {{author.deathYear}}</p>
+        </div>
+        <div class="col-2 pr-0" *ngIf="authenticationService.logged && authenticationService.adminAuth()">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteAuthorModal" title="elimina" data-cy="eliminaAutore">
+              <i class="fa fa-trash fa-lg"></i>
+            </button>
+            <div class="btn-group" role="group">
+              <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="modifica" data-cy="updateDropdown">
+                  <i class="fa fa-pencil-alt fa-lg"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="modifyButton">
+                  <button class="dropdown-item" (click)="updateAuthor()" data-cy="updateAuthor">Modifica profilo</button>
+                  <button class="dropdown-item" (click)="uploadPhoto()" data-cy="updatePhoto">Modifica foto autore</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <p class="lead"><strong>Biografia:</strong> {{author.biography}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h1 class="h1">Libri di {{author.authorsFullname}}</h1>
+      <hr>
+      <div class="row row-cols-1 row-cols-3">
+        <div class="col mb-3" *ngFor="let libro of booksByAuthor">
+          <div class="card mb-3">
+            <img [src]="libro.coverImage" class="card-img-top">
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-12">
+                  <h5 class="card-title mb-0">
+                    {{libro.titolo}}
+                  </h5>
+                  <p class="card-text mb-0">
+                    di <span *ngFor="let author of libro.autori"><a [routerLink]="['/authors/'+ author.id]">{{author.authorsFullname}}</a>  </span>
+                  </p>
+                  <p class="card-text"><small class="text-muted"><span *ngFor="let genre of libro.generi">{{genre}} </span></small></p>
+                  <div class="row">
+                    <div class="col-12">
+                      <bar-rating [(rate)]="libro.overallRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <button type="button" class="btn btn-info btn-block" [routerLink]="['/libro/' + libro.id]">Scopri</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="update || upload">
+  <div class="row">
+    <div class="col-3">
+      <div class="nav flex-column nav-pills p-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"  role="tab" aria-controls="v-pills-profile" (click)="resetUpdateUpload()">Profilo</a>
+        <a class="nav-link" id="v-pills-update-tab" data-toggle="pill" role="tab" [class.active]="update" aria-controls="v-pills-update" (click)="updateAuthor()">Modifica informazioni</a>
+        <a class="nav-link" id="v-pills-upload-tab" data-toggle="pill" role="tab" [class.active]="upload" aria-controls="v-pills-upload" (click)="uploadPhoto()">Modifica foto</a>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <app-photo-upload  [tipo]="'autore'" [id]="author.id" [photoUrl]="author.authorsPhoto" (uploaded)="uploadedHandler($event)" *ngIf="upload"></app-photo-upload>
+      <app-author-update *ngIf="update" [author]="author" (updated)="updatedHandler($event)"></app-author-update>
+    </div>
+  </div>
+</div>

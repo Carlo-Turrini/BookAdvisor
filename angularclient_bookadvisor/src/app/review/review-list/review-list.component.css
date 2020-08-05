@@ -1,0 +1,11 @@
+a.myTitle {
+  color: #000000;
+}
+
+a.myTitle:hover {
+  color: #888888;
+}
+
+.card {
+  background-color: rgba(255,255,255,0.6);
+}

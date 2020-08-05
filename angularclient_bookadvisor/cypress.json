@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://localhost:4200",
+  "viewportHeight": 1000,
+  "viewportWidth": 1000,
+  "video": true
+}

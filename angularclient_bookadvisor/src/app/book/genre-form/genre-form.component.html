@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-9">
+    <h1 class="display-4 pt-3">Nuovo genere</h1>
+  </div>
+  <div class="col-3">
+    <button class="btn btn-info btn-block mt-3" type="button" (click)="backToBookForm.emit()">Indietro</button>
+  </div>
+</div>
+<hr>
+<form [formGroup]="genreForm" (ngSubmit)="onSubmit()" data-cy="genreForm">
+  <div class="form-group">
+    <label for="gen">Genere*:</label>
+    <input type = "text" id="gen" class="form-control" formControlName="genre" rows="10" [class.is-invalid]="isInvalidAndDirty('genre')" data-cy="genere">
+    <div class="invalid-feedback" *ngIf="hasError('genre','required')">
+      Inserire una recensione!
+    </div>
+    <div class="invalid-feedback" *ngIf="hasError('genre','minlength')">
+      Il genere non può contenere meno di 1 carattere!
+    </div>
+    <div class="invalid-feedback" *ngIf="hasError('genre','maxlength')">
+      Il genere non può contenere più di 20 caratteri!
+    </div>
+    <div class="invalid-feedback" *ngIf="hasError('genre', 'genreTaken')">
+      Genere già in uso!
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary mb-3" [disabled]="!genreForm.valid" >Submit</button>
+</form>
+

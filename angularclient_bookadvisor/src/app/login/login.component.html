@@ -1,0 +1,46 @@
+<div class="container">
+  <h1 class="display-4 pt-3">Login</h1>
+  <hr>
+  <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="messageChanged" data-cy="message">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="close" (click)="resetMessageChanged()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" data-cy="loginForm">
+    <div class="form-group">
+      <label for="username">
+        Username*:
+      </label>
+      <input type="text" id="username" formControlName="username" class="form-control" [class.is-invalid]="isInvalidAndDirty('username')" data-cy="username">
+      <div class="invalid-feedback" *ngIf="hasError('username', 'required')">
+        Inserire uno username!
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('username', 'minlength')">
+        Lo username deve avere almeno 5 caratteri!
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('username', 'maxlength')">
+        Lo username non può avere più di 24 caratteri!
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">
+        Password*:
+      </label>
+      <input type="password" id="password" formControlName="password" class="form-control" [class.is-invalid]="isInvalidAndDirty('password')" data-cy="password">
+      <div class="invalid-feedback" *ngIf="hasError('password', 'required')">
+        Inserire una password!
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('password', 'minlength')">
+        La password deve avere almeno 8 caratteri!
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('username', 'maxlength')">
+        La password non può avere più di 64 caratteri!
+      </div>
+    </div>
+    <button type="submit" [disabled]="!loginForm.valid" class="btn btn-info">Log in</button>
+  </form>
+  <div class="col-md-3 offset-md-9 pb-3">
+    <button class="btn-sm btn-outline-info btn-block" [routerLink]="['/new-user']" data-cy="registration">Vuoi registrarti?</button>
+  </div>
+</div>

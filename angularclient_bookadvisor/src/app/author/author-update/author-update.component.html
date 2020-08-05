@@ -1,0 +1,38 @@
+<div class="container">
+  <h1 class="display-4 pt-3">Modifica l'autore</h1>
+  <hr>
+  <form [formGroup]="authorForm" (ngSubmit)="onSubmit()" data-cy="updateForm">
+    <div class="form-group">
+      <label for="authorsFullname">
+        Nome completo*:
+      </label>
+      <input type="text" id="authorsFullname" formControlName="authorsFullname" class="form-control" [class.is-invalid]="isInvalidAndDirty('authorsFullname')" data-cy="fullname">
+      <div class="invalid-feedback" *ngIf="hasError('authorsFullname', 'required')">Inserire il nome dell'autore!</div>
+      <div class="invalid-feedback" *ngIf="hasError('authorsFullname', 'minlength')">Il nome deve contenere almeno 3 caratteri!</div>
+      <div class="invalid-feedback" *ngIf="hasError('authorsFullname', 'maxlength')">Il nome non può contenere più di 50 caratteri!</div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-6 mb-3">
+        <label for="birth">Anno di nascita*:</label>
+        <input id="birth" formControlName="birthYear" type="number" class="form-control" [class.is-invalid]="isInvalidAndDirty('birthYear')">
+        <div class="invalid-feedback" *ngIf="hasError('birthYear', 'required')">Inserire un anno di nascita!</div>
+        <div class="invalid-feedback" *ngIf="hasError('birthYear', 'min')">L'autore non può essere nato prima del 2000BC (-2000)!</div>
+        <div class="invalid-feedback" *ngIf="hasError('birthYear', 'max')">L'autore non può essere nato dopo il 9998DC!</div>
+      </div>
+      <div class="form-group col-6 mb-3">
+        <label for="death">Anno di morte:</label>
+        <input id="death" formControlName="deathYear" type="number" class="form-control" [class.is-invalid]="isInvalidAndDirty('deathYear')">
+        <div class="invalid-feedback" *ngIf="hasError('deathYear', 'min')">L'autore non può essere morto prima del 1999BC (-1999)!</div>
+        <div class="invalid-feedback" *ngIf="hasError('deathYear', 'max')">L'autore non può essere morto dopo il 9999DC!</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="biblio">Biografia*:</label>
+      <textarea id="biblio" class="form-control" formControlName="biography" rows="10" [class.is-invalid]="isInvalidAndDirty('biography')"></textarea>
+      <div class="invalid-feedback" *ngIf="hasError('biography', 'required')">Inserire la biografia!</div>
+      <div class="invalid-feedback" *ngIf="hasError('biography', 'minlength')">La biografia deve avere almeno 1 carattere!</div>
+      <div class="invalid-feedback" *ngIf="hasError('biography', 'maxlength')">La biografia deve avere al massimo 4000 caratteri!</div>
+    </div>
+    <button type="submit" class="btn btn-primary mb-3" [disabled]="!authorForm.valid">Submit</button>
+  </form>
+</div>

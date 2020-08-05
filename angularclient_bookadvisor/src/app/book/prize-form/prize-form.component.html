@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-9">
+    <h1 class="display-4 pt-3">Nuovo premio</h1>
+  </div>
+  <div class="col-3">
+    <button type="button" class="btn btn-info btn-block mt-3" (click)="goBack.emit()">Indietro</button>
+  </div>
+</div>
+<hr>
+<form [formGroup]="prizeForm" (ngSubmit)="onSubmit()" data-cy="prizeForm">
+  <div class="form-group">
+    <label for="prizeName">
+      Premio*:
+    </label>
+    <input type="text" id="prizeName" formControlName="prizeName" class="form-control" [class.is-invalid]="isInvalidAndDirty('prizeName')" data-cy="prizeName">
+    <div class="invalid-feedback" *ngIf="hasError('prizeName', 'required')">Inserire il nome del premio!</div>
+    <div class="invalid-feedback" *ngIf="hasError('prizeName', 'minlength')">Il premio deve contenere almeno 1 caratteri!</div>
+    <div class="invalid-feedback" *ngIf="hasError('prizeName', 'maxlength')">Il premio non può contenere più di 64 caratteri!</div>
+    <div class="invalid-feedback" *ngIf="hasError('prizeName', 'prizeAssigned')">Questo premio è già assegnato al libro!</div>
+  </div>
+  <div class="form-group col-6 p-0 mb-3">
+    <label for="yearAwarded">Anno di assegnazione*:</label>
+    <input id="yearAwarded" formControlName="yearAwarded" type="number" class="form-control" [class.is-invalid]="isInvalidAndDirty('yearAwarded')" data-cy="yearAwarded">
+    <div class="invalid-feedback" *ngIf="hasError('yearAwarded', 'required')">Inserire un anno di assegnazione!</div>
+    <div class="invalid-feedback" *ngIf="hasError('yearAwarded', 'min')">Il premio non può essere stato assegnato prima del 0 DC!</div>
+    <div class="invalid-feedback" *ngIf="hasError('yearAwarded', 'max')">Il premio non può essere stato assegnato dopo il 9999 DC!</div>
+  </div>
+  <button type="submit" class="btn btn-primary mb-3" [disabled]="!prizeForm.valid">Submit</button>
+</form>
+
+

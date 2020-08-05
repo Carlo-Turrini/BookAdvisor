@@ -1,0 +1,156 @@
+<div class="modal fade" id="deleteLibroModal" tabindex="-1" role="dialog" aria-labelledby="deleteLibroModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteLibroModalLabel">Cancellazione</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Confermi di voler cancellare il libro?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-cy="annulla">Annulla</button>
+        <a class="btn btn-danger" (click)="deleteLibro()" data-dismiss="modal" data-cy="conferma">Conferma</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="!update && !upload">
+  <div *ngIf="!recensione">
+    <div class="row">
+      <div class="col-6 offset-3 pt-3">
+        <img [src]="[libro.copertina]" class="bookImage">
+        <h1 class="display-4 text-center" data-cy="titolo">{{libro.titolo}}</h1>
+        <p class="lead text-center text-muted" *ngIf="libro.saga">({{libro.titoloSaga}} #{{libro.numInSaga}})</p>
+        <p class="lead text-center" data-cy="autori">
+          di <span *ngFor="let author of libro.autori"><a [routerLink]="['/authors/'+ author.id]" data-cy="autore">{{author.authorsFullname}}</a>  </span>
+        </p>
+        <hr>
+        <div>
+          <div class="col-4 offset-4">
+            <bar-rating [(rate)]="libro.overallRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+          </div>
+          <p class="lead text-center">{{libro.overallRating}}</p>
+        </div>
+        <hr>
+        <div class="text-center" *ngIf="authenticationService.logged">
+          <select class="custom-select" (change)="updateMyBooks($event)" data-cy="myBooks">
+            <option disabled  [selected]="libro.bookShelf==null">--Seleziona uno scaffale--</option>
+            <option *ngFor="let s of shelves" [value]="s" [selected]="s==libro.bookShelf">{{s}}</option>
+          </select>
+          <hr>
+        </div>
+      </div>
+      <div class="col-2 pt-3" *ngIf="authenticationService.adminAuth()">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteLibroModal" title="elimina" data-cy="elimina">
+            <i class="fa fa-trash fa-lg"></i>
+          </button>
+          <div class="btn-group" role="group">
+            <div class="dropdown">
+              <button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="modifica" data-cy="modifyDropdown">
+                <i class="fa fa-pencil-alt fa-lg"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="modifyButton">
+                <button class="dropdown-item" (click)="updateLibro()" data-cy="updateBook">Modifica libro</button>
+                <button class="dropdown-item" (click)="uploadPhoto()" data-cy="updatePhoto">Modifica copertina</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <p class="lead"><strong>Anno di pubblicazione:</strong> {{libro.annoPubblicazione}}</p>
+        <p class="lead"><strong>Pagine:</strong> {{libro.pagine}}</p>
+        <p class="lead" data-cy="generi"><strong>Generi: </strong><span *ngFor="let genre of libro.generi" data-cy="genere">{{genre}} </span></p>
+        <p class="lead"><strong>Sinossi:</strong></p>
+        <p class="lead">{{libro.sinossi}}</p>
+        <h4 class="h4">Valutazioni: </h4>
+        <hr>
+        <div class="row pl-3">
+          <p class="lead mr-3">Complessivo: </p>
+          <bar-rating [(rate)]="libro.overallRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+          <p class="ml-3 lead">{{libro.overallRating}}</p>
+        </div>
+        <div class="row pl-3">
+          <p class="lead mr-3">Qualità: </p>
+          <bar-rating [(rate)]="libro.overallWritingQualityRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+          <p class="ml-3 lead">{{libro.overallWritingQualityRating}}</p>
+        </div>
+        <div class="row pl-3">
+          <p class="lead mr-3">Originalità: </p>
+          <bar-rating [(rate)]="libro.overallOriginalityRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+          <p class="ml-3 lead">{{libro.overallOriginalityRating}}</p>
+        </div>
+        <div class="row pl-3">
+          <p class="lead mr-3">Page-turner: </p>
+          <bar-rating [(rate)]="libro.overallPageTurnerRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+          <p class="ml-3 lead">{{libro.overallPageTurnerRating}}</p>
+        </div>
+        <hr>
+      </div>
+    </div>
+    <div *ngIf="libro.id != undefined && !reinit">
+      <app-prize-list [bookID]="libro.id"></app-prize-list>
+    </div>
+    <div class="row" *ngIf="libro.saga">
+      <div class="col-12">
+        <h1 class="h1">Altri in {{libro.titoloSaga}}</h1>
+        <hr>
+        <div class="row row-cols-1 row-cols-3">
+          <div class="col mb-3" *ngFor="let libroSaga of altriLibriSaga">
+            <div class="card mb-3">
+              <img [src]="libroSaga.coverImage" class="card-img-top">
+              <div class="card-body">
+                <div class="row mb-4">
+                  <div class="col-12">
+                    <h5 class="card-title mb-0">
+                      {{libroSaga.titolo}}
+                    </h5>
+                    <p class="card-text mb-0">
+                      di <span *ngFor="let author of libroSaga.autori"><a [routerLink]="['/authors/'+ author.id]">{{author.authorsFullname}}</a>  </span>
+                    </p>
+                    <p class="card-text"><small class="text-muted"><span *ngFor="let genre of libroSaga.generi">{{genre}} </span></small></p>
+                    <div class="row">
+                      <div class="col-12">
+                        <bar-rating [(rate)]="libroSaga.overallRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <button type="button" class="btn btn-info btn-block" [routerLink]="['/libro/' + libroSaga.id]">Scopri</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="libro.id != undefined">
+    <app-review-list [type]="'book'" [identifier]="libro.id" (newReview)="addReview()" (changeToReviewList)="reviewSubmitted()" ></app-review-list>
+  </div>
+</div>
+
+<div class="container" *ngIf="update || upload">
+  <div class="row">
+    <div class="col-3">
+      <div class="nav flex-column nav-pills p-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"  role="tab" aria-controls="v-pills-profile" (click)="resetUpdateUpload()">Libro</a>
+        <a class="nav-link" id="v-pills-update-tab" data-toggle="pill" role="tab" [class.active]="update" aria-controls="v-pills-update" (click)="updateLibro()">Modifica libro</a>
+        <a class="nav-link" id="v-pills-upload-tab" data-toggle="pill" role="tab" [class.active]="upload" aria-controls="v-pills-upload" (click)="uploadPhoto()">Modifica foto</a>
+      </div>
+    </div>
+    <div class="col-9">
+      <app-photo-upload  [tipo]="'copertina'" [id]="libro.id" [photoUrl]="libro.copertina" (uploaded)="uploadedHandler($event)" *ngIf="upload"></app-photo-upload>
+      <app-update-libro *ngIf="update" [libro]="libro" (updated)="updatedHandler($event)"></app-update-libro>
+    </div>
+  </div>
+</div>

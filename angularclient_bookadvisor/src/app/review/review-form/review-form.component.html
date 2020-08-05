@@ -1,0 +1,42 @@
+
+<h1 class="display-4 pt-3">Nuova recensione</h1>
+<hr>
+<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" data-cy="reviewForm">
+  <div class="form-group">
+    <label for="rating">Rating*: </label>
+    <bar-rating id="rating" formControlName="rating" [max]="5"  [showText]="true" [titles]="['Insufficiente','Sufficiente','Buono','Distinto','Ottimo']" [theme]="'stars'" data-cy="rating"></bar-rating>
+  </div>
+  <div class="form-group">
+    <label for="originalityRating">Originalità*: </label>
+    <bar-rating id="originalityRating" formControlName="originalityRating" [max]="5"  [showText]="true" [titles]="['Insufficiente','Sufficiente','Buono','Distinto','Ottimo']" [theme]="'stars'" data-cy="originalityRating"></bar-rating>
+  </div>
+  <div class="form-group">
+    <label for="writingQualityRating">Qualità della scrittura*: </label>
+    <bar-rating id="writingQualityRating" formControlName="writingQualityRating" [max]="5"  [showText]="true" [titles]="['Insufficiente','Sufficiente','Buono','Distinto','Ottimo']" [theme]="'stars'" data-cy="writingQualityRating"></bar-rating>
+  </div>
+  <div class="form-group">
+    <label for="pageTurnerRating">Page-turner*: </label>
+    <bar-rating id="pageTurnerRating" formControlName="pageTurnerRating" [max]="5"  [showText]="true" [titles]="['Insufficiente','Sufficiente','Buono','Distinto','Ottimo']" [theme]="'stars'" data-cy="pageTurnerRating"></bar-rating>
+  </div>
+  <div class="form-group">
+    <div class="custom-control custom-switch col-6 mb-3">
+      <input type="checkbox" class="custom-control-input" id="containsSpoilers" formControlName="containsSpoilers" [defaultChecked]="false" [class.is-invalid]="isInvalidAndDirty('containsSpoilers')" data-cy="spoilers">
+      <label for="containsSpoilers" class="custom-control-label">Contiene spoiler?</label>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="testo">Recensione*:</label>
+    <textarea id="testo" class="form-control" formControlName="testo" rows="10" [class.is-invalid]="isInvalidAndDirty('testo')" data-cy="testo"></textarea>
+    <div class="invalid-feedback" *ngIf="hasError('testo','required')">
+      Inserire una recensione!
+    </div>
+    <div class="invalid-feedback" *ngIf="hasError('testo','minlength')">
+      La recensione non può contenere meno di 1 carattere!
+    </div>
+    <div class="invalid-feedback" *ngIf="hasError('testo','maxlength')">
+      La recensione non può contenere più di 2048 caratteri!
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary mb-3" [disabled]="!reviewForm.valid" >Submit</button>
+</form>
+

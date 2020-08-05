@@ -1,0 +1,84 @@
+<div class="modal fade" id="deleteUtenteModal" tabindex="-1" role="dialog" aria-labelledby="deleteUtenteModalLabel" aria-hidden="true" data-cy="userDeleteModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUtenteModalLabel">Eliminazione</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="lead">Confermi di voler eliminare il profilo?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" data-cy="annulla">Annulla</button>
+        <a class="btn btn-danger" (click)="deleteUser()" data-dismiss="modal" data-cy="conferma">Conferma</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container" *ngIf="!update && !upload">
+  <div class="row p-3">
+    <div class="col-3" *ngIf="utente.profilePhoto!=null">
+      <img [src]="utente.profilePhoto" class="rounded-circle profilePhoto" alt="Foto profilo">
+    </div>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-10 pl-0">
+          <h1 class="display-4">{{utente.name}} {{utente.surname}}</h1>
+          <h4 class="lead"> @{{utente.username}}</h4>
+        </div>
+        <div class="col-md-2 pr-0" *ngIf="authenticationService.sameUserOrAdminAuth(utente.id)">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-light" data-toggle="modal" data-target="#deleteUtenteModal" title="elimina" data-cy="delete">
+              <i class="fa fa-trash fa-lg"></i>
+            </button>
+            <div class="btn-group" role="group">
+              <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="modifyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="modifica" data-cy="updateDropdown">
+                  <i class="fa fa-pencil-alt fa-lg"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="modifyButton">
+                  <button class="dropdown-item" (click)="updateUser()" data-cy="updateUser">Modifica profilo</button>
+                  <button class="dropdown-item" (click)="uploadPhoto()" data-cy="updatePhoto">Modifica foto profilo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <p class="lead"><strong>Email:</strong> <span data-cy="email">{{utente.email}}</span> </p>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <p class="lead"><strong>Descrizione:</strong> {{utente.description}}</p>
+    </div>
+  </div>
+  <div *ngIf="utente.id != undefined">
+    <app-review-list [type]="'user'" [identifier]="utente.id"></app-review-list>
+  </div>
+  <div *ngIf="utente.id != undefined && !(update || upload) && !reinit">
+    <app-my-books-list #myBooksList [userID]="utente.id" (rankModified)="modifiedRank($event)"></app-my-books-list>
+    <app-book-ranking [userID]="utente.id" [isRankModified]="isRankModified" (updatedRank)="updatedRank()"></app-book-ranking>
+  </div>
+</div>
+
+<div class="container" *ngIf="update || upload">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="nav flex-column nav-pills p-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill"  role="tab" aria-controls="v-pills-profile" (click)="resetUpdateUpload()">Profilo</a>
+        <a class="nav-link" id="v-pills-update-tab" data-toggle="pill" role="tab" [class.active]="update" aria-controls="v-pills-update" (click)="updateUser()">Modifica informazioni</a>
+        <a class="nav-link" id="v-pills-upload-tab" data-toggle="pill" role="tab" [class.active]="upload" aria-controls="v-pills-upload" (click)="uploadPhoto()">Modifica foto</a>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <app-photo-upload  [tipo]="'profilo'" [id]="utente.id" [photoUrl]="utente.profilePhoto" (uploaded)="uploadedHandler($event)" *ngIf="upload"></app-photo-upload>
+      <app-utente-update *ngIf="update" [utente]="utente" (updated)="updatedHandler($event)"></app-utente-update>
+    </div>
+  </div>
+</div>
+

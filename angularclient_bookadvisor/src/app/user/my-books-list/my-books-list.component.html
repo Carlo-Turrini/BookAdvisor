@@ -1,0 +1,180 @@
+<h1 class="h1 pt-3">I miei libri</h1>
+<hr>
+<h3 class="h3">Ho letto</h3>
+<hr>
+<div class="row row-cols-3">
+  <div class="col mb-3" *ngFor="let book of myBooksRead" data-cy="myBooksRead">
+    <div class="modal fade" id="deleteMyBooksReadModal{{book.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteMyBooksReadModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteMyBooksReadModalLabel">Eliminazione</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="lead">Confermi di voler eliminare il libro dalla dalla lista?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-cy=annulla>Annulla</button>
+            <a class="btn btn-danger" (click)="deleteMyBooks(book.bookID, book.shelf)" data-dismiss="modal" data-cy="conferma">Conferma</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <img [src]="book.coverImage" class="card-img-top">
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-10">
+            <h5 class="card-title mb-0" data-cy="bookTitle">
+              {{book.titolo}}
+            </h5>
+            <p class="card-text mb-0">
+              di <span *ngFor="let author of book.authors"><a [routerLink]="['/authors/'+ author.id]">{{author.authorsFullname}}</a>  </span>
+            </p>
+            <p class="card-text"><small class="text-muted"><span *ngFor="let genre of book.genres">{{genre}} </span></small></p>
+            <div class="row">
+              <div class="col-12">
+                <bar-rating id="rating1" [(rate)]="book.overallRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+              </div>
+            </div>
+          </div>
+          <div class="col-1 pl-2" *ngIf="authenticationService.sameUserOrAdminAuth(this.userID)">
+            <button type="button" class="btn btn-light" data-toggle="modal" [attr.data-target]="'#deleteMyBooksReadModal'+book.id" title="elimina" data-cy="eliminaMyBookRead">
+              <i class="fa fa-trash fa-lg"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <select  *ngIf="this.authenticationService.sameUserOrAdminAuth(this.userID)" class="custom-select mb-3" (change)="updateMyBooks(book.bookID, book.shelf, $event)" data-cy="updateMyBooksSelect">
+              <option *ngFor="let s of shelves" [value]="s" [selected]="s==book.shelf">{{s}}</option>
+            </select>
+            <button type="button" class="btn btn-info btn-block" [routerLink]="['/libro/' + book.bookID]">Scopri</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h3 class="h3">Voglio leggere</h3>
+<hr>
+<div class="row row-cols-3">
+  <div class="col mb-3" *ngFor="let book of myBooksToRead" data-cy="myBooksToRead">
+    <div class="modal fade" id="deleteMyBooksToReadModal{{book.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteMyBooksToReadModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteMyBooksToReadModalLabel">Eliminazione</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="lead">Confermi di voler eliminare il libro dalla dalla lista?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+            <a class="btn btn-danger" (click)="deleteMyBooks(book.bookID, book.shelf)" data-dismiss="modal">Conferma</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <img [src]="book.coverImage" class="card-img-top">
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-10">
+            <h5 class="card-title mb-0" data-cy="bookTitle">
+              {{book.titolo}}
+            </h5>
+            <p class="card-text mb-0">
+              di <span *ngFor="let author of book.authors"><a [routerLink]="['/authors/'+ author.id]">{{author.authorsFullname}}</a>  </span>
+            </p>
+            <p class="card-text"><small class="text-muted"><span *ngFor="let genre of book.genres">{{genre}} </span></small></p>
+            <div class="row">
+              <div class="col-12">
+                <bar-rating id="rating2" [(rate)]="book.overallRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+              </div>
+            </div>
+          </div>
+          <div class="col-1 pl-2" *ngIf="authenticationService.sameUserOrAdminAuth(this.userID)">
+            <button type="button" class="btn btn-light" data-toggle="modal" [attr.data-target]="'#deleteMyBooksToReadModal'+book.id" title="elimina">
+              <i class="fa fa-trash fa-lg"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <select *ngIf="this.authenticationService.sameUserOrAdminAuth(this.userID)" class="custom-select mb-3" (change)="updateMyBooks(book.bookID, book.shelf, $event)">
+              <option *ngFor="let s of shelves" [value]="s" [selected]="s==book.shelf">{{s}}</option>
+            </select>
+            <button type="button" class="btn btn-info btn-block" [routerLink]="['/libro/' + book.bookID]">Scopri</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h3 class="h3">Sto leggendo</h3>
+<hr>
+<div class="row row-cols-3">
+  <div class="col mb-3" *ngFor="let book of myBooksReading" data-cy="myBooksReading">
+    <div class="modal fade" id="deleteMyBooksReadingModal{{book.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteMyBooksReadingModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteMyBooksReadingModalLabel">Eliminazione</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="lead">Confermi di voler eliminare il libro dalla dalla lista?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+            <a class="btn btn-danger" (click)="deleteMyBooks(book.bookID, book.shelf)" data-dismiss="modal">Conferma</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <img [src]="book.coverImage" class="card-img-top">
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col-10">
+            <h5 class="card-title mb-0">
+              {{book.titolo}}
+            </h5>
+            <p class="card-text mb-0">
+              di <span *ngFor="let author of book.authors"><a [routerLink]="['/authors/'+ author.id]">{{author.authorsFullname}}</a>  </span>
+            </p>
+            <p class="card-text"><small class="text-muted"><span *ngFor="let genre of book.genres">{{genre}} </span></small></p>
+            <div class="row">
+              <div class="col-12">
+                <bar-rating id="rating3" [(rate)]="book.overallRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating>
+              </div>
+            </div>
+          </div>
+          <div class="col-1 pl-2" *ngIf="authenticationService.sameUserOrAdminAuth(this.userID)">
+            <button type="button" class="btn btn-light" data-toggle="modal" [attr.data-target]="'#deleteMyBooksReadingModal'+book.id" title="elimina">
+              <i class="fa fa-trash fa-lg"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <select *ngIf="this.authenticationService.sameUserOrAdminAuth(this.userID)" class="custom-select mb-3" (change)="updateMyBooks(book.bookID, book.shelf, $event)">
+              <option *ngFor="let s of shelves" [value]="s" [selected]="s==book.shelf">{{s}}</option>
+            </select>
+            <button type="button" class="btn btn-info btn-block" [routerLink]="['/libro/' + book.bookID]">Scopri</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

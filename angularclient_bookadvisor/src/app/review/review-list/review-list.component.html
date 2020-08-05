@@ -1,0 +1,83 @@
+<div *ngIf="!add" data-cy="reviewList">
+  <div class="row">
+    <div class="col-9">
+      <h1 class="h1">Recensioni</h1>
+    </div>
+    <div class="col-3" *ngIf="authenticationService.logged && type=='book'">
+      <button type="button" class="btn btn-info btn-block" (click)="addReview()" data-cy="newReviewButton"><i class="fa fa-plus"></i> Recensisci</button>
+    </div>
+  </div>
+  <hr>
+  <div class="row p-3" *ngFor="let recensione of recensioni">
+    <div class="modal fade" id="deleteRecensioneModal{{recensione.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteRecensioneModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteRecensioneModalLabel">Eliminazione</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="lead">Confermi di voler eliminare la recensione?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-cy="annulla">Annulla</button>
+            <a class="btn btn-danger" (click)="deleteReview(recensione.id, recensione.userId)" data-dismiss="modal" data-cy="conferma">Conferma</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="width:100%">
+      <div class="row no-gutters">
+        <div class="col-2 pl-3 pt-3">
+          <img [src]="recensione.coverImage" class="card-img recensione-image" *ngIf="type=='user'">
+          <img [src]="recensione.profileImage" class="card-img recensione-image" *ngIf="type=='book'">
+        </div>
+        <div class="col-10">
+          <div class="card-body">
+            <div class="row mb-4">
+              <div class="col-md-1" *ngIf="authenticationService.sameUserOrAdminAuth(recensione.userId)" data-cy="eliminaRecensione">
+                <button type="button" class="btn btn-light" data-toggle="modal" [attr.data-target]="'#deleteRecensioneModal'+recensione.id" title="elimina" data-cy="elimina">
+                  <i class="fa fa-trash fa-lg"></i>
+                </button>
+              </div>
+              <div class="col-5">
+                <h5 class="card-title mb-0" *ngIf="type=='book'">
+                  Recensione di <a class="myTitle mb-0" [routerLink]="['/utente/' + recensione.userId]">@{{recensione.username}}</a>
+                </h5>
+                <a class="myTitle mb-0" [routerLink]="['/libro/' + recensione.bookId]" *ngIf="type=='user'">
+                  <h5 class="card-title mb-0">
+                    {{recensione.titolo}}
+                  </h5>
+                </a>
+                <p class="card-text mb-0" *ngIf="type=='user'">
+                  di <span *ngFor="let author of recensione.autori"><a [routerLink]="['/authors/'+ author.id]">{{author.authorsFullname}}</a>  </span>
+                </p>
+                <p class="card-text"><small class="text-muted">{{recensione.timestamp}}</small></p>
+              </div>
+              <div class="col-4 offset-2">
+                <div class="row"><p class="mr-2">Rating: </p><bar-rating id="rating" [rate]="recensione.rating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating></div>
+                <div class="row"><p class="mr-2">Qualità: </p><bar-rating id="writingQualityRating" [rate]="recensione.writingQualityRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating></div>
+                <div class="row"><p class="mr-2">Originalità: </p><bar-rating id="originalityRating" [rate]="recensione.originalityRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating></div>
+                <div class="row"><p class="mr-2">Page-turner: </p><bar-rating id="pageTurnerRating" [rate]="recensione.pageTurnerRating" [max]="5" [theme]="'stars'" [readOnly]="true"></bar-rating></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <button *ngIf="recensione.containsSpoilers" class="btn btn-info" type="button" data-toggle="collapse" [attr.data-target]="'#collapseIfSpoilers'+recensione.id">Leggi nonostante gli spoiler?</button>
+                <div [ngClass]="{'collapse': recensione.containsSpoilers}" id="collapseIfSpoilers{{recensione.id}}">
+                  <p class="card-text" data-cy="testo">{{recensione.testo}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class = "card-footer text-center mt-3">
+        <button [disabled]="!authenticationService.logged" (click)="setUsefulReview(recensione)" aria-label="Mi piace" data-cy="like"><i class="fa-thumbs-up" [ngClass]="{'fas': authenticationService.logged && recensione.reviewUsefulForLoggedUser, 'far': !authenticationService.logged || !recensione.reviewUsefulForLoggedUser}"></i> {{recensione.numOfUsersConsideredReviewUseful}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-review-form [bookId]="identifier" (reviewSubmitted)="reviewAddedHandler($event)" *ngIf="add" data-cy="addReview"></app-review-form>

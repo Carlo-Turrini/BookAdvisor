@@ -1,0 +1,82 @@
+<div class="container">
+  <h1 class="display-4 pt-3"> Modifica le informazioni di {{this.utente.username}}</h1>
+  <hr>
+  <form [formGroup]="utenteUpdateForm" (ngSubmit)="onSubmit()" data-cy="updateForm">
+    <div class="form-row">
+      <div class="form-group col-6 mb-3">
+        <label for="nome">
+          Nome*:
+        </label>
+        <input type="text" id="nome" formControlName="nome" class="form-control" [class.is-invalid]="isInvalidAndDirty('nome')">
+        <div class="invalid-feedback" *ngIf="hasError('nome', 'required')">
+          Inserire un nome!
+        </div>
+        <div class="invalid-feedback" *ngIf="hasError('nome', 'minlength')">
+          Il nome deve avere almeno 2 caratteri!
+        </div>
+        <div class="invalid-feedback" *ngIf="hasError('nome', 'maxlength')">
+          Il nome non può avere più di 24 caratteri!
+        </div>
+      </div>
+      <div class="form-group col-6 mb-3">
+        <label for="cognome">
+          Cognome*:
+        </label>
+        <input type="text" id="cognome" formControlName="cognome" class="form-control" [class.is-invalid]="isInvalidAndDirty('cognome')">
+        <div class="invalid-feedback" *ngIf="hasError('cognome', 'required')">
+          Inserire un cognome!
+        </div>
+        <div class="invalid-feedback" *ngIf="hasError('cognome', 'minlength')">
+          Il cognome deve avere almeno 2 caratteri!
+        </div>
+        <div class="invalid-feedback" *ngIf="hasError('cognome', 'maxlength')">
+          Il cognome non può avere più di 24 caratteri!
+        </div>
+      </div>
+    </div>
+    <div class="form-group p-0">
+      <div class="custom-control custom-switch col-6 mb-3">
+        <input type="checkbox" class="custom-control-input" id="passwordSwitch" formControlName="passwordChange" [defaultChecked]="false" [class.is-invalid]="isInvalidAndDirty('passwordChange')" (change)="this.clearPasswordField($event)">
+        <label for="passwordSwitch" class="custom-control-label">Vuoi cambiare password?</label>
+      </div>
+    </div>
+    <div class="form-group col-6 mb-3 p-0" *ngIf="utenteUpdateForm.value.passwordChange">
+      <label for="password">
+        Nuova password
+      </label>
+      <input type="password" id="password" formControlName="password" class="form-control" [class.is-invalid]="isInvalidAndDirty('password')">
+      <div class="invalid-feedback" *ngIf="hasError('password', 'minlength')">
+        La password deve avere almeno 8 caratteri!
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('password', 'maxlength')">
+        La password non può avere più di 50 caratteri!
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">
+        Email*:
+      </label>
+      <input type="email" id="email" formControlName="email" class="form-control" placeholder="mario.rossi@provider.com" [class.is-invalid]="isInvalidAndDirty('email')" data-cy="email">
+      <div class="invalid-feedback" *ngIf="hasError('email', 'required')">
+        Inserire un'email!
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('email', 'email')">
+        Email non valida!
+      </div>
+      <div class="invalid-feedback" *ngIf="hasError('email', 'emailTaken')">
+        Email già in uso!
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="descrizione">
+        Descrizione:
+      </label>
+      <textarea id="descrizione" formControlName="descrizione" class="form-control" rows="5" [class.is-invalid]="isInvalidAndDirty('descrizione')"></textarea>
+      <div class="invalid-feedback" *ngIf="hasError('descrizione', 'maxlength')">
+        La descrizione può contenere al massimo 2048 caratteri!
+      </div>
+    </div>
+    <button type="submit" class="btn btn-info mb-3" [disabled]="!utenteUpdateForm.valid">Submit</button>
+  </form>
+</div>

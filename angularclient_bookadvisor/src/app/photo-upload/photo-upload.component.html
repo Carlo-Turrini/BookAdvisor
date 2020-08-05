@@ -1,0 +1,16 @@
+<div class="container">
+  <h1 class="display-4 pt-3">Immagine di {{tipo}}</h1>
+  <hr>
+  <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="messageChanged">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="close" (click)="resetMessageChanged()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <img [src]="photoUrl" class="photo" *ngIf="photoUrl">
+    <div class="custom-file mb-3 mt-3">
+      <input type="file" #file class="custom-file-input" id="photo" accept='image/*' (change)="onFileChanged(file.files)" data-cy="file">
+      <label for="photo" class="custom-file-label">Scegli un'immagine di {{tipo}}</label>
+    </div>
+    <button type="button" class="btn-primary btn mb-3" [disabled]="!photoChanged" (click)="onUpload()" data-cy="uplodaFile">Upload</button>
+</div>
