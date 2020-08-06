@@ -13,11 +13,11 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   private loginSuccess: boolean;
-  private messageChanged: boolean = false;
+  messageChanged: boolean = false;
   private submitted: boolean = false;
   private returnRoute: ActivatedRoute;
-  private message: string = null;
-  private loginForm = new FormGroup({
+  message: string = null;
+  loginForm = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(24)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(64)])
   });

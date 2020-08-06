@@ -24,7 +24,7 @@ export class AuthorFormComponent implements OnInit {
   @Input() private from: string;
   @Output() private authorSubmitted: EventEmitter<AuthorOfBook> = new EventEmitter<AuthorOfBook>();
   @Output() private authorSubmittedInList: EventEmitter<AuthorCard[]> = new EventEmitter<AuthorCard[]>();
-  @Output() private goBack: EventEmitter<void> = new EventEmitter<void>();
+  @Output() goBack: EventEmitter<void> = new EventEmitter<void>();
   constructor(private route: ActivatedRoute, private router: Router, private authorService: AuthorService, private authorValidatorService: AuthorValidatorService, private authenticationService: AuthenticationService) {
   }
 

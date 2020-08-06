@@ -10,12 +10,12 @@ import {AuthenticationService} from "../../core/services/authentication.service"
   styleUrls: ['./book-ranking.component.css']
 })
 export class BookRankingComponent implements OnInit, OnChanges {
-  @Input() private userID: number;
+  @Input() userID: number;
   @Input() private isRankModified: boolean;
   @Output() private updatedRank: EventEmitter<void> = new EventEmitter<void>();
-  private bookRanking : BookRanking[] = [];
-  private add: boolean = false;
-  constructor(private route: ActivatedRoute, private router: Router, private bookRankingService: BookRankingService, private authenticationService: AuthenticationService) { }
+  bookRanking : BookRanking[] = [];
+  add: boolean = false;
+  constructor(private route: ActivatedRoute, private router: Router, private bookRankingService: BookRankingService, public authenticationService: AuthenticationService) { }
 
   async ngOnInit() {
     await this.bookRankingService.getUsersBookRanking(this.userID).then(ranking => {ranking.forEach(bookRank => {this.bookRanking.push(bookRank)})})

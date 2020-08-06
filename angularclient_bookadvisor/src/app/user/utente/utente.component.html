@@ -57,7 +57,7 @@
       <p class="lead"><strong>Descrizione:</strong> {{utente.description}}</p>
     </div>
   </div>
-  <div *ngIf="utente.id != undefined">
+  <div *ngIf="utente.id != undefined && !reinit">
     <app-review-list [type]="'user'" [identifier]="utente.id"></app-review-list>
   </div>
   <div *ngIf="utente.id != undefined && !(update || upload) && !reinit">

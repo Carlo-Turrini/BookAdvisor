@@ -10,10 +10,10 @@ import {AuthenticationService} from "../../core/services/authentication.service"
   styleUrls: ['./prize-list.component.css']
 })
 export class PrizeListComponent implements OnInit {
-  private prizes: Prize[] = [];
-  @Input() private bookID: number;
-  private addPrize: boolean = false;
-  constructor(private route: ActivatedRoute, private router: Router, private libroService: LibroService, private authenticationService: AuthenticationService) { }
+  prizes: Prize[] = [];
+  @Input() bookID: number;
+  addPrize: boolean = false;
+  constructor(private route: ActivatedRoute, private router: Router, private libroService: LibroService, public authenticationService: AuthenticationService) { }
 
   async ngOnInit() {
     await this.libroService.getBooksPrizes(this.bookID).then(prizesReturned => {prizesReturned.forEach(prize => {this.prizes.push(prize)})})
@@ -34,7 +34,7 @@ export class PrizeListComponent implements OnInit {
     else this.router.navigate(['/']);
   }
 
-  private prizeAdded(prize: Prize) {
+  prizeAdded(prize: Prize) {
     this.prizes.push(prize);
     this.addPrize = false;
   }

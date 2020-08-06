@@ -10,7 +10,18 @@ export class AuthenticationService {
   loggedUser: LoggedInfo = new LoggedInfo();
 
   private URL = 'http://localhost:8080';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    let loggedTemp = localStorage.getItem('logged');
+    let loggedInfoIDTemp = localStorage.getItem('loggedInfoID');
+    let loggedInfoIsAdminTemp = localStorage.getItem('loggedInfoIsAdmin');
+    if(loggedTemp != null) {
+      this.logged = JSON.parse(loggedTemp);
+    }
+    if(loggedInfoIDTemp != null && loggedInfoIsAdminTemp != null) {
+      this.loggedUser.id= JSON.parse(loggedInfoIDTemp);
+      this.loggedUser.admin= JSON.parse(loggedInfoIsAdminTemp);
+    }
+  }
 
   public async loginUser(username: string, password: string){
     var logSuccess: boolean = false;
@@ -31,8 +42,11 @@ export class AuthenticationService {
     });
     if (logSuccess) {
       await this.http.get<LoggedInfo>(this.URL + "/utenti/loggedUserInfo", {withCredentials: true}).toPromise().then(data => {
-        this.loggedUser = data;})
+        this.loggedUser = data;});
       this.logged = true;
+      localStorage.setItem('logged', JSON.stringify(this.logged));
+      localStorage.setItem('loggedInfoID', JSON.stringify(this.loggedUser.id));
+      localStorage.setItem('loggedInfoIsAdmin', JSON.stringify(this.loggedUser.admin));
       console.log(this.loggedUser.admin);
 
     }
@@ -83,5 +97,8 @@ export class AuthenticationService {
     this.logged = false;
     this.loggedUser.id = null;
     this.loggedUser.admin = false;
+    localStorage.removeItem('logged');
+    localStorage.removeItem('loggedInfoID');
+    localStorage.removeItem('loggedInfoIsAdmin');
   }
 }

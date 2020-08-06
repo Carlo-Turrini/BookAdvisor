@@ -134,7 +134,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="libro.id != undefined">
+  <div *ngIf="libro.id != undefined && !reinit">
     <app-review-list [type]="'book'" [identifier]="libro.id" (newReview)="addReview()" (changeToReviewList)="reviewSubmitted()" ></app-review-list>
   </div>
 </div>

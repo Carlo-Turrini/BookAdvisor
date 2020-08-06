@@ -28,6 +28,9 @@ public class WebConfig implements WebMvcConfigurer {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
                         resourcePath = resourcePath.replace("ui/", "");
+                        if(resourcePath.contains("ba/assets/images/") || resourcePath.equals("ba/favicon.ico")) {
+                            resourcePath = resourcePath.replace("ba/", "");
+                        }
                         System.out.println("getResource(): " + resourcePath);
                         Resource requestedResource = location.createRelative(resourcePath);
                         System.out.println("getResource result: " + (requestedResource.exists()));
