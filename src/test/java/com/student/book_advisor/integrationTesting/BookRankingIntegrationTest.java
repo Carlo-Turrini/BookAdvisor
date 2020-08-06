@@ -67,7 +67,7 @@ public class BookRankingIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         BookRankingDTO bookRankingDTO = new BookRankingDTO(1, 1, 1, "Titolo");
-        mockMvc.perform(get("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(get("/api/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -95,7 +95,7 @@ public class BookRankingIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(bookForRankDTO);
-        mockMvc.perform(post("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(post("/api/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -126,7 +126,7 @@ public class BookRankingIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(bookForRankDTO);
-        mockMvc.perform(post("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(post("/api/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -147,7 +147,7 @@ public class BookRankingIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(bookForRankDTO);
-        mockMvc.perform(post("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(post("/api/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -163,7 +163,7 @@ public class BookRankingIntegrationTest {
         Cookie authCookie = new Cookie("access_token", userToken);
         Integer userID = 2;
         Integer bookRankID = 2;
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -178,7 +178,7 @@ public class BookRankingIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         Integer userID = 3;
         Integer bookRankID = 2;
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -195,7 +195,7 @@ public class BookRankingIntegrationTest {
         Integer userID = 2;
         Integer bookRankID = 3;
         BookRankingDTO bookRankingDTO = new BookRankingDTO(1, 1, 1, "Titolo");
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -216,7 +216,7 @@ public class BookRankingIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         Integer userID = 2;
         Integer bookRankID = 1;
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -232,7 +232,7 @@ public class BookRankingIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Integer userID = 2;
         Integer bookRankID = 2;
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")

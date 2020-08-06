@@ -13,7 +13,7 @@ import {PrizeForm} from "../model/prize-form";
   providedIn: 'root'
 })
 export class LibroService {
-  URL = 'http://localhost:8080/libri';
+  URL = 'http://localhost:8080/api/libri';
   constructor(private http: HttpClient) { }
 
   public findAllBooks(): Promise<LibroCard[]> {

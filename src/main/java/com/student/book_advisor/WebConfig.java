@@ -20,7 +20,6 @@ public class WebConfig implements WebMvcConfigurer {
     }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        System.out.println("Enters");
         registry.addResourceHandler("/**/*")
                 .addResourceLocations("classpath:/static/")
                 .resourceChain(true)
@@ -31,9 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
                         if(resourcePath.contains("ba/assets/images/") || resourcePath.equals("ba/favicon.ico")) {
                             resourcePath = resourcePath.replace("ba/", "");
                         }
-                        System.out.println("getResource(): " + resourcePath);
                         Resource requestedResource = location.createRelative(resourcePath);
-                        System.out.println("getResource result: " + (requestedResource.exists()));
                         return requestedResource.exists() && requestedResource.isReadable() ? requestedResource
                                 : new ClassPathResource("/static/index.html");
                     }

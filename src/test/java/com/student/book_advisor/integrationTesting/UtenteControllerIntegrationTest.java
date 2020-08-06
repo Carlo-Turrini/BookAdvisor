@@ -68,7 +68,7 @@ public class UtenteControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         LoggedUserDTO loggedUserDTO = new LoggedUserDTO(2, false);
-        mockMvc.perform(get("/utenti/loggedUserInfo")
+        mockMvc.perform(get("/api/utenti/loggedUserInfo")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -82,7 +82,7 @@ public class UtenteControllerIntegrationTest {
     public void testBGetLoggedUserInfo_unauthorized() throws Exception {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/utenti/loggedUserInfo")
+        mockMvc.perform(get("/api/utenti/loggedUserInfo")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -95,7 +95,7 @@ public class UtenteControllerIntegrationTest {
         String usernameUnique = "MarioRossi";
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(post("/utenti/isUsernameUnique")
+        mockMvc.perform(post("/api/utenti/isUsernameUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(usernameUnique)
@@ -110,7 +110,7 @@ public class UtenteControllerIntegrationTest {
         String emailUnique = "m.r@gmail.com";
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(post("/utenti/isEmailUnique")
+        mockMvc.perform(post("/api/utenti/isEmailUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(emailUnique)
@@ -125,7 +125,7 @@ public class UtenteControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(get("/utenti")
+        mockMvc.perform(get("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -148,7 +148,7 @@ public class UtenteControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(get("/utenti")
+        mockMvc.perform(get("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -162,7 +162,7 @@ public class UtenteControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         UsersInfoDTO usersInfoDTO = new UsersInfoDTO(userID, "Mario", "Rossi", "MarioRossi", "mario.rossi@gmail.com", "prova");
-        mockMvc.perform(get("/utenti/{id}", userID)
+        mockMvc.perform(get("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -191,7 +191,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(post("/utenti")
+        mockMvc.perform(post("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -219,7 +219,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(post("/utenti")
+        mockMvc.perform(post("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -237,7 +237,7 @@ public class UtenteControllerIntegrationTest {
         Cookie authCookie = new Cookie("access_token", userToken);
         MockMultipartFile mf = new MockMultipartFile("fotoProfilo", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer userID = 2;
-        mockMvc.perform(multipart("/utenti/{id}/foto_profilo", userID)
+        mockMvc.perform(multipart("/api/utenti/{id}/foto_profilo", userID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -253,7 +253,7 @@ public class UtenteControllerIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         MockMultipartFile mf = new MockMultipartFile("fotoProfilo", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer userID = 4;
-        mockMvc.perform(multipart("/utenti/{id}/foto_profilo", userID)
+        mockMvc.perform(multipart("/api/utenti/{id}/foto_profilo", userID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -268,7 +268,7 @@ public class UtenteControllerIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         MockMultipartFile mf = new MockMultipartFile("fotoProfilo", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer userID = 2;
-        mockMvc.perform(multipart("/utenti/{id}/foto_profilo", userID)
+        mockMvc.perform(multipart("/api/utenti/{id}/foto_profilo", userID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -283,7 +283,7 @@ public class UtenteControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         MockMultipartFile mf = new MockMultipartFile("fotoProfilo", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer userID = 2;
-        mockMvc.perform(multipart("/utenti/{id}/foto_profilo", userID)
+        mockMvc.perform(multipart("/api/utenti/{id}/foto_profilo", userID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie))
@@ -304,7 +304,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -328,7 +328,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -353,7 +353,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -379,7 +379,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -405,7 +405,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -430,7 +430,7 @@ public class UtenteControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -446,7 +446,7 @@ public class UtenteControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(delete("/utenti/{id}", userID)
+        mockMvc.perform(delete("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -461,7 +461,7 @@ public class UtenteControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(delete("/utenti/{id}", userID)
+        mockMvc.perform(delete("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -474,7 +474,7 @@ public class UtenteControllerIntegrationTest {
         Integer userID = 2;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(delete("/utenti/{id}", userID)
+        mockMvc.perform(delete("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")

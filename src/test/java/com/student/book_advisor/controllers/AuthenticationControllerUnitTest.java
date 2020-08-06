@@ -97,7 +97,7 @@ public class AuthenticationControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(loginDTO);
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/api/authenticate")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -117,7 +117,7 @@ public class AuthenticationControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(loginDTO);
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/api/authenticate")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -131,7 +131,7 @@ public class AuthenticationControllerUnitTest {
     public void testLogoutWhenNotLoggedIn() throws Exception {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/logoutUser")
+        mockMvc.perform(get("/api/logoutUser")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -145,7 +145,7 @@ public class AuthenticationControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(get("/logoutUser")
+        mockMvc.perform(get("/api/logoutUser")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")

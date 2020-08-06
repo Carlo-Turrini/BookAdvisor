@@ -61,7 +61,7 @@ public class AuthorControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(post("/authors/isFullnameUnique")
+        mockMvc.perform(post("/api/authors/isFullnameUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content("Prova")
@@ -84,7 +84,7 @@ public class AuthorControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
-        mockMvc.perform(post("/authors")
+        mockMvc.perform(post("/api/authors")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -108,7 +108,7 @@ public class AuthorControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
-        mockMvc.perform(post("/authors")
+        mockMvc.perform(post("/api/authors")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -132,7 +132,7 @@ public class AuthorControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
-        mockMvc.perform(put("/authors/{id}", authorID)
+        mockMvc.perform(put("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -155,7 +155,7 @@ public class AuthorControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
-        mockMvc.perform(put("/authors/{id}", authorID)
+        mockMvc.perform(put("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -180,7 +180,7 @@ public class AuthorControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
-        mockMvc.perform(put("/authors/{id}", authorID)
+        mockMvc.perform(put("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -197,7 +197,7 @@ public class AuthorControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         Integer authorID = 3;
-        mockMvc.perform(delete("/authors/{id}", authorID)
+        mockMvc.perform(delete("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -211,7 +211,7 @@ public class AuthorControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         Integer authorID = 1;
-        mockMvc.perform(delete("/authors/{id}", authorID)
+        mockMvc.perform(delete("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -225,7 +225,7 @@ public class AuthorControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(get("/authors/authorsForBookForm")
+        mockMvc.perform(get("/api/authors/authorsForBookForm")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -246,7 +246,7 @@ public class AuthorControllerIntegrationTest {
         Integer authorID = 1;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/authors/{id}", authorID)
+        mockMvc.perform(get("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -263,7 +263,7 @@ public class AuthorControllerIntegrationTest {
     public void test7GetAllAuthors() throws Exception {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/authors")
+        mockMvc.perform(get("/api/authors")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -289,7 +289,7 @@ public class AuthorControllerIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         MockMultipartFile mf = new MockMultipartFile("authorsPhoto", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer authorID = 1;
-        mockMvc.perform(multipart("/authors/{id}/authors_photo", authorID)
+        mockMvc.perform(multipart("/api/authors/{id}/authors_photo", authorID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -304,7 +304,7 @@ public class AuthorControllerIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         MockMultipartFile mf = new MockMultipartFile("authorsPhoto", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer authorID = 4;
-        mockMvc.perform(multipart("/authors/{id}/authors_photo", authorID)
+        mockMvc.perform(multipart("/api/authors/{id}/authors_photo", authorID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -318,7 +318,7 @@ public class AuthorControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         String fullname = "Pablo Neruda";
-        mockMvc.perform(get("/authors/byName/{fullname}", fullname)
+        mockMvc.perform(get("/api/authors/byName/{fullname}", fullname)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")

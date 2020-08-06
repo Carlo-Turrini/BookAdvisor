@@ -21,6 +21,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RequestMapping("/api")
 public class PrizeController {
     @Autowired
     private LibroService libroService;

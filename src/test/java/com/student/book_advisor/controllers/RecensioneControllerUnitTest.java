@@ -103,7 +103,7 @@ public class RecensioneControllerUnitTest {
         RecensioneDTO recensioneDTO = new RecensioneDTO(1, "prova", 4, Calendar.getInstance().getTime(), 1, "MarioRossi", bookID, "Prova", 4, 5, 3, false, 12L);
         recensioneDTOList.add(recensioneDTO);
         Mockito.when(recensioneService.getAllReviewsByBook(bookID)).thenReturn(recensioneDTOList);
-        mockMvc.perform(get("/libri/{id}/recensioni", bookID)
+        mockMvc.perform(get("/api/libri/{id}/recensioni", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -137,7 +137,7 @@ public class RecensioneControllerUnitTest {
         RecensioneDTO recensioneDTO = new RecensioneDTO(1, "prova", 4, Calendar.getInstance().getTime(), userID, "MarioRossi", 1, "Prova", 4, 5, 3, false, 12L);
         recensioneDTOList.add(recensioneDTO);
         Mockito.when(recensioneService.getAllReveiewsByUser(userID)).thenReturn(recensioneDTOList);
-        mockMvc.perform(get("/utenti/{id}/recensioni", userID)
+        mockMvc.perform(get("/api/utenti/{id}/recensioni", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -178,7 +178,7 @@ public class RecensioneControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(recensioneFormDTO);
-        mockMvc.perform(post("/libri/{id}/recensioni", bookID)
+        mockMvc.perform(post("/api/libri/{id}/recensioni", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -214,7 +214,7 @@ public class RecensioneControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(recensioneFormDTO);
-        mockMvc.perform(post("/libri/{id}/recensioni", bookID)
+        mockMvc.perform(post("/api/libri/{id}/recensioni", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -241,7 +241,7 @@ public class RecensioneControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(recensioneFormDTO);
-        mockMvc.perform(post("/libri/{id}/recensioni", bookID)
+        mockMvc.perform(post("/api/libri/{id}/recensioni", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -258,7 +258,7 @@ public class RecensioneControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(delete("/utenti/{userId}/recensioni/{id}", userID, recensioneID)
+        mockMvc.perform(delete("/api/utenti/{userId}/recensioni/{id}", userID, recensioneID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -275,7 +275,7 @@ public class RecensioneControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(delete("/utenti/{userId}/recensioni/{id}", userID, recensioneID)
+        mockMvc.perform(delete("/api/utenti/{userId}/recensioni/{id}", userID, recensioneID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -290,7 +290,7 @@ public class RecensioneControllerUnitTest {
         Integer recensioneID = 1;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(delete("/utenti/{userId}/recensioni/{id}", userID, recensioneID)
+        mockMvc.perform(delete("/api/utenti/{userId}/recensioni/{id}", userID, recensioneID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -306,7 +306,7 @@ public class RecensioneControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(post("/recensioni/{id}/isReviewUseful", recensioneID)
+        mockMvc.perform(post("/api/recensioni/{id}/isReviewUseful", recensioneID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(userID.toString())
@@ -323,7 +323,7 @@ public class RecensioneControllerUnitTest {
         Integer recensioneID = 1;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(post("/recensioni/{id}/isReviewUseful", recensioneID)
+        mockMvc.perform(post("/api/recensioni/{id}/isReviewUseful", recensioneID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(userID.toString())
@@ -340,7 +340,7 @@ public class RecensioneControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(delete("/recensioni/{reviewID}/isReviewUseful/{userID}", recensioneID, userID)
+        mockMvc.perform(delete("/api/recensioni/{reviewID}/isReviewUseful/{userID}", recensioneID, userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -356,7 +356,7 @@ public class RecensioneControllerUnitTest {
         Integer recensioneID = 1;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(delete("/recensioni/{reviewID}/isReviewUseful/{userID}", recensioneID, userID)
+        mockMvc.perform(delete("/api/recensioni/{reviewID}/isReviewUseful/{userID}", recensioneID, userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")

@@ -94,7 +94,7 @@ public class AuthorControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         Mockito.when(authorService.isAuthorsFullnameUnique(Mockito.anyString())).thenReturn(true);
-        mockMvc.perform(post("/authors/isFullnameUnique")
+        mockMvc.perform(post("/api/authors/isFullnameUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content("Prova")
@@ -120,7 +120,7 @@ public class AuthorControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
         Mockito.when(authorService.isAuthorsFullnameUnique(Mockito.anyString())).thenReturn(false);
-        mockMvc.perform(post("/authors")
+        mockMvc.perform(post("/api/authors")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -148,7 +148,7 @@ public class AuthorControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
         Mockito.when(authorService.isAuthorsFullnameUnique(Mockito.anyString())).thenReturn(true);
-        mockMvc.perform(post("/authors")
+        mockMvc.perform(post("/api/authors")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -176,7 +176,7 @@ public class AuthorControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(authorFormDTO);
         Mockito.when(authorService.getAuthor(Mockito.anyInt())).thenReturn(null);
-        mockMvc.perform(put("/authors/{id}", authorID)
+        mockMvc.perform(put("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -206,7 +206,7 @@ public class AuthorControllerUnitTest {
         author.setAuthorsFullname("Pablo Neruda");
         Mockito.when(authorService.getAuthor(Mockito.anyInt())).thenReturn(author);
         Mockito.when(authorService.isAuthorsFullnameUnique(authorFormDTO.getAuthorsFullname())).thenReturn(false);
-        mockMvc.perform(put("/authors/{id}", authorID)
+        mockMvc.perform(put("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -239,7 +239,7 @@ public class AuthorControllerUnitTest {
         author.setAuthorsFullname("Pablo Neruda");
         Mockito.when(authorService.getAuthor(Mockito.anyInt())).thenReturn(author);
         Mockito.when(authorService.isAuthorsFullnameUnique(authorFormDTO.getAuthorsFullname())).thenReturn(true);
-        mockMvc.perform(put("/authors/{id}", authorID)
+        mockMvc.perform(put("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -260,7 +260,7 @@ public class AuthorControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         Integer authorID = 1;
-        mockMvc.perform(delete("/authors/{id}", authorID)
+        mockMvc.perform(delete("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -281,7 +281,7 @@ public class AuthorControllerUnitTest {
         authorOfBook.setId(1);
         authorOfBookList.add(authorOfBook);
         Mockito.when(authorService.getAllAuthorsOfBook()).thenReturn(authorOfBookList);
-        mockMvc.perform(get("/authors/authorsForBookForm")
+        mockMvc.perform(get("/api/authors/authorsForBookForm")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -302,7 +302,7 @@ public class AuthorControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         AuthorDTO authorDTO = new AuthorDTO(authorID, "Pablo Neruda", "biografia", 1975, null);
         Mockito.when(authorService.getAuthorsDTO(authorID)).thenReturn(authorDTO);
-        mockMvc.perform(get("/authors/{id}", authorID)
+        mockMvc.perform(get("/api/authors/{id}", authorID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -326,7 +326,7 @@ public class AuthorControllerUnitTest {
         AuthorCardDTO authorDTO = new AuthorCardDTO(1, "Pablo Neruda", 1975, null);
         authorOfBookList.add(authorDTO);
         Mockito.when(authorService.getAllAuthors()).thenReturn(authorOfBookList);
-        mockMvc.perform(get("/authors")
+        mockMvc.perform(get("/api/authors")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -350,7 +350,7 @@ public class AuthorControllerUnitTest {
         MockMultipartFile mf = new MockMultipartFile("authorsPhoto", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer authorID = 1;
         Mockito.when(authorService.updateAuthorsPhoto(mf, authorID)).thenReturn("prova");
-        mockMvc.perform(multipart("/authors/{id}/authors_photo", authorID)
+        mockMvc.perform(multipart("/api/authors/{id}/authors_photo", authorID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -370,7 +370,7 @@ public class AuthorControllerUnitTest {
         authorOfBook.setId(1);
         authorOfBook.setAuthorsFullname("Pablo Neruda");
         Mockito.when(authorService.getAuthorOfBookByFullname(authorOfBook.getAuthorsFullname())).thenReturn(authorOfBook);
-        mockMvc.perform(get("/authors/byName/{fullname}", authorOfBook.getAuthorsFullname())
+        mockMvc.perform(get("/api/authors/byName/{fullname}", authorOfBook.getAuthorsFullname())
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")

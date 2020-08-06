@@ -14,7 +14,7 @@ import {BookRanking} from "../model/book-ranking";
 })
 export class UtenteService {
 
-  URL = 'http://localhost:8080/utenti';
+  URL = 'http://localhost:8080/api/utenti';
 
   constructor(private http: HttpClient) {
   }

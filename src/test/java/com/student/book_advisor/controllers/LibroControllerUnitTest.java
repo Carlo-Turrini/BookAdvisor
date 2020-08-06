@@ -115,7 +115,7 @@ public class LibroControllerUnitTest {
         libroCardDTO.setGeneri(genres);
         libroCardDTOList.add(libroCardDTO);
         Mockito.when(libroService.findAllBooksByGenre(genere)).thenReturn(libroCardDTOList);
-        mockMvc.perform(get("/libri")
+        mockMvc.perform(get("/api/libri")
                 .param("genere", genere)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
@@ -140,7 +140,7 @@ public class LibroControllerUnitTest {
         LibroCardDTO libroCardDTO = new LibroCardDTO(1, "Prova", 4.5);
         libroCardDTOList.add(libroCardDTO);
         Mockito.when(libroService.findBooksContainingTitolo(titolo)).thenReturn(libroCardDTOList);
-        mockMvc.perform(get("/libri")
+        mockMvc.perform(get("/api/libri")
                 .param("titolo", titolo)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
@@ -165,7 +165,7 @@ public class LibroControllerUnitTest {
         LibroCardDTO libroCardDTO = new LibroCardDTO(bookID, "Prova", 4.5);
         libroCardDTOList.add(libroCardDTO);
         Mockito.when(libroService.findAllBooksByTitoloSagaExcludingCurrent(titoloSaga, bookID)).thenReturn(libroCardDTOList);
-        mockMvc.perform(get("/libri")
+        mockMvc.perform(get("/api/libri")
                 .param("titoloSaga", titoloSaga)
                 .param("bookId", bookID.toString())
                 .header("X-XSRF-TOKEN", csrf.toString())
@@ -190,7 +190,7 @@ public class LibroControllerUnitTest {
         LibroCardDTO libroCardDTO = new LibroCardDTO(1, "Prova", 4.5);
         libroCardDTOList.add(libroCardDTO);
         Mockito.when(libroService.findAllBooksByAuthor(author)).thenReturn(libroCardDTOList);
-        mockMvc.perform(get("/libri")
+        mockMvc.perform(get("/api/libri")
                 .param("author", author)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
@@ -213,7 +213,7 @@ public class LibroControllerUnitTest {
         LibroCardDTO libroCardDTO = new LibroCardDTO(1, "Prova", 4.5);
         libroCardDTOList.add(libroCardDTO);
         Mockito.when(libroService.findAllBooks()).thenReturn(libroCardDTOList);
-        mockMvc.perform(get("/libri")
+        mockMvc.perform(get("/api/libri")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -234,7 +234,7 @@ public class LibroControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         Mockito.when(libroService.isTitleUnique(titolo)).thenReturn(true);
-        mockMvc.perform(post("/libri/isTitleUnique")
+        mockMvc.perform(post("/api/libri/isTitleUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(titolo)
@@ -270,7 +270,7 @@ public class LibroControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(libroFormDTO);
         Mockito.when(libroService.isTitleUnique(libroFormDTO.getTitolo())).thenReturn(false);
-        mockMvc.perform(post("/libri")
+        mockMvc.perform(post("/api/libri")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -308,7 +308,7 @@ public class LibroControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(libroFormDTO);
         Mockito.when(libroService.isTitleUnique(libroFormDTO.getTitolo())).thenReturn(true);
-        mockMvc.perform(post("/libri")
+        mockMvc.perform(post("/api/libri")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -345,7 +345,7 @@ public class LibroControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(libroFormDTO);
         Mockito.when(libroService.isTitleUnique(libroFormDTO.getTitolo())).thenReturn(true);
-        mockMvc.perform(post("/libri")
+        mockMvc.perform(post("/api/libri")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -381,7 +381,7 @@ public class LibroControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(libroFormDTO);
-        mockMvc.perform(post("/libri")
+        mockMvc.perform(post("/api/libri")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -398,7 +398,7 @@ public class LibroControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         LibroDTO libroDTO = new LibroDTO(bookID, "Prova", 1923, 123, "sinossi", null, null, 4.5, 4.3, 4.6, 3.9);
         Mockito.when(libroService.findBookDTOById(bookID)).thenReturn(libroDTO);
-        mockMvc.perform(get("/libri/{id}", bookID)
+        mockMvc.perform(get("/api/libri/{id}", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -421,7 +421,7 @@ public class LibroControllerUnitTest {
         Libro book = new Libro();
         Mockito.when(libroService.findBookById(bookID)).thenReturn(book);
         Mockito.when(libroService.updateBooksCoverPhoto(Mockito.any(MultipartFile.class), Mockito.any(Libro.class))).thenReturn("prova");
-        mockMvc.perform(multipart("/libri/{id}/foto_copertina", bookID)
+        mockMvc.perform(multipart("/api/libri/{id}/foto_copertina", bookID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -441,7 +441,7 @@ public class LibroControllerUnitTest {
         MockMultipartFile mf = new MockMultipartFile("copertina", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer bookID = 1;
         Mockito.when(libroService.findBookById(bookID)).thenReturn(null);
-        mockMvc.perform(multipart("/libri/{id}/foto_copertina", bookID)
+        mockMvc.perform(multipart("/api/libri/{id}/foto_copertina", bookID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -479,7 +479,7 @@ public class LibroControllerUnitTest {
         libro.setTitolo("Vecchio titolo");
         Mockito.when(libroService.findBookById(bookID)).thenReturn(libro);
         Mockito.when(libroService.isTitleUnique(libroFormDTO.getTitolo())).thenReturn(false);
-        mockMvc.perform(put("/libri/{id}", bookID)
+        mockMvc.perform(put("/api/libri/{id}", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -518,7 +518,7 @@ public class LibroControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(libroFormDTO);
         Mockito.when(libroService.findBookById(bookID)).thenReturn(null);
-        mockMvc.perform(put("/libri/{id}", bookID)
+        mockMvc.perform(put("/api/libri/{id}", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -558,7 +558,7 @@ public class LibroControllerUnitTest {
         libro.setTitolo("Vecchio titolo");
         Mockito.when(libroService.findBookById(bookID)).thenReturn(libro);
         Mockito.when(libroService.isTitleUnique(libroFormDTO.getTitolo())).thenReturn(true);
-        mockMvc.perform(put("/libri/{id}", bookID)
+        mockMvc.perform(put("/api/libri/{id}", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -578,7 +578,7 @@ public class LibroControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(delete("/libri/{id}", bookID)
+        mockMvc.perform(delete("/api/libri/{id}", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -594,7 +594,7 @@ public class LibroControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(delete("/libri/{id}", bookID)
+        mockMvc.perform(delete("/api/libri/{id}", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -610,7 +610,7 @@ public class LibroControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         OverallRatingsForBook overallRatingsForBook = new OverallRatingsForBook(4.2, 4.5, 4.7, 3.9);
         Mockito.when(libroService.getBookOverallRatings(bookID)).thenReturn(overallRatingsForBook);
-        mockMvc.perform(get("/libri/{id}/overallRatings", bookID)
+        mockMvc.perform(get("/api/libri/{id}/overallRatings", bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")

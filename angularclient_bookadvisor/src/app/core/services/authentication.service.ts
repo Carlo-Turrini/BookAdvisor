@@ -9,7 +9,7 @@ export class AuthenticationService {
   logged: boolean = false;
   loggedUser: LoggedInfo = new LoggedInfo();
 
-  private URL = 'http://localhost:8080';
+  private URL = 'http://localhost:8080/api';
   constructor(private http: HttpClient) {
     let loggedTemp = localStorage.getItem('logged');
     let loggedInfoIDTemp = localStorage.getItem('loggedInfoID');

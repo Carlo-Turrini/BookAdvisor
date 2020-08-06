@@ -64,7 +64,7 @@ public class GenreControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         String genre = "Romanzo";
-        mockMvc.perform(post("/genres/isGenreUnique")
+        mockMvc.perform(post("/api/genres/isGenreUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(genre)
@@ -81,7 +81,7 @@ public class GenreControllerIntegrationTest {
     public void test2GetAllGenres() throws Exception{
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/genres")
+        mockMvc.perform(get("/api/genres")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie))
                 .andExpect(status().isOk())
@@ -102,7 +102,7 @@ public class GenreControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(genreFormDTO);
-        mockMvc.perform(post("/genres")
+        mockMvc.perform(post("/api/genres")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -126,7 +126,7 @@ public class GenreControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(genreFormDTO);
-        mockMvc.perform(post("/genres")
+        mockMvc.perform(post("/api/genres")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)

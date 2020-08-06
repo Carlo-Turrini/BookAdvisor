@@ -67,7 +67,7 @@ public class PrizeControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(prizeFormDTO);
-        mockMvc.perform(post("/libri/{id}/prizes", bookId)
+        mockMvc.perform(post("/api/libri/{id}/prizes", bookId)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -91,7 +91,7 @@ public class PrizeControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(prizeFormDTO);
-        mockMvc.perform(post("/libri/{id}/prizes", bookId)
+        mockMvc.perform(post("/api/libri/{id}/prizes", bookId)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -113,7 +113,7 @@ public class PrizeControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(prizeFormDTO);
-        mockMvc.perform(post("/libri/{id}/prizes", bookId)
+        mockMvc.perform(post("/api/libri/{id}/prizes", bookId)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -129,7 +129,7 @@ public class PrizeControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(delete("/libri/{id}/prizes/{prizeID}", "1", "1")
+        mockMvc.perform(delete("/api/libri/{id}/prizes/{prizeID}", "1", "1")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
                 .andExpect(status().isOk());
@@ -139,7 +139,7 @@ public class PrizeControllerIntegrationTest {
     public void test3GetPrizesOfBook() throws Exception {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/libri/{id}/prizes", "1")
+        mockMvc.perform(get("/api/libri/{id}/prizes", "1")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie))
                 .andExpect(status().isOk())
@@ -157,7 +157,7 @@ public class PrizeControllerIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         Integer bookId = 1;
         String prizeName = "Premio Strega";
-        mockMvc.perform(get("/libri/{id}/prizes/{prizeName}", bookId, prizeName)
+        mockMvc.perform(get("/api/libri/{id}/prizes/{prizeName}", bookId, prizeName)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
                 .andExpect(status().isOk())
@@ -174,7 +174,7 @@ public class PrizeControllerIntegrationTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         String prizeName = "Premio Strega";
         Integer bookId = 1;
-        mockMvc.perform(post("/libri/{id}/prizes/isPrizeAssigned", bookId)
+        mockMvc.perform(post("/api/libri/{id}/prizes/isPrizeAssigned", bookId)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(prizeName)

@@ -8,7 +8,7 @@ import {MyBooksRead} from "../model/my-books-read";
   providedIn: 'root'
 })
 export class MyBooksService {
-  URL = "http://localhost:8080/utenti";
+  URL = "http://localhost:8080/api/utenti";
   constructor(private http: HttpClient) { }
 
   public deleteBookFromMyBooks(bookID: number, userID: number): Promise<boolean> {

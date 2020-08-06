@@ -7,7 +7,7 @@ import {AbstractControl} from "@angular/forms";
 })
 export class BookValidatorService {
   private timeout;
-  private URL = "http://localhost:8080/libri";
+  private URL = "http://localhost:8080/api/libri";
 
   constructor(private readonly http: HttpClient) { }
 

@@ -104,7 +104,7 @@ public class UtenteControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         LoggedUserDTO loggedUserDTO = new LoggedUserDTO(2, false);
-        mockMvc.perform(get("/utenti/loggedUserInfo")
+        mockMvc.perform(get("/api/utenti/loggedUserInfo")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -118,7 +118,7 @@ public class UtenteControllerUnitTest {
     public void testGetLoggedUserInfo_unauthorized() throws Exception {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/utenti/loggedUserInfo")
+        mockMvc.perform(get("/api/utenti/loggedUserInfo")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -132,7 +132,7 @@ public class UtenteControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Mockito.when(utenteService.isUsernameUnique(usernmaeUnique)).thenReturn(true);
-        mockMvc.perform(post("/utenti/isUsernameUnique")
+        mockMvc.perform(post("/api/utenti/isUsernameUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(usernmaeUnique)
@@ -150,7 +150,7 @@ public class UtenteControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Mockito.when(utenteService.isEmailUnique(emailUnique)).thenReturn(true);
-        mockMvc.perform(post("/utenti/isEmailUnique")
+        mockMvc.perform(post("/api/utenti/isEmailUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(emailUnique)
@@ -171,7 +171,7 @@ public class UtenteControllerUnitTest {
         UtenteCardDTO utenteCardDTO = new UtenteCardDTO(1, "MarioRossi", "Mario", "Rossi");
         utenteCardDTOList.add(utenteCardDTO);
         Mockito.when(utenteService.findAllUsers()).thenReturn(utenteCardDTOList);
-        mockMvc.perform(get("/utenti")
+        mockMvc.perform(get("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -192,7 +192,7 @@ public class UtenteControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(get("/utenti")
+        mockMvc.perform(get("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -208,7 +208,7 @@ public class UtenteControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         UsersInfoDTO usersInfoDTO = new UsersInfoDTO(userID, "Mario", "Rossi", "MarioRossi", "m.r@gmail.com", "prova");
         Mockito.when(utenteService.findById(userID)).thenReturn(usersInfoDTO);
-        mockMvc.perform(get("/utenti/{id}", userID)
+        mockMvc.perform(get("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -241,7 +241,7 @@ public class UtenteControllerUnitTest {
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
         Mockito.when(utenteService.isEmailUnique(utenteFormDTO.getEmail())).thenReturn(false);
         Mockito.when(utenteService.isUsernameUnique(utenteFormDTO.getUsername())).thenReturn(false);
-        mockMvc.perform(post("/utenti")
+        mockMvc.perform(post("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -274,7 +274,7 @@ public class UtenteControllerUnitTest {
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
         Mockito.when(utenteService.isEmailUnique(utenteFormDTO.getEmail())).thenReturn(true);
         Mockito.when(utenteService.isUsernameUnique(utenteFormDTO.getUsername())).thenReturn(true);
-        mockMvc.perform(post("/utenti")
+        mockMvc.perform(post("/api/utenti")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -297,7 +297,7 @@ public class UtenteControllerUnitTest {
         MockMultipartFile mf = new MockMultipartFile("fotoProfilo", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer userID = 2;
         Mockito.when(utenteService.updateUsersProfilePhoto(mf, userID)).thenReturn("prova");
-        mockMvc.perform(multipart("/utenti/{id}/foto_profilo", userID)
+        mockMvc.perform(multipart("/api/utenti/{id}/foto_profilo", userID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -316,7 +316,7 @@ public class UtenteControllerUnitTest {
         MockMultipartFile mf = new MockMultipartFile("fotoProfilo", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer userID = 2;
         Mockito.when(utenteService.updateUsersProfilePhoto(mf, userID)).thenReturn("prova");
-        mockMvc.perform(multipart("/utenti/{id}/foto_profilo", userID)
+        mockMvc.perform(multipart("/api/utenti/{id}/foto_profilo", userID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie))
@@ -334,7 +334,7 @@ public class UtenteControllerUnitTest {
         MockMultipartFile mf = new MockMultipartFile("fotoProfilo", "test.png", MediaType.IMAGE_PNG_VALUE, "test".getBytes());
         Integer userID = 2;
         Mockito.when(utenteService.updateUsersProfilePhoto(mf, userID)).thenReturn("prova");
-        mockMvc.perform(multipart("/utenti/{id}/foto_profilo", userID)
+        mockMvc.perform(multipart("/api/utenti/{id}/foto_profilo", userID)
                 .file(mf)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie))
@@ -356,7 +356,7 @@ public class UtenteControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -382,7 +382,7 @@ public class UtenteControllerUnitTest {
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(utenteFormDTO);
         Mockito.when(utenteService.getUser(userID)).thenReturn(null);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -413,7 +413,7 @@ public class UtenteControllerUnitTest {
         usersInfo.setEmail("mario.rossi@gmail.com");
         Mockito.when(utenteService.getUser(userID)).thenReturn(usersInfo);
         Mockito.when(utenteService.isEmailUnique(utenteFormDTO.getEmail())).thenReturn(false);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -445,7 +445,7 @@ public class UtenteControllerUnitTest {
         UsersInfo usersInfo = new UsersInfo();
         usersInfo.setEmail(utenteFormDTO.getEmail());
         Mockito.when(utenteService.getUser(userID)).thenReturn(usersInfo);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -476,7 +476,7 @@ public class UtenteControllerUnitTest {
         UsersInfo usersInfo = new UsersInfo();
         usersInfo.setEmail(utenteFormDTO.getEmail());
         Mockito.when(utenteService.getUser(userID)).thenReturn(usersInfo);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -507,7 +507,7 @@ public class UtenteControllerUnitTest {
         UsersInfo usersInfo = new UsersInfo();
         usersInfo.setEmail(utenteFormDTO.getEmail());
         Mockito.when(utenteService.getUser(userID)).thenReturn(usersInfo);
-        mockMvc.perform(put("/utenti/{id}", userID)
+        mockMvc.perform(put("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -526,7 +526,7 @@ public class UtenteControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(delete("/utenti/{id}", userID)
+        mockMvc.perform(delete("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -543,7 +543,7 @@ public class UtenteControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(delete("/utenti/{id}", userID)
+        mockMvc.perform(delete("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -558,7 +558,7 @@ public class UtenteControllerUnitTest {
         Integer userID = 2;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(delete("/utenti/{id}", userID)
+        mockMvc.perform(delete("/api/utenti/{id}", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")

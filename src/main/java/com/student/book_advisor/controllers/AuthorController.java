@@ -23,6 +23,7 @@ import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RequestMapping("/api")
 public class AuthorController {
     @Autowired
     private AuthorService authorService;

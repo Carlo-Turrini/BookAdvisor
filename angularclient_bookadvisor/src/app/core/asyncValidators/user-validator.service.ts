@@ -8,7 +8,7 @@ import {AbstractControl} from "@angular/forms";
 export class UserValidatorService {
 
   private timeout;
-  private URL = "http://localhost:8080/utenti";
+  private URL = "http://localhost:8080/api/utenti";
 
   constructor(private readonly http: HttpClient) { }
 

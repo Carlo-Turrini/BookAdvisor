@@ -102,7 +102,7 @@ public class BookRankingControllerUnitTest {
         BookRankingDTO bookRankingDTO = new BookRankingDTO(1, 1, 1, "Prova");
         bookRankingDTOList.add(bookRankingDTO);
         Mockito.when(bookRankingService.findUsersBookRank(Mockito.anyInt())).thenReturn(bookRankingDTOList);
-        mockMvc.perform(get("/utenti/{id}/bookRank", 2)
+        mockMvc.perform(get("/api/utenti/{id}/bookRank", 2)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -134,7 +134,7 @@ public class BookRankingControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(bookForRankDTO);
-        mockMvc.perform(post("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(post("/api/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -167,7 +167,7 @@ public class BookRankingControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(bookForRankDTO);
-        mockMvc.perform(post("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(post("/api/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -195,7 +195,7 @@ public class BookRankingControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(bookForRankDTO);
-        mockMvc.perform(post("/utenti/{id}/bookRank", userID)
+        mockMvc.perform(post("/api/utenti/{id}/bookRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -216,7 +216,7 @@ public class BookRankingControllerUnitTest {
         BookRankingDTO bookRankingDTO = new BookRankingDTO(1, 1, 1, "Prova");
         bookRankingDTOList.add(bookRankingDTO);
         Mockito.when(bookRankingService.removeBookFromBookRank(userID, bookRankID)).thenReturn(bookRankingDTOList);
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -243,7 +243,7 @@ public class BookRankingControllerUnitTest {
         BookRankingDTO bookRankingDTO = new BookRankingDTO(1, 1, 1, "Prova");
         bookRankingDTOList.add(bookRankingDTO);
         Mockito.when(bookRankingService.removeBookFromBookRank(userID, bookRankID)).thenReturn(bookRankingDTOList);
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -265,7 +265,7 @@ public class BookRankingControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Integer userID = 2;
         Integer bookRankID = 2;
-        mockMvc.perform(delete("/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
+        mockMvc.perform(delete("/api/utenti/{id}/bookRank/{rankID}", userID, bookRankID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")

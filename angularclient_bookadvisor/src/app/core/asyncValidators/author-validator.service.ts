@@ -7,7 +7,7 @@ import {AbstractControl} from "@angular/forms";
 })
 export class AuthorValidatorService {
   private timeout;
-  URL = "http://localhost:8080/authors";
+  URL = "http://localhost:8080/api/authors";
 
   constructor(private readonly http: HttpClient) { }
 

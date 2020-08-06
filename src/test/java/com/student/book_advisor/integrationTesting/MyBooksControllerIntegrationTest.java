@@ -65,7 +65,7 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         MyBooksReadDTO myBooksReadDTO = new MyBooksReadDTO(2, "La ruota del tempo");
-        mockMvc.perform(get("/utenti/{id}/myBooks/booksReadNotInRank", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks/booksReadNotInRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -84,7 +84,7 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         MyBooksReadDTO myBooksReadDTO = new MyBooksReadDTO(2, "La ruota del tempo");
-        mockMvc.perform(get("/utenti/{id}/myBooks/booksReadNotInRank", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks/booksReadNotInRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -101,7 +101,7 @@ public class MyBooksControllerIntegrationTest {
         Integer userID = 2;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/utenti/{id}/myBooks/booksReadNotInRank", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks/booksReadNotInRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -133,7 +133,7 @@ public class MyBooksControllerIntegrationTest {
         authorOfBookList2.add(author2);
         myBooks2.setAuthors(authorOfBookList2);
         myBooks2.setGenres(generi);
-        mockMvc.perform(get("/utenti/{id}/myBooks", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -171,7 +171,7 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         BookShelf shelf = BookShelf.reading;
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
@@ -190,7 +190,7 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         BookShelf shelf = BookShelf.reading;
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
@@ -208,7 +208,7 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         BookShelf shelf = BookShelf.reading;
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
@@ -226,7 +226,7 @@ public class MyBooksControllerIntegrationTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         BookShelf shelf = BookShelf.reading;
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
@@ -243,7 +243,7 @@ public class MyBooksControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         BookShelf shelf = BookShelf.read;
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(shelf.toString())
@@ -259,7 +259,7 @@ public class MyBooksControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(put("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(BookShelf.reading.toString())
@@ -277,7 +277,7 @@ public class MyBooksControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(put("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(BookShelf.reading.toString())
@@ -294,7 +294,7 @@ public class MyBooksControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(put("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(BookShelf.read.toString())
@@ -311,7 +311,7 @@ public class MyBooksControllerIntegrationTest {
         Integer bookID = 1;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, bookID)
+        mockMvc.perform(put("/api/utenti/{id}/myBooks/{bookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(BookShelf.read.toString())
@@ -327,7 +327,7 @@ public class MyBooksControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
-        mockMvc.perform(delete("/utenti/{id}/myBooks/{myBookID}", userID, bookID)
+        mockMvc.perform(delete("/api/utenti/{id}/myBooks/{myBookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -344,7 +344,7 @@ public class MyBooksControllerIntegrationTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(delete("/utenti/{id}/myBooks/{myBookID}", userID, bookID)
+        mockMvc.perform(delete("/api/utenti/{id}/myBooks/{myBookID}", userID, bookID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -359,7 +359,7 @@ public class MyBooksControllerIntegrationTest {
         Integer userID = 2;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(delete("/utenti/{id}/myBooks/{myBookID}", userID, 1)
+        mockMvc.perform(delete("/api/utenti/{id}/myBooks/{myBookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")

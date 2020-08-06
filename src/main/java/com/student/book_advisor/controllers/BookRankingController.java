@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RequestMapping("/api")
 public class BookRankingController {
     @Autowired
     private BookRankingService bookRankingService;

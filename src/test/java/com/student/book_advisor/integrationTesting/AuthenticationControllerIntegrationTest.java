@@ -49,7 +49,7 @@ public class AuthenticationControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(loginDTO);
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/api/authenticate")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -70,7 +70,7 @@ public class AuthenticationControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(loginDTO);
-        mockMvc.perform(post("/authenticate")
+        mockMvc.perform(post("/api/authenticate")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(requestJson)
@@ -85,7 +85,7 @@ public class AuthenticationControllerIntegrationTest {
     public void testLogoutWhenNotLoggedIn() throws Exception {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/logoutUser")
+        mockMvc.perform(get("/api/logoutUser")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -104,7 +104,7 @@ public class AuthenticationControllerIntegrationTest {
         roles.add("ROLE_USER");
         String adminToken = jwtTokenProvider.createToken("MarioRossi", 1, roles);
         Cookie authCookie = new Cookie("access_token", adminToken);
-        mockMvc.perform(get("/logoutUser")
+        mockMvc.perform(get("/api/logoutUser")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")

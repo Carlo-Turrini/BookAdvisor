@@ -10,7 +10,7 @@ import {AuthorOfBook} from "../model/author-of-book";
   providedIn: 'root'
 })
 export class AuthorService {
-  URL = "http://localhost:8080/authors"
+  URL = "http://localhost:8080/api/authors";
   constructor(private http: HttpClient) { }
 
   public getAllAuthors(): Promise<AuthorCard[]> {

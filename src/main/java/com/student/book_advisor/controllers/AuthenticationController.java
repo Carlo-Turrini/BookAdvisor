@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@RequestMapping("/api")
 public class AuthenticationController {
 
     @Autowired

@@ -7,7 +7,7 @@ import {AbstractControl} from "@angular/forms";
 })
 export class GenreValidatorService {
   private timeout;
-  private URL = "http://localhost:8080/genres";
+  private URL = "http://localhost:8080/api/genres";
 
   constructor(private readonly http: HttpClient) { }
 

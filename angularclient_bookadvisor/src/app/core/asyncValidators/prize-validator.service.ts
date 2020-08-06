@@ -7,7 +7,7 @@ import {AbstractControl, AsyncValidatorFn} from "@angular/forms";
 })
 export class PrizeValidatorService {
   private timeout;
-  private URL = "http://localhost:8080/libri";
+  private URL = "http://localhost:8080/api/libri";
 
   constructor(private readonly http: HttpClient) { }
 

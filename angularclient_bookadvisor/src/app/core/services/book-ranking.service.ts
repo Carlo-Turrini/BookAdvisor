@@ -7,7 +7,7 @@ import {BookRanking} from "../model/book-ranking";
   providedIn: 'root'
 })
 export class BookRankingService {
-  URL = "http://localhost:8080/utenti";
+  URL = "http://localhost:8080/api/utenti";
   constructor(private http: HttpClient) { }
 
   public addBookToRanking(userID: number, myBookID: number, rank: number): Promise<BookRanking[]>{

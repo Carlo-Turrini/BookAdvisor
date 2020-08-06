@@ -99,7 +99,7 @@ public class MyBooksControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         Mockito.when(myBooksService.deleteFromShelf(Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        mockMvc.perform(delete("/utenti/{id}/myBooks/{myBookID}", userID, 1)
+        mockMvc.perform(delete("/api/utenti/{id}/myBooks/{myBookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -118,7 +118,7 @@ public class MyBooksControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         Mockito.when(myBooksService.deleteFromShelf(Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        mockMvc.perform(delete("/utenti/{id}/myBooks/{myBookID}", userID, 1)
+        mockMvc.perform(delete("/api/utenti/{id}/myBooks/{myBookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -135,7 +135,7 @@ public class MyBooksControllerUnitTest {
         Integer userID = 2;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(delete("/utenti/{id}/myBooks/{myBookID}", userID, 1)
+        mockMvc.perform(delete("/api/utenti/{id}/myBooks/{myBookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -151,7 +151,7 @@ public class MyBooksControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", userToken);
         Mockito.when(myBooksService.updateShelf(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(BookShelf.class))).thenReturn(true);
-        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, 1)
+        mockMvc.perform(put("/api/utenti/{id}/myBooks/{bookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(BookShelf.reading.toString())
@@ -171,7 +171,7 @@ public class MyBooksControllerUnitTest {
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         Cookie authCookie = new Cookie("access_token", adminToken);
         Mockito.when(myBooksService.updateShelf(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(BookShelf.class))).thenReturn(true);
-        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, 1)
+        mockMvc.perform(put("/api/utenti/{id}/myBooks/{bookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(BookShelf.reading.toString())
@@ -189,7 +189,7 @@ public class MyBooksControllerUnitTest {
         Integer userID = 2;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(put("/utenti/{id}/myBooks/{bookID}", userID, 1)
+        mockMvc.perform(put("/api/utenti/{id}/myBooks/{bookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(BookShelf.read.toString())
@@ -209,7 +209,7 @@ public class MyBooksControllerUnitTest {
         MyBooksReadDTO myBooksReadDTO = new MyBooksReadDTO(1, "Prova");
         myBooksReadDTOList.add(myBooksReadDTO);
         Mockito.when(myBooksService.findAllMyBooksRead(Mockito.anyInt())).thenReturn(myBooksReadDTOList);
-        mockMvc.perform(get("/utenti/{id}/myBooks/booksReadNotInRank", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks/booksReadNotInRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -233,7 +233,7 @@ public class MyBooksControllerUnitTest {
         MyBooksReadDTO myBooksReadDTO = new MyBooksReadDTO(1, "Prova");
         myBooksReadDTOList.add(myBooksReadDTO);
         Mockito.when(myBooksService.findAllMyBooksRead(Mockito.anyInt())).thenReturn(myBooksReadDTOList);
-        mockMvc.perform(get("/utenti/{id}/myBooks/booksReadNotInRank", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks/booksReadNotInRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .characterEncoding("utf-8")
@@ -252,7 +252,7 @@ public class MyBooksControllerUnitTest {
         Integer userID = 2;
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
-        mockMvc.perform(get("/utenti/{id}/myBooks/booksReadNotInRank", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks/booksReadNotInRank", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -270,7 +270,7 @@ public class MyBooksControllerUnitTest {
         MyBooksDTO myBooksDTO = new MyBooksDTO(1, 1, "Prova", BookShelf.read, userID, 4.5);
         myBooksDTOList.add(myBooksDTO);
         Mockito.when(myBooksService.findAllMyBooks(userID)).thenReturn(myBooksDTOList);
-        mockMvc.perform(get("/utenti/{id}/myBooks", userID)
+        mockMvc.perform(get("/api/utenti/{id}/myBooks", userID)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .characterEncoding("utf-8")
@@ -296,7 +296,7 @@ public class MyBooksControllerUnitTest {
         Cookie authCookie = new Cookie("access_token", userToken);
         BookShelf shelf = BookShelf.read;
         Mockito.when(myBooksService.addToShelf(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(BookShelf.class))).thenReturn(shelf.toString());
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, 1)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
@@ -317,7 +317,7 @@ public class MyBooksControllerUnitTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         BookShelf shelf = BookShelf.read;
         Mockito.when(myBooksService.addToShelf(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(BookShelf.class))).thenReturn(shelf.toString());
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, 1)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(shelf.toString())
@@ -336,7 +336,7 @@ public class MyBooksControllerUnitTest {
         UUID csrf = UUID.randomUUID();
         Cookie csrfCookie = new Cookie("XSRF-TOKEN", csrf.toString());
         BookShelf shelf = BookShelf.read;
-        mockMvc.perform(post("/utenti/{id}/myBooks/{bookID}", userID, 1)
+        mockMvc.perform(post("/api/utenti/{id}/myBooks/{bookID}", userID, 1)
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie)
                 .content(shelf.toString())

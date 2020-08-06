@@ -91,7 +91,7 @@ public class GenreControllerUnitTest {
         Cookie authCookie = new Cookie("access_token", adminToken);
         given(genreService.isGenreUnique("Romanzo")).willReturn(true);
         String genre = "Romanzo";
-        mockMvc.perform(post("/genres/isGenreUnique")
+        mockMvc.perform(post("/api/genres/isGenreUnique")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(genre)
@@ -110,7 +110,7 @@ public class GenreControllerUnitTest {
         genres.add("Romanzo");
         //given(genreService.getAllGenres()).willReturn(genres);
         Mockito.when(genreService.getAllGenres()).thenReturn(genres);
-        mockMvc.perform(get("/genres")
+        mockMvc.perform(get("/api/genres")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie))
                 .andExpect(status().isOk())
@@ -130,7 +130,7 @@ public class GenreControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(genreFormDTO);
-        mockMvc.perform(post("/genres")
+        mockMvc.perform(post("/api/genres")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)
@@ -155,7 +155,7 @@ public class GenreControllerUnitTest {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
         String requestJson = objectWriter.writeValueAsString(genreFormDTO);
-        mockMvc.perform(post("/genres")
+        mockMvc.perform(post("/api/genres")
                 .header("X-XSRF-TOKEN", csrf.toString())
                 .cookie(csrfCookie, authCookie)
                 .content(requestJson)

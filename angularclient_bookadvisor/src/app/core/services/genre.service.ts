@@ -7,7 +7,7 @@ import {GenreForm} from "../model/genre-form";
   providedIn: 'root'
 })
 export class GenreService {
-  URL = "http://localhost:8080/genres";
+  URL = "http://localhost:8080/api/genres";
   constructor(private http: HttpClient) { }
 
   public getAllGenres(): Promise<string[]> {
