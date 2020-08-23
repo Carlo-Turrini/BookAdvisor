@@ -1,30 +1,30 @@
-#BookAvisor Project
+# BookAvisor Project
 Per questo progetto ho sviluppato un'applicazione web utilizzando Spring Boot e Angular. Tra le altre dipendenze rilevanti troviamo quella di un server Redis, necessario per alcuni check di sicurezza.
 Il DBMS scelto per l'applicativo è SQLServer, tuttavia, per comodità, l'applicativo può anche essere avviato in modalità test utilizzando un H2, ovvero un database in-memory.
 
 Di seguito verranno fornite alcune indicazioni relative al corretto deployment dell'applicativo per poterlo utilizzare.
 
-##Passi per eseguire BookAdvisor
-###1. Avviare Redis
+## Passi per eseguire BookAdvisor
+### 1. Avviare Redis
 Come prima cosa bisogna ricordarsi di avviare un'istanza di Redis. Di default l'applicativo suppone che tale istanza sia in ascolto sulla porta 6379 e che l'host sia localhost. Se ciò non dovesse essere vero queste informazioni vanno modificate all'interno della classe RedisUtil che si trova nel package security.redis.
-###2. Eseguire con SQL Server
+### 2. Eseguire con SQL Server
 Per poter eseguire l'applicativo con SQL Server bisognerà prima modificare le impostazioni del dataSource in application.properties di modo che riflettano le impostazioni di connessione al DB locale.
-###3. Eseguire con H2
+### 3. Eseguire con H2
 L'esecuzione con H2 è consigliata se non si vuole creare un DB SQL Server.
 L'utilizzo è molto semplice, dopo aver eseguito il build dell'applicativo tramite: mvn clean install, si potrà eseguire il jar così creato con il profilo di test per avviare il server con H2 utilizzando il seguente comando:
 java -jar -Dspring.profiles.active=test target/book_advisor-0.0.1-SNAPSHOT.jar
-###Nota sugli utenti ADMIN e i DB
+### Nota sugli utenti ADMIN e i DB
 Nell'applicativo non è prevista la possibilità per gli utenti di modificare il proprio ruolo (USER o ADMIN). L'amministratore del DB è l'unico a poter fornire agli utenti l'autorità di ADMIN.
 Per quanto riguarda H2 essendo un DB in-memory che viene ricreato ogni volta chec si fa partire l'applicativo, è stato creato un file initialData.sql all'interno del package resources con delle istanze con cui popolare il DB, fra cui anche un utente con autorità ADMIN.
-###4. Cambiare luoghi di stoccaggio immagini
+### 4. Cambiare luoghi di stoccaggio immagini
 Le immagini non vengono salvate all'interno del DB ma in locale di conseguenza bisogna ridefinire la rootDir all'interno della classe FolderService che si trova nel package services.storage
-###5. Angular
+### 5. Angular
 Per tutte le informazioni relative ad angular si faccia riferimento alla sezione AngularClient.
-###Nota relativa ai test Cypress
+### Nota relativa ai test Cypress
 Siccome nell'applicativo non è previsto un metodo per cancellare i generi bisogna assicurarsi di fare il restart del server in modalità test ogni volta prima di rieseguire i test e2e.  
-###Nota relativa al plugin maven surefire
+### Nota relativa al plugin maven surefire
 Ogni tanto capita che a causa della numerosità dei test e della pesantezza dei test di integrazione scritti sfruttando le utility fornite da Spring, il plugin maven surefire fallisca. Nel pom.xml ho configurato i commandLine arguments in modo tale da allocare memoria sufficiente a evitare che questo succeda, almeno sul mio PC. Se dovesse fallire il plugin si provi a modificare tali argomenti nel pom.
-###6. Build con Maven
+### 6. Build con Maven
 Per eseguire il build con maven basterà eseguire:
 * mvn clean install
 
