@@ -26,6 +26,7 @@ Siccome nell'applicativo non è previsto un metodo per cancellare i generi bisog
 Ogni tanto capita che a causa della numerosità dei test e della pesantezza dei test di integrazione scritti sfruttando le utility fornite da Spring, il plugin maven surefire fallisca. Nel pom.xml ho configurato i commandLine arguments in modo tale da allocare memoria sufficiente a evitare che questo succeda, almeno sul mio PC. Se dovesse fallire il plugin si provi a modificare tali argomenti nel pom.
 ### 6. Build con Maven
 Per eseguire il build con maven basterà eseguire:
+
 * mvn clean install
 
 Questo comando, grazie alla nostra configurazione del pom si occuperà di installare in locale, non globalmente sul pc, node e npm, necessari per angular. Poi si occuperà di installare le dipendenze di angular tramite **npm install** e di fare il build di angular eseguendo lo script build tramite **npm run build**. Infine sposterà le risorse buildate di angular all'interno di target affinché spring possa fornirle correttamente.
@@ -58,11 +59,15 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via [Cypress](http://www.cypress.io/).
 Si noti inoltre che per eseguire correttamente i test utilizzando Cypress bisognerà manualmente avviare il server col profilo di test attivo tramite:
+
 * java -jar -Dspring.profiles.active=test target/book_advisor-0.0.1-SNAPSHOT.jar
+
 * mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=test
 
 In alternativa al posto di ng e2e possiamo eseguire i seguenti comandi:
+
 * cypress:open per far partire cypress runner
+
 * ng serve per far partire un server di sviluppo angular
 
 Notiamo che in ambo i casi il server Spring va comunque avviato manualmente.
