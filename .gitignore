@@ -45,7 +45,7 @@ build/
 
 # dependencies
 /angularclient_bookadvisor/node_modules
-/angularclient_bookadvisor/node/**
+/angularclient_bookadvisor/node/
 
 # profiling files
 /angularclient_bookadvisor/chrome-profiler-events*.json
